@@ -1,0 +1,67 @@
+V "GNAT Lib v13"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U lthing_mldsa_field%b	lthing_mldsa_field.adb	44d96c1e NE OO PK
+Z system.assertions%s	s-assert.adb		s-assert.ali
+
+U lthing_mldsa_field%s	lthing_mldsa_field.ads	f60020ab EE NE OO PK
+W interfaces%s		interfac.ads		interfac.ali
+
+D ada.ads		20240521074738 76789da1 ada%s
+D a-assert.ads		20240521074737 ba465f5c ada.assertions%s
+D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D lthing_mldsa_field.ads  20260607002412 e3f7b969 lthing_mldsa_field%s
+D lthing_mldsa_field.adb  20260607002354 a72ed577 lthing_mldsa_field%b
+D system.ads		20240521074738 426dafb8 system%s
+D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
+D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
+D s-stalib.ads		20240521074738 1c9580f6 system.standard_library%s
+G a e
+G c Z s b [add lthing_mldsa_field 33 13 none]
+G c Z s b [sub lthing_mldsa_field 38 13 none]
+G c Z s b [mul lthing_mldsa_field 43 13 none]
+G c Z s b [reduce lthing_mldsa_field 48 13 none]
+G c Z s b [to_centered lthing_mldsa_field 54 13 none]
+X 4 interfac.ads
+38K9*Interfaces 232e15 5|20w6 20r22
+53I9*Integer_32<integer> 5|27r18 54r41 57r59 6|37r41
+56I9*Integer_64<long_long_integer> 5|30r20 35r21 35r48 35r65 40r21 40r49
+. 40r66 45r21 45r48 45r65 51r21 6|11r20 11r34 11r51 19r20 19r34 19r51 19r68
+. 26r20 26r34 26r51
+X 5 lthing_mldsa_field.ads
+22K9*LTHING_MLDSA_Field 59l5 59e23 6|8b14 46l5 46t23
+24N4*Q 27r40 35r85 40r86 45r85 51r56 56r45 56r56 57r54 6|15r24 19r80 22r24
+. 29r24 34r24 39r14 40r21
+27I12*Fq{4|53I9} 33r25 33r36 38r25 38r36 43r25 43r36 48r38 54r30 6|10r25
+. 10r36 15r14 18r25 18r36 22r14 25r25 25r36 29r14 32r38 34r14 37r30
+30I12*Wide{4|56I9} 48r25 6|32r25
+33V13*Add{27I12} 33>18 33>21 35r33 6|10b13
+33i18 A{27I12} 35r60 6|10b18 11r46
+33i21 B{27I12} 35r77 6|10b21 11r63
+38V13*Sub{27I12} 38>18 38>21 40r33 6|18b13
+38i18 A{27I12} 40r61 6|18b18 19r46
+38i21 B{27I12} 40r78 6|18b21 19r63
+43V13*Mul{27I12} 43>18 43>21 45r33 6|25b13
+43i18 A{27I12} 45r60 6|25b18 26r46
+43i21 B{27I12} 45r77 6|25b21 26r63
+48V13*Reduce{27I12} 48>21 51r33 6|32b13
+48i21 X{30I12} 50r21 51r50 6|32b21 34r18
+54V13*To_Centered{4|53I9} 54>26 56r21 57r31 6|37b13
+54i26 A{27I12} 57r71 6|37b26 39r10 40r17 42r17
+X 6 lthing_mldsa_field.adb
+11i7 S{4|56I9} 15r18
+19i7 S{4|56I9} 22r18
+26i7 P{4|56I9} 29r18
+

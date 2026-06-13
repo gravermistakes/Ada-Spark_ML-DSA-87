@@ -1,0 +1,122 @@
+V "GNAT Lib v13"
+M P W=b
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_IO
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U test_ntt%b		test_ntt.adb		1fc20ab0 NE OO SU
+W ada%s			ada.ads			ada.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W interfaces%s		interfac.ads		interfac.ali
+W lthing_mldsa_field%s	lthing_mldsa_field.adb	lthing_mldsa_field.ali
+W lthing_mldsa_ntt%s	lthing_mldsa_ntt.adb	lthing_mldsa_ntt.ali
+Z system.concat_2%s	s-conca2.adb		s-conca2.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+
+D ada.ads		20240521074738 76789da1 ada%s
+D a-assert.ads		20240521074737 ba465f5c ada.assertions%s
+D a-except.ads		20240521074738 2a7d8d70 ada.exceptions%s
+D a-ioexce.ads		20240521074738 40018c65 ada.io_exceptions%s
+D a-numeri.ads		20240521074738 84bea7a3 ada.numerics%s
+D a-nubinu.ads		20240521074738 93f1f3d1 ada.numerics.big_numbers%s
+D a-nbnbig.ads		20240521074738 711e0174 ada.numerics.big_numbers.big_integers_ghost%s
+D a-stream.ads		20240521074738 119b8fb3 ada.streams%s
+D a-string.ads		20240521074738 90ac6797 ada.strings%s
+D a-sttebu.ads		20240521074738 f1ad67a2 ada.strings.text_buffers%s
+D a-stuten.ads		20240521074738 c6ced0ae ada.strings.utf_encoding%s
+D a-tags.ads		20240521074738 9eaa38c6 ada.tags%s
+D a-textio.ads		20240521074738 5c2c6153 ada.text_io%s
+D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D i-cstrea.ads		20240521074738 e53d8b8e interfaces.c_streams%s
+D lthing_mldsa_field.ads  20260607002412 e3f7b969 lthing_mldsa_field%s
+D lthing_mldsa_ntt.ads	20260607003437 597bac7a lthing_mldsa_ntt%s
+D system.ads		20240521074738 426dafb8 system%s
+D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
+D s-casuti.ads		20240521074738 cf13d755 system.case_util%s
+D s-conca2.ads		20240521074738 b5fb73f7 system.concat_2%s
+D s-crtl.ads		20240521074738 8a0692f8 system.crtl%s
+D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
+D s-ficobl.ads		20240521074738 dc5161d4 system.file_control_block%s
+D s-imagei.ads		20240521074738 c707dfd0 system.image_i%s
+D s-imgint.ads		20240521074738 d4a52a9b system.img_int%s
+D s-parame.ads		20251218205951 1f39ba92 system.parameters%s
+D s-putima.ads		20240521074738 17291fe4 system.put_images%s
+D s-secsta.ads		20240521074738 578279f5 system.secondary_stack%s
+D s-soflin.ads		20240521074738 df77073e system.soft_links%s
+D s-stache.ads		20240521074738 0b81c1fe system.stack_checking%s
+D s-stalib.ads		20240521074738 1c9580f6 system.standard_library%s
+D s-stoele.ads		20240521074738 ab5468e4 system.storage_elements%s
+D s-stoele.adb		20240521074738 8f5a9db6 system.storage_elements%b
+D s-traent.ads		20240521074738 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20240521074738 fa2a7f59 system.unsigned_types%s
+D s-valint.ads		20240521074738 1f610d7a system.val_int%s
+D s-valuns.ads		20240521074738 e8a1f424 system.val_uns%s
+D s-valuti.ads		20240521074738 fcd603d8 system.val_util%s
+D s-valuei.ads		20240521074738 11081e09 system.value_i%s
+D s-vaispe.ads		20240521074738 44130d39 system.value_i_spec%s
+D s-valueu.ads		20240521074738 18770347 system.value_u%s
+D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
+D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
+D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
+D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
+D test_ntt.adb		20260607003531 ec95e732 test_ntt%b
+G a e
+G c Z b b [test_ntt standard 6 11 none]
+G r c none [test_ntt standard 6 11 none] [ntt lthing_mldsa_ntt 29 14 none]
+G r c none [test_ntt standard 6 11 none] [inv_ntt lthing_mldsa_ntt 32 14 none]
+G r c none [test_ntt standard 6 11 none] [schoolbook_mul lthing_mldsa_ntt 38 13 none]
+G r c none [test_ntt standard 6 11 none] [pointwise lthing_mldsa_ntt 35 13 none]
+X 1 ada.ads
+16K9*Ada 20e8 48|4r6 4r30
+X 13 a-textio.ads
+58K13*Text_IO 787e16 48|4w10 4r34
+282U14*New_Line 48|63s4
+566U14*Put_Line 48|37s26 38s9 48s7 50s7 60s39 61s9 64s22 65s9
+X 15 interfac.ads
+38K9*Interfaces 232e15 48|3w6 3r30
+53I9*Integer_32<integer>
+56I9*Integer_64<long_long_integer> 48|18r48 30r11
+X 17 lthing_mldsa_field.ads
+22K9*LTHING_MLDSA_Field 59e23 48|2w6 2r30
+27I12*Fq{15|53I9} 48|24r19
+X 18 lthing_mldsa_ntt.ads
+22K9*LTHING_MLDSA_NTT 40e21 48|1w6 1r30
+24A9*Poly(17|27I12)<integer> 48|9r24 18r28 28r18 29r36
+29U14*NTT 48|35s4 44s4 44s14 58s22 58s32
+32U14*Inv_NTT 48|36s4 46s4 59s36
+35V13*Pointwise{24A9} 48|45s16 59s16
+38V13*Schoolbook_Mul{24A9} 48|42s19 57s19
+X 48 test_ntt.adb
+6U11*Test_NTT 6b11 66l5 66t13
+7i4 Fails{natural} 38m64 38r73 51m7 51r16 61m62 61r71 64r7 65r40
+9V13 Eq{boolean} 9b13 9>17 9>20 15l8 15t10 37s7 47s7 60s7
+9a17 A{18|24A9} 11r16 12r13
+9a20 B{18|24A9} 12r22
+11i11 I{integer} 12r16 12r25
+18U14 Fill 18b14 18<20 18=34 26l8 26t12 33s4 41s4 41s20 56s4 56s20
+18a20 P{18|24A9} 20r16 24m10
+18i34 Seed{15|56I9} 22m10 22r19 23r13 23m27 23r35 24r23
+20i11 I{integer} 24r13
+28a4 A{18|24A9} 33m10 34r13 35m9 35r9 36m13 36r13 37r11 41m10 42r35 43r10
+. 56m10 57r35 58r10
+28a7 B{18|24A9} 41m26 42r38 43r19 56m26 57r38 58r19
+28a10 Acopy{18|24A9} 34m4 37r14
+29a4 Na{18|24A9} 43m4 44m9 44r9 45r27 58m4 58m27 58r27 59r27
+29a8 Nb{18|24A9} 43m13 44m19 44r19 45r31 58m13 58m37 58r37 59r31
+29a12 Prod_NTT{18|24A9} 45m4 46m13 46r13 47r11 59m4 59m45 59r45 60r11
+29a22 Prod_School{18|24A9} 42m4 47r21 57m4 60r21
+30i4 Seed{15|56I9} 33m13 33r13 41m13 41r13 41m29 41r29 55m4 56m13 56r13 56m29
+. 56r29
+

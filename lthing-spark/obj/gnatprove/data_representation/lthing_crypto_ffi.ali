@@ -1,0 +1,73 @@
+V "GNAT Lib v14"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -gnatR2js
+A -gnatws
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U lthing_crypto_ffi%s	lthing_crypto_ffi.ads	8e6a4347 NE OO PK
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.adb			i-c.ali
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+Z system.assertions%s	s-assert.adb		s-assert.ali
+
+D ada.ads		20240507065137 76789da1 ada%s
+D a-assert.ads		20240507065137 ba465f5c ada.assertions%s
+D a-unccon.ads		20240507065137 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240507065137 9111f9c1 interfaces%s
+D i-c.ads		20240507065137 aac316ce interfaces.c%s
+D lthing_crypto_ffi.ads	20260606181329 11320ca4 lthing_crypto_ffi%s
+D lthing_types.ads	20260606181020 a48aa0ec lthing_types%s
+D system.ads		20240507065137 14286b0f system%s
+D s-assert.ads		20240507065137 9c4520c7 system.assertions%s
+D s-exctab.ads		20240507065137 91bef6ef system.exception_table%s
+D s-parame.ads		20240507065137 3597fc11 system.parameters%s
+D s-stalib.ads		20240507065137 1c9580f6 system.standard_library%s
+G a e
+G c Z s s [shake_absorb lthing_crypto_ffi 33 14 none]
+G c Z s s [shake_squeeze lthing_crypto_ffi 45 14 none]
+G c Z s s [compare_ct lthing_crypto_ffi 58 13 none]
+G c Z s s [Tkeccak_stateBIP lthing_crypto_ffi 29 4 none]
+X 4 interfac.ads
+38K9*Interfaces 233e15 6|18w6 18r29 19r6 19r30 29r47 36r18 37r18 48r20 49r20
+. 61r13 61r43
+70M9*Unsigned_8
+84M9*Unsigned_64 6|29r58
+X 5 i-c.ads
+30K20*C 598e17 6|19w17 19r41 36r29 37r29 48r31 49r31 61r24 61r54
+59I9*int<integer> 6|61r56
+68M9*unsigned 6|36r31 37r31 48r33 49r33 61r26 66r25
+X 6 lthing_crypto_ffi.ads
+22K9*LTHING_Crypto_FFI 70l5 70e22
+25N4*SHAKE512_Rate 42r50 54r53
+28I12*Lane_Index{natural} 29r32
+29A9*Keccak_State(4|84M9)<integer> 34r25 46r27
+33U14*SHAKE_Absorb 34=7 35>7 36>7 37>7
+34a7 State{29A9}
+35a7 Data{7|28A9} 42r18
+36m7 Data_Len{5|68M9}
+37m7 Rate{5|68M9} 42r43
+45U14*SHAKE_Squeeze 46=7 47<7 48>7 49>7
+46a7 State{29A9}
+47a7 Output{7|28A9} 54r19 55r19 55r35
+48m7 Output_Len{5|68M9}
+49m7 Rate{5|68M9} 54r46
+58V13*Compare_CT{5|59I9} 59>7 60>7 61>7
+59a7 A{7|28A9} 67r27
+60a7 B{7|28A9} 68r27
+61m7 Len{5|68M9} 66r18 67r48 68r48
+X 7 lthing_types.ads
+17K9*LTHING_Types 6|20w6 20r29 7|58e17
+19M12*Byte{4|70M9}
+28A9*Byte_Array(19M12)<integer> 6|35r18 47r24 59r13 60r13
+

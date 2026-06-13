@@ -1,0 +1,265 @@
+{
+  "spark": {
+    " 2": "all",
+    " 3": "spec",
+    " 4": "spec",
+    " 1": "spec"
+  },
+  "skip_flow_proof": [
+  ],
+  "skip_proof": [
+  ],
+  "progress": "PROGRESS_PROOF",
+  "stop_reason": "STOP_REASON_NONE",
+  "flow": [
+  ],
+  "pragma_assume": [
+  ],
+  "proof": [
+    {
+      "file": "lthing_crypto_ffi.ads",
+      "line": 67,
+      "col": 28,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_crypto_ffi.ads",
+      "check_line": 67,
+      "check_col": 28,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_crypto_ffi.ads",
+      "line": 67,
+      "col": 48,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+            "introduce_premises": [
+              {
+                "proof_attempts": {
+                },
+                "transformations": {
+                }
+              }
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_crypto_ffi.ads",
+      "check_line": 67,
+      "check_col": 48,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_crypto_ffi.ads",
+      "line": 68,
+      "col": 28,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_crypto_ffi.ads",
+      "check_line": 68,
+      "check_col": 28,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_crypto_ffi.ads",
+      "line": 68,
+      "col": 48,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_crypto_ffi.ads",
+      "check_line": 68,
+      "check_col": 48,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    }
+  ],
+  "assumptions": [
+  ],
+  "timings": {
+    "global": {
+      "init_why_sections": 4.44000004790723E-04,
+      "globals (advanced)": 1.83700001798570E-03,
+      "flow analysis": 2.88999988697469E-04,
+      "marking": 2.37999993260019E-04,
+      "translation of standard": 2.48500006273389E-03,
+      "properties (advanced)": 1.80000006366754E-05,
+      "globals (basic)": 9.82700008898973E-03
+    },
+    " 4": {
+      "gnat2why.vc_generation": 2.03000003239140E-04
+    },
+    " 1": {
+      "gnat2why.vc_generation": 2.34000006457791E-04,
+      "gnatwhy3.run_vcs": 3.99900000047637E-06,
+      "gnatwhy3.register_vcs": 0.00000000000000E+00,
+      "gnatwhy3.schedule_vcs": 3.00000010611257E-06,
+      "gnatwhy3.save_session": 1.75599905196577E-03,
+      "gnatwhy3.init": 3.54523986577988E-01
+    },
+    " 3": {
+      "gnat2why.vc_generation": 2.17200000770390E-03
+    }
+  },
+  "entities": {
+    " 1": {
+      "name": "LTHING_Crypto_FFI.Compare_CT",
+      "sloc": [
+        {
+          "file": "lthing_crypto_ffi.ads",
+          "line": 58
+        }
+      ]
+    },
+    " 2": {
+      "name": "LTHING_Crypto_FFI",
+      "sloc": [
+        {
+          "file": "lthing_crypto_ffi.ads",
+          "line": 22
+        }
+      ]
+    },
+    " 3": {
+      "name": "LTHING_Crypto_FFI.SHAKE_Absorb",
+      "sloc": [
+        {
+          "file": "lthing_crypto_ffi.ads",
+          "line": 33
+        }
+      ]
+    },
+    " 4": {
+      "name": "LTHING_Crypto_FFI.SHAKE_Squeeze",
+      "sloc": [
+        {
+          "file": "lthing_crypto_ffi.ads",
+          "line": 45
+        }
+      ]
+    }
+  }
+}

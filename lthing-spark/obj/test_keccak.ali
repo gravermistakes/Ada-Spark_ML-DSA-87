@@ -1,0 +1,172 @@
+V "GNAT Lib v13"
+M P W=b
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P SS ZX
+
+RN
+RV NO_IO
+RV NO_LOCAL_ALLOCATORS
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U test_keccak%b		test_keccak.adb		9f43a8b0 NE OO SU
+W ada%s			ada.ads			ada.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W interfaces%s		interfac.ads		interfac.ali
+W lthing_kat_ffi%s	lthing_kat_ffi.ads	lthing_kat_ffi.ali
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+Z system.concat_2%s	s-conca2.adb		s-conca2.ali
+Z system.concat_3%s	s-conca3.adb		s-conca3.ali
+Z system.concat_4%s	s-conca4.adb		s-conca4.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+Z system.img_llli%s	s-imgllli.ads		s-imgllli.ali
+Z system.img_llu%s	s-imgllu.ads		s-imgllu.ali
+Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+Z system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
+
+D ada.ads		20240521074738 76789da1 ada%s
+D a-assert.ads		20240521074737 ba465f5c ada.assertions%s
+D a-except.ads		20240521074738 2a7d8d70 ada.exceptions%s
+D a-ioexce.ads		20240521074738 40018c65 ada.io_exceptions%s
+D a-numeri.ads		20240521074738 84bea7a3 ada.numerics%s
+D a-nubinu.ads		20240521074738 93f1f3d1 ada.numerics.big_numbers%s
+D a-nbnbig.ads		20240521074738 711e0174 ada.numerics.big_numbers.big_integers_ghost%s
+D a-stream.ads		20240521074738 119b8fb3 ada.streams%s
+D a-string.ads		20240521074738 90ac6797 ada.strings%s
+D a-sttebu.ads		20240521074738 f1ad67a2 ada.strings.text_buffers%s
+D a-stuten.ads		20240521074738 c6ced0ae ada.strings.utf_encoding%s
+D a-tags.ads		20240521074738 9eaa38c6 ada.tags%s
+D a-textio.ads		20240521074738 5c2c6153 ada.text_io%s
+D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D i-c.ads		20240521074738 5c5a6c17 interfaces.c%s
+D i-cstrea.ads		20240521074738 e53d8b8e interfaces.c_streams%s
+D lthing_kat_ffi.ads	20260613191950 74bca6a6 lthing_kat_ffi%s
+D lthing_types.ads	20260613191916 a48aa0ec lthing_types%s
+D system.ads		20240521074738 426dafb8 system%s
+D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
+D s-casuti.ads		20240521074738 cf13d755 system.case_util%s
+D s-conca2.ads		20240521074738 b5fb73f7 system.concat_2%s
+D s-conca3.ads		20240521074738 8a7a19a2 system.concat_3%s
+D s-conca4.ads		20240521074738 33f85f3e system.concat_4%s
+D s-crtl.ads		20240521074738 8a0692f8 system.crtl%s
+D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
+D s-ficobl.ads		20240521074738 dc5161d4 system.file_control_block%s
+D s-imagei.ads		20240521074738 c707dfd0 system.image_i%s
+D s-imageu.ads		20240521074738 631c6ed0 system.image_u%s
+D s-imgint.ads		20240521074738 d4a52a9b system.img_int%s
+D s-imgllli.ads		20240521074738 8322d24d system.img_llli%s
+D s-imgllu.ads		20240521074738 ef081208 system.img_llu%s
+D s-parame.ads		20251218205951 1f39ba92 system.parameters%s
+D s-putima.ads		20240521074738 17291fe4 system.put_images%s
+D s-secsta.ads		20240521074738 578279f5 system.secondary_stack%s
+D s-soflin.ads		20240521074738 df77073e system.soft_links%s
+D s-stache.ads		20240521074738 0b81c1fe system.stack_checking%s
+D s-stalib.ads		20240521074738 1c9580f6 system.standard_library%s
+D s-stoele.ads		20240521074738 ab5468e4 system.storage_elements%s
+D s-stoele.adb		20240521074738 8f5a9db6 system.storage_elements%b
+D s-traent.ads		20240521074738 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20240521074738 fa2a7f59 system.unsigned_types%s
+D s-valint.ads		20240521074738 1f610d7a system.val_int%s
+D s-valllli.ads		20240521074738 bf3121bd system.val_llli%s
+D s-vallllu.ads		20240521074738 fcd04714 system.val_lllu%s
+D s-valllu.ads		20240521074738 ca6e26ce system.val_llu%s
+D s-valuns.ads		20240521074738 e8a1f424 system.val_uns%s
+D s-valuti.ads		20240521074738 fcd603d8 system.val_util%s
+D s-valuei.ads		20240521074738 11081e09 system.value_i%s
+D s-vaispe.ads		20240521074738 44130d39 system.value_i_spec%s
+D s-valueu.ads		20240521074738 18770347 system.value_u%s
+D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
+D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
+D s-widlllu.ads		20240521074738 c5dfde5a system.wid_lllu%s
+D s-widllu.ads		20240521074738 a6620b19 system.wid_llu%s
+D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
+D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
+D test_keccak.adb	20260613192102 06ae566b test_keccak%b
+G a e
+G c Z b b [test_keccak standard 6 11 none]
+G r c none [test_keccak standard 6 11 none] [keccak_f1600 lthing_kat_ffi 23 14 none]
+G r c none [test_keccak standard 6 11 none] [shake_absorb lthing_kat_ffi 31 14 none]
+G r c none [test_keccak standard 6 11 none] [shake_squeeze lthing_kat_ffi 43 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 59|4r6 4r29
+X 13 a-textio.ads
+58K13*Text_IO 787e16 59|4w10 4r33
+282U14*New_Line 59|192s4 195s4 198s4 202s4
+566U14*Put_Line 59|90s10 92s10 94s13 96s13 97s13 111s10 113s10 114s10 115s10
+. 191s4 204s7 206s7
+X 15 interfac.ads
+38K9*Interfaces 232e15 59|3w6 3r29
+69M9*Unsigned_8 59|12r62 13r27
+83M9*Unsigned_64 59|114r35
+X 18 lthing_kat_ffi.ads
+16K9*LTHING_KAT_FFI 55e19 59|1w6 1r30
+20A9*Keccak_State(15|83M9)<integer> 59|106r15 122r15 140r15 158r15 174r15
+23U14*Keccak_F1600 59|108s7
+31U14*SHAKE_Absorb 59|132s7 150s7 166s7 184s7
+43U14*SHAKE_Squeeze 59|133s7 151s7 167s7 185s7
+X 19 lthing_types.ads
+17K9*LTHING_Types 58e17 59|2w6 2r29
+28A9*Byte_Array(19M12)<integer> 59|8r48 9r16 64r35 77r46 123r15 124r16 126r27
+. 141r24 144r16 146r27 159r15 160r16 162r27 175r24 178r16 180r27
+X 59 test_keccak.adb
+6U11*Test_Keccak 6b11 208l5 208t16
+8V13 Hex_To_Bytes{19|28A9} 8b13 8>27 62l8 62t20 126s41 146s41 162s41 180s41
+8a27 Hex{string} 9r33 10r24 56r20 57r20 57r31
+9a7 Result{19|28A9} 11r29 57m46 57r46 61r14
+10i7 Pos{natural} 56r13 57r25 57r36 58m10 58r17
+11i7 Byte_Pos{natural} 57r54 59m10 59r22
+12U17 Hex_Pair 12b17 12>27 12>31 12<47 54l11 54t19 57s10
+12e27 Hi{character} 15r15
+12e31 Lo{character} 34r15
+12m47 Byte_Out{15|69M9} 53m10
+13m10 Hi_Val{15|69M9} 16m25 17m25 18m25 19m25 20m25 21m25 22m25 23m25 24m25
+. 25m25 26m31 27m31 28m31 29m31 30m31 31m31 32m28 53r23
+13m18 Lo_Val{15|69M9} 35m25 36m25 37m25 38m25 39m25 40m25 41m25 42m25 43m25
+. 44m25 45m31 46m31 47m31 48m31 49m31 50m31 51m28 53r38
+64V13 Bytes_To_Hex{string} 64b13 64>27 75l8 75t20 96s36 97s36
+64a27 Bytes{19|28A9} 65r29 69r16
+65a7 Result{string} 66r24 70m10 71m10 74r14
+66i7 Pos{natural} 70r18 71r18 72m10 72r17
+67a7 Hex_Chars{string} 70r26 71r30
+69m11 B=69:16{19|19M12} 70r46 71r50
+77U14 Chk 77b14 77>19 77>34 77>39 100l8 100t11 134s7 152s7 168s7 186s7
+77a19 Name{string} 90r32 92r32
+77a34 Got{19|28A9} 78r26 81r19 82r16 93r13 94r42 96r50
+77a39 Want{19|28A9} 78r39 82r27 93r27 94r72 97r50
+78b7 Match{boolean} 80r10 83m16 89r10
+81i14 I{integer} 82r21 82r33
+102i4 Fails{natural} 116m10 116r19 135m34 135r43 153m34 153r43 169m34 169r43
+. 187m34 187r43 203r7 206r35
+105U14 Test_Keccak_F1600_Zero 105b14 118l8 118t30 194s4
+106a7 State{18|20A9} 108m21 108r21 110r10 114r54
+121U14 Test_SHAKE256_Empty_64B 121b14 136l8 136t31 196s4
+122a7 State{18|20A9} 132m21 132r21 133m22 133r22
+123a7 Empty{19|28A9} 132r28
+124a7 Output{19|28A9} 133m29 133r37 134r34 135r10
+126a7 Expected{19|28A9} 134r42 135r20
+139U14 Test_SHAKE256_ABC_32B 139b14 154l8 154t29 197s4
+140a7 State{18|20A9} 150m21 150r21 151m22 151r22
+141a7 Input{19|28A9} 150r28 150r35
+144a7 Output{19|28A9} 151m29 151r37 152r34 153r10
+146a7 Expected{19|28A9} 152r42 153r20
+157U14 Test_SHAKE128_Empty_32B 157b14 170l8 170t31 199s4
+158a7 State{18|20A9} 166m21 166r21 167m22 167r22
+159a7 Empty{19|28A9} 166r28
+160a7 Output{19|28A9} 167m29 167r37 168r34 169r10
+162a7 Expected{19|28A9} 168r42 169r20
+173U14 Test_SHAKE128_ABC_32B 173b14 188l8 188t29 200s4
+174a7 State{18|20A9} 184m21 184r21 185m22 185r22
+175a7 Input{19|28A9} 184r28 184r35
+178a7 Output{19|28A9} 185m29 185r37 186r34 187r10
+180a7 Expected{19|28A9} 186r42 187r20
+

@@ -1,0 +1,94 @@
+V "GNAT Lib v14"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -gnatR2js
+A -gnatws
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U lthing_hash%b		lthing_hash.adb		9927b6aa NE OO PK IU
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.adb			i-c.ali
+W lthing_crypto_ffi%s	lthing_crypto_ffi.ads	lthing_crypto_ffi.ali
+Z system.assertions%s	s-assert.adb		s-assert.ali
+
+U lthing_hash%s		lthing_hash.ads		570f75fb EE NE OO PK IU
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+
+D ada.ads		20240507065137 76789da1 ada%s
+D a-assert.ads		20240507065137 ba465f5c ada.assertions%s
+D a-unccon.ads		20240507065137 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240507065137 9111f9c1 interfaces%s
+D i-c.ads		20240507065137 aac316ce interfaces.c%s
+D lthing_crypto_ffi.ads	20260606181329 11320ca4 lthing_crypto_ffi%s
+D lthing_hash.ads	20260606181440 f385d517 lthing_hash%s
+D lthing_hash.adb	20260606181354 40428016 lthing_hash%b
+D lthing_types.ads	20260606181020 a48aa0ec lthing_types%s
+D system.ads		20240507065137 14286b0f system%s
+D s-assert.ads		20240507065137 9c4520c7 system.assertions%s
+D s-exctab.ads		20240507065137 91bef6ef system.exception_table%s
+D s-parame.ads		20240507065137 3597fc11 system.parameters%s
+D s-stalib.ads		20240507065137 1c9580f6 system.standard_library%s
+G a e
+G c Z s b [shake512 lthing_hash 20 14 none]
+G c Z s b [chain_hash lthing_hash 30 14 none]
+G r c none [shake512 lthing_hash 20 14 none] [shake_absorb lthing_crypto_ffi 33 14 none]
+G r c none [shake512 lthing_hash 20 14 none] [shake_squeeze lthing_crypto_ffi 45 14 none]
+G r c none [chain_hash lthing_hash 30 14 none] [shake_absorb lthing_crypto_ffi 33 14 none]
+G r c none [chain_hash lthing_hash 30 14 none] [shake_squeeze lthing_crypto_ffi 45 14 none]
+X 4 interfac.ads
+38K9*Interfaces 233e15 8|8w6 8r29 9r6 24r22
+70M9*Unsigned_8
+84M9*Unsigned_64
+X 5 i-c.ads
+30K20*C 598e17 8|9w17 24r33
+68M9*unsigned 8|24r35
+X 6 lthing_crypto_ffi.ads
+22K9*LTHING_Crypto_FFI 70e22 8|10w6 10r29
+25N4*SHAKE512_Rate 8|25r22 31r24
+29A9*Keccak_State(4|84M9)<integer> 8|18r15
+33U14*SHAKE_Absorb 8|21s7
+34a7 State{29A9} 8|22r10
+35a7 Data{9|28A9} 8|23r10
+36m7 Data_Len{5|68M9} 8|24r10
+37m7 Rate{5|68M9} 8|25r10
+45U14*SHAKE_Squeeze 8|27s7
+46a7 State{29A9} 8|28r10
+47a7 Output{9|28A9} 8|29r10
+48m7 Output_Len{5|68M9} 8|30r10
+49m7 Rate{5|68M9} 8|31r10
+X 7 lthing_hash.ads
+15K9*LTHING_Hash 38l5 38e16 8|12b14 63l5 63t16
+20U14*SHAKE512 21>7 22<7 8|14b14 36l8 36t16 60s7
+21a7 Input{9|28A9} 24r21 8|15b7 23r22 24r45
+22a7 Output{9|32A9} 8|16b7 34m10
+30U14*Chain_Hash 31>7 32>7 33<7 8|38b14 61l8 61t18
+31a7 Previous_Seal{9|32A9} 8|39b7 49r24
+32a7 Artifact{9|28A9} 35r21 36r30 8|40b7 44r45 52r16 54r27 56r24
+33a7 Output{9|32A9} 8|41b7 60m25
+X 8 lthing_hash.adb
+18a7 State{6|29A9} 22m22 22r22 28m24 28r24
+19a7 Buf{9|28A9} 29m24 34r24
+33i11 I{9|31I12} 34r18 34r29
+44i7 Concat_Len{natural} 45r37 55r26
+45a7 Concat{9|28A9} 49m10 56m10 60r17
+46i7 J{natural} 51m7 54r13 55r22 56r18 57m10 57r15
+48i11 I{9|31I12} 49r18 49r39
+52i11 I{integer} 54r23 56r34
+X 9 lthing_types.ads
+17K9*LTHING_Types 7|13w6 13r24 9|58e17
+19M12*Byte{4|70M9}
+24N4*Max_Document_Bytes 7|36r49
+28A9*Byte_Array(19M12)<integer> 7|21r16 32r23 8|15r16 19r15 40r23 45r20
+31I12*Digest_Index{natural} 8|33r16 48r16
+32A9*Digest(19M12)<integer> 7|22r20 31r23 33r27 8|16r20 39r23 41r27
+

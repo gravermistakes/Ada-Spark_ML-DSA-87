@@ -1,0 +1,24 @@
+
+lthing_hash.adb:19:07: warning: initialization of "Buf" has no effect
+   19 |      Buf   : Byte_Array (0 .. 63) := (others => 0);
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+lthing_hash.adb:21:07: warning: no Always_Terminates aspect available for "SHAKE_Absorb"
+   21>|      SHAKE_Absorb
+  ... | ...
+   25 |         Rate     => SHAKE512_Rate);
+  assuming "SHAKE_Absorb" always terminates
+
+lthing_hash.adb:27:07: warning: no Always_Terminates aspect available for "SHAKE_Squeeze"
+   27>|      SHAKE_Squeeze
+  ... | ...
+   31 |         Rate       => SHAKE512_Rate);
+  assuming "SHAKE_Squeeze" always terminates
+
+lthing_hash.adb:28:24: warning: "State" is set by "SHAKE_Squeeze" but not used after the call
+   28 |        (State      => State,
+      |                       ^~~~~
+
+lthing_hash.adb:46:07: warning: initialization of "J" has no effect
+   46 |      J          : Natural := 0;
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~

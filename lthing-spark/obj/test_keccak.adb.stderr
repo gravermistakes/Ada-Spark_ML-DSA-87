@@ -1,0 +1,2 @@
+test_keccak.adb:123:07: warning: "Empty" is not modified, could be declared constant [-gnatwk]
+test_keccak.adb:159:07: warning: "Empty" is not modified, could be declared constant [-gnatwk]

@@ -1,0 +1,17 @@
+[
+{
+  "name": "Lthing_Crypto_Ffi.Lane_Index",
+  "location": "lthing_crypto_ffi.ads:28:12",
+  "Object_Size": 32,
+  "Value_Size": 5,
+  "Alignment": 4
+}
+,
+{
+  "name": "Lthing_Crypto_Ffi.Keccak_State",
+  "location": "lthing_crypto_ffi.ads:29:9",
+  "Size": 1600,
+  "Alignment": 8,
+  "Component_Size": 64
+}
+]

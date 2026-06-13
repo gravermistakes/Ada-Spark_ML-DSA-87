@@ -1,0 +1,80 @@
+V "GNAT Lib v14"
+A -x
+A ada
+A -gnatA
+A -g
+A -g
+A -O0
+A -gnatwa
+A -gnata
+A -gnatc
+P GP
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_ELABORATION_CODE
+
+U lthing_types%s	lthing_types.ads	359b592d OO PK
+W interfaces%s		interfac.ads		interfac.ali
+
+D interfac.ads		20240507065137 9111f9c1 interfaces%s
+D lthing_types.ads	20260606181020 a48aa0ec lthing_types%s
+D system.ads		20240507065137 14286b0f system%s
+G a Z
+X 1 interfac.ads
+38K9*Interfaces 233e15 2|15w6 19r20
+70M9*Unsigned_8 2|19r31
+X 2 lthing_types.ads
+17K9*LTHING_Types 58l5 58e17
+19M12*Byte{1|70M9} 28r55 32r43
+24N4*Max_Document_Bytes 26r46
+26I12*Index_Range{natural} 28r30
+28A9*Byte_Array(19M12)<integer>
+31I12*Digest_Index{natural} 32r26
+32A9*Digest(19M12)<integer>
+37E9*Verify_Status 45e20 52r17
+38n7*Verified{37E9} 56r61
+39n7*Bad_Envelope{37E9}
+40n7*Bad_Magic{37E9}
+41n7*Bad_Length{37E9}
+42n7*Seal_Mismatch{37E9}
+43n7*Chain_Broken{37E9}
+44n7*Signature_Invalid{37E9}
+45n7*Not_Verified{37E9} 52r34
+51R9*Verified_Record 55e6
+52e7*Status{37E9} 56r52
+53b7*Trusted{boolean} 56r25
+
+QQ SPARKVERSION 0.0w
+GG EK_DIRECT_CALLS lthing_types 0
+GG EK_PROOF_DEPENDENCIES lthing_types 0
+GG EK_GLOBALS lthing_types local FALSE E_PACKAGE TRUE ORIGIN_FLOW 0 proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_packages 0 local_var 0 TRUE FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE interfaces__rotate_right__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_types__verified_recordPredicate FALSE FALSE FALSE FALSE TRUE lthing_types VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_types TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE interfaces__rotate_right__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_END_MARKER

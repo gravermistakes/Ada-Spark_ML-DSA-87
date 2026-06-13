@@ -1,0 +1,50 @@
+Summary of SPARK analysis
+=========================
+
+--------------------------------------------------------------------------------------------------
+SPARK Analysis results        Total        Flow                     Provers   Justified   Unproved
+--------------------------------------------------------------------------------------------------
+Data Dependencies                13          13                           .           .          .
+Flow Dependencies                 .           .                           .           .          .
+Initialization                    7           7                           .           .          .
+Non-Aliasing                      .           .                           .           .          .
+Run-time Checks                  37           .     37 (Trivial 1%, Z3 99%)           .          .
+Assertions                        2           .                      2 (Z3)           .          .
+Functional Contracts             12           .    12 (Trivial 12%, Z3 88%)           .          .
+LSP Verification                  .           .                           .           .          .
+Termination                       9           9                           .           .          .
+Concurrency                       .           .                           .           .          .
+--------------------------------------------------------------------------------------------------
+Total                            80    29 (36%)                    51 (64%)           .          .
+
+
+max steps used for successful proof: 2
+
+Analyzed 5 units
+in unit lthing_crypto_ffi, 1 subprograms and packages out of 4 analyzed
+  LTHING_Crypto_FFI at lthing_crypto_ffi.ads:22 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+  LTHING_Crypto_FFI.Compare_CT at lthing_crypto_ffi.ads:58 skipped; body is SPARK_Mode => Off
+  LTHING_Crypto_FFI.SHAKE_Absorb at lthing_crypto_ffi.ads:33 skipped; body is SPARK_Mode => Off
+  LTHING_Crypto_FFI.SHAKE_Squeeze at lthing_crypto_ffi.ads:45 skipped; body is SPARK_Mode => Off
+in unit lthing_hash, 3 subprograms and packages out of 3 analyzed
+  LTHING_Hash at lthing_hash.ads:15 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+  LTHING_Hash.Chain_Hash at lthing_hash.ads:30 flow analyzed (0 errors, 0 checks, 1 warnings and 0 pragma Assume statements) and proved (12 checks)
+  LTHING_Hash.SHAKE512 at lthing_hash.ads:20 flow analyzed (0 errors, 0 checks, 2 warnings and 0 pragma Assume statements) and proved (3 checks)
+in unit lthing_judicial, 7 subprograms and packages out of 7 analyzed
+  LTHING_Judicial at lthing_judicial.ads:33 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+  LTHING_Judicial.Digest_Equal at lthing_judicial.adb:53 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (1 checks)
+  LTHING_Judicial.Envelope_Ok at lthing_judicial.adb:32 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+  LTHING_Judicial.Magic_Ok at lthing_judicial.adb:42 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (2 checks)
+  LTHING_Judicial.Parse_And_Verify at lthing_judicial.ads:73 flow analyzed (0 errors, 0 checks, 1 warnings and 0 pragma Assume statements) and proved (8 checks)
+  LTHING_Judicial.Parse_Unverified at lthing_judicial.ads:47 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (3 checks)
+  LTHING_Judicial.Verify_Signature at lthing_judicial.adb:71 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+in unit lthing_mldsa_field, 6 subprograms and packages out of 6 analyzed
+  LTHING_MLDSA_Field at lthing_mldsa_field.ads:22 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+  LTHING_MLDSA_Field.Add at lthing_mldsa_field.ads:33 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (4 checks)
+  LTHING_MLDSA_Field.Mul at lthing_mldsa_field.ads:43 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (4 checks)
+  LTHING_MLDSA_Field.Reduce at lthing_mldsa_field.ads:48 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (4 checks)
+  LTHING_MLDSA_Field.Sub at lthing_mldsa_field.ads:38 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (4 checks)
+  LTHING_MLDSA_Field.To_Centered at lthing_mldsa_field.ads:54 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (2 checks)
+in unit lthing_types, 2 subprograms and packages out of 2 analyzed
+  LTHING_Types at lthing_types.ads:17 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)
+  LTHING_Types.Verified_Recordpredicate at lthing_types.ads:51 flow analyzed (0 errors, 0 checks, 0 warnings and 0 pragma Assume statements) and proved (0 checks)

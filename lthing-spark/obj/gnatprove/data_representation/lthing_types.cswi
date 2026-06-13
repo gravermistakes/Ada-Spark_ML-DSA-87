@@ -1,0 +1,12 @@
+              
+-c
+-x
+ada
+-gnatA
+-g
+-O0
+-gnatwa
+-gnata
+-S
+-gnatR2js
+-gnatws

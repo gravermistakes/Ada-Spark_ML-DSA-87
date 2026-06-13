@@ -1,0 +1,2 @@
+lthing_kat_ffi.ads:12:25: warning: use clause for package "Interfaces" has no effect [-gnatwu]
+lthing_kat_ffi.ads:13:26: warning: use clause for package "C" has no effect [-gnatwu]

@@ -1,0 +1,107 @@
+V "GNAT Lib v13"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U lthing_judicial%b	lthing_judicial.adb	9ac3d31a NE OO PK
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.adb			i-c.ali
+W lthing_crypto_ffi%s	lthing_crypto_ffi.ads	lthing_crypto_ffi.ali
+W lthing_hash%s		lthing_hash.adb		lthing_hash.ali
+Z system.assertions%s	s-assert.adb		s-assert.ali
+
+U lthing_judicial%s	lthing_judicial.ads	eef8c152 EE NE OO PK
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+
+D ada.ads		20240521074738 76789da1 ada%s
+D a-assert.ads		20240521074737 ba465f5c ada.assertions%s
+D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D i-c.ads		20240521074738 5c5a6c17 interfaces.c%s
+D lthing_crypto_ffi.ads	20260606181329 11320ca4 lthing_crypto_ffi%s
+D lthing_hash.ads	20260606181440 f385d517 lthing_hash%s
+D lthing_judicial.ads	20260606181445 4a7261be lthing_judicial%s
+D lthing_judicial.adb	20260606181228 6e5c0700 lthing_judicial%b
+D lthing_types.ads	20260606181020 a48aa0ec lthing_types%s
+D system.ads		20240521074738 426dafb8 system%s
+D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
+D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
+D s-parame.ads		20251218205951 1f39ba92 system.parameters%s
+D s-stalib.ads		20240521074738 1c9580f6 system.standard_library%s
+G a e
+G c Z s b [parse_unverified lthing_judicial 47 14 none]
+G c Z s b [parse_and_verify lthing_judicial 73 14 none]
+G c Z b b [envelope_ok lthing_judicial 32 13 none]
+G c Z b b [magic_ok lthing_judicial 42 13 none]
+G c Z b b [digest_equal lthing_judicial 53 13 none]
+G c Z b b [verify_signature lthing_judicial 71 13 none]
+G r c none [digest_equal lthing_judicial 53 13 none] [compare_ct lthing_crypto_ffi 58 13 none]
+X 4 interfac.ads
+38K9*Interfaces 232e15 9|22r6 22r29
+69M9*Unsigned_8
+X 5 i-c.ads
+29K20*C 597e17 9|22w17 22r40
+57I9*int<integer>
+X 6 lthing_crypto_ffi.ads
+22K9*LTHING_Crypto_FFI 70e22 9|21w6 21r29
+58V13*Compare_CT{5|57I9} 9|63s14
+X 7 lthing_hash.ads
+15K9*LTHING_Hash 38e16 9|20w6 20r29
+30U14*Chain_Hash 9|127s7
+X 8 lthing_judicial.ads
+33K9*LTHING_Judicial 86l5 86e20 9|24b14 147l5 147t20
+36N4*Judicial_DocType 9|49r60
+47U14*Parse_Unverified 48>7 49<7 9|84b14
+48a7 Document{10|28A9} 9|85b7 89r27
+49r7 Result{10|51R9} 51r21 52r30 9|86b7 90m10 90r10 93m10 93r10
+73U14*Parse_And_Verify 74>7 75>7 76>7 77<7 9|100b14
+74a7 Document{10|28A9} 79r21 80r30 9|101b7 114r27 120r24 127r34 138r32
+75a7 Previous_Seal{10|32A9} 9|102b7 127r19
+76a7 Public_Key{10|28A9} 81r30 9|103b7 138r42
+77r7 Result{10|51R9} 82r25 82r56 84r22 84r40 9|104b7 111m7 111r7 115m10 115r10
+. 121m10 121r10 133m10 133r10 139m10 139r10 144m7 144r7
+X 9 lthing_judicial.adb
+32V13 Envelope_Ok{boolean} 32b13 32>26 38l8 38t19 89s14 114s14
+32a26 Document{10|28A9} 37r14
+42V13 Magic_Ok{boolean} 42b13 42>23 50l8 50t16 120s14
+42a23 Document{10|28A9} 48r14 49r27 49r37
+53V13 Digest_Equal{boolean} 53b13 53>27 53>30 64l8 64t20 132s14
+53a27 A{10|32A9} 60r23
+53a30 B{10|32A9} 61r23
+56a7 A_Arr{10|28A9} 60m10 63r26
+57a7 B_Arr{10|28A9} 61m10 63r33
+59i11 I{10|31I12} 60r17 60r26 61r17 61r26
+71V13 Verify_Signature{boolean} 71b13 72>7 73>7 79l8 79t24 138s14
+72a7 Document{10|28A9} 76r28
+73a7 Public_Key{10|28A9} 76r38
+106a7 Recomputed_Chain{10|32A9} 127m44 132r28 132r46
+X 10 lthing_types.ads
+17K9*LTHING_Types 8|31w6 31r24 10|58e17
+19M12*Byte{4|69M9}
+24N4*Max_Document_Bytes 8|80r49
+28A9*Byte_Array(19M12)<integer> 8|48r18 74r23 76r23 9|32r37 42r34 56r15 57r15
+. 72r20 73r20 85r18 101r23 103r23
+31I12*Digest_Index{natural} 9|59r16
+32A9*Digest(19M12)<integer> 8|75r23 9|53r34 102r23 106r26
+38n7*Verified{37E9} 8|52r47 82r42 84r56 9|144r28
+39n7*Bad_Envelope{37E9} 9|90r31 115r31
+40n7*Bad_Magic{37E9} 9|121r31
+43n7*Chain_Broken{37E9} 9|133r31
+44n7*Signature_Invalid{37E9} 9|139r31
+45n7*Not_Verified{37E9} 9|93r31 111r28
+51R9*Verified_Record 8|49r22 77r27 9|86r22 104r27 10|55e6
+52e7*Status{37E9} 8|52r37 82r32 84r47 9|90m21 93m21 111m18 115m21 121m21
+. 133m21 139m21 144m18
+53b7*Trusted{boolean} 8|51r28 82r63 84r29 9|90m45 93m45 111m42 115m45 121m42
+. 133m45 139m50 144m38
+

@@ -1,0 +1,11 @@
+20260606181504
+-c
+-x
+ada
+-gnatA
+-g
+-O0
+-gnatwa
+-gnata
+-gnatc
+-gnates=/home/claude/lthing-spark/obj/gnatprove/cbb41847.tmp

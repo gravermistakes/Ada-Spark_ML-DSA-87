@@ -1,0 +1,102 @@
+V "GNAT Lib v13"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U lthing_mldsa_ntt%b	lthing_mldsa_ntt.adb	d5171271 NE OO PK IU
+
+U lthing_mldsa_ntt%s	lthing_mldsa_ntt.ads	af7b8cd1 EE NE OO PK IU
+W interfaces%s		interfac.ads		interfac.ali
+W lthing_mldsa_field%s	lthing_mldsa_field.adb	lthing_mldsa_field.ali
+
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D lthing_mldsa_field.ads  20260607002412 e3f7b969 lthing_mldsa_field%s
+D lthing_mldsa_ntt.ads	20260607003437 597bac7a lthing_mldsa_ntt%s
+D lthing_mldsa_ntt.adb	20260607003459 8c6cbe0b lthing_mldsa_ntt%b
+D system.ads		20240521074738 426dafb8 system%s
+G a e
+G c Z s b [ntt lthing_mldsa_ntt 29 14 none]
+G c Z s b [inv_ntt lthing_mldsa_ntt 32 14 none]
+G c Z s b [pointwise lthing_mldsa_ntt 35 13 none]
+G c Z s b [schoolbook_mul lthing_mldsa_ntt 38 13 none]
+G c Z s s [TpolyBIP lthing_mldsa_ntt 24 4 none]
+G r c none [ntt lthing_mldsa_ntt 29 14 none] [mul lthing_mldsa_field 43 13 none]
+G r c none [ntt lthing_mldsa_ntt 29 14 none] [sub lthing_mldsa_field 38 13 none]
+G r c none [ntt lthing_mldsa_ntt 29 14 none] [add lthing_mldsa_field 33 13 none]
+G r c none [inv_ntt lthing_mldsa_ntt 32 14 none] [mul lthing_mldsa_field 43 13 none]
+G r c none [inv_ntt lthing_mldsa_ntt 32 14 none] [sub lthing_mldsa_field 38 13 none]
+G r c none [inv_ntt lthing_mldsa_ntt 32 14 none] [add lthing_mldsa_field 33 13 none]
+G r c none [pointwise lthing_mldsa_ntt 35 13 none] [mul lthing_mldsa_field 43 13 none]
+G r c none [schoolbook_mul lthing_mldsa_ntt 38 13 none] [mul lthing_mldsa_field 43 13 none]
+G r c none [schoolbook_mul lthing_mldsa_ntt 38 13 none] [add lthing_mldsa_field 33 13 none]
+G r c none [schoolbook_mul lthing_mldsa_ntt 38 13 none] [sub lthing_mldsa_field 38 13 none]
+X 1 interfac.ads
+38K9*Interfaces 232e15 3|19w6 19r31
+53I9*Integer_32<integer>
+X 2 lthing_mldsa_field.ads
+22K9*LTHING_MLDSA_Field 59e23 3|20w6 20r31
+27I12*Fq{1|53I9} 3|24r37 4|24r32 27r13 35r20 66r14 67r14 95r15 96r15 98r24
+33V13*Add{27I12} 4|80s34 111s34 145s27
+38V13*Sub{27I12} 4|79s34 108s24 112s34 148s33
+43V13*Mul{27I12} 4|40s26 42s24 78s24 113s34 121s19 129s19 145s41 148s53
+X 3 lthing_mldsa_ntt.ads
+22K9*LTHING_MLDSA_NTT 40l5 40e21 4|9b14 155l5 155t21
+24A9*Poly(2|27I12)<integer> 29r30 32r34 35r31 35r44 38r36 38r49 4|63r30 92r34
+. 125r31 125r44 126r11 137r36 137r49 138r11
+26N4*Zeta_Root 4|35r26
+29U14*NTT 29=19 4|63b14 87l8 87t11
+29a19 A{24A9} 4|63b19 78r35 79m19 79r39 80m19 80r39
+32U14*Inv_NTT 32=23 4|92b14 123l8 123t15
+32a23 A{24A9} 4|92b23 110r24 111m19 111r42 112m19 112r42 113m19 113r45 120r16
+. 121m10 121r24
+35V13*Pointwise{24A9} 35>24 35>27 4|125b13 132l8 132t17
+35a24 A{24A9} 4|125b24 128r16 129r24
+35a27 B{24A9} 4|125b27 129r31
+38V13*Schoolbook_Mul{24A9} 38>29 38>32 4|137b13 153l8 153t22
+38a29 A{24A9} 4|137b29 145r46 148r58
+38a32 B{24A9} 4|137b32 145r53 148r65
+X 4 lthing_mldsa_ntt.adb
+12V13 BRV{natural} 12b13 12>18 21l8 21t11 33s17
+12i18 X{natural} 14r22
+13i7 R{natural} 17m10 17r15 20r14
+14i7 V{natural} 17r24 18m10 18r15
+16i11 I{integer}
+24a4 Zetas(2|27I12) 46m10 76r24 108r32
+26U14 Init_Zetas 26b14 48l8 48t18 55s10
+27i7 Acc{2|27I12} 32m10 40m19 40r31 46r23
+28i7 E{natural} 33m10 36r31
+30i11 I{integer} 33r22 46r17
+35i13 Base{2|27I12} 40r36 42m16 42r29 42r35
+36i13 Exp{natural} 38r19 39r19 43m16 43r24
+50b4 Initialized{boolean} 54r14 56m10
+52U14 Ensure_Init 52b14 58l8 58t19 69s7 100s7
+64i7 Len{natural} 70r13 77r42 78r42 79r26 82r37 85m10 85r17
+65i7 K{natural} 75m16 75r21 76r31
+66i7 Zeta{2|27I12} 76m16 78r29
+67i7 T{2|27I12} 78m19 79r46 80r46
+72i13 Start{natural} 74r19 77r25 77r34 82m16 82r25
+77i20 J{integer} 78r38 79r22 79r42 80r22 80r42
+93i7 Len{natural} 101r13 109r42 111r49 112r26 112r49 113r26 113r52 115r37
+. 118m10 118r17
+94i7 K{natural} 106m16 106r21 108r39
+95i7 Zeta{2|27I12} 108m16 113r39
+96i7 T{2|27I12} 110m19 111r39 112r39
+98i7 N_Inv{2|27I12} 121r31
+103i13 Start{natural} 105r19 109r25 109r34 115m16 115r25
+109i20 J{integer} 110r27 111r22 111r45 112r22 112r45 113r22 113r48
+120i11 I{integer} 121r13 121r27
+126a7 R{3|24A9} 129m10 131r14
+128i11 I{integer} 129r13 129r27 129r34
+138a7 R{3|24A9} 145m16 145r32 148m16 148r38 152r14
+139i7 Idx{natural} 143m13 144r16 145r19 145r35 148r19 148r41
+141i11 I{integer} 143r20 145r49 148r61
+142i14 J{integer} 143r24 145r56 148r68
+

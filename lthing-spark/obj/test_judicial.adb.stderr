@@ -1,0 +1,3 @@
+test_judicial.adb:7:04: warning: "PK" is not modified, could be declared constant [-gnatwk]
+test_judicial.adb:8:04: warning: "Zero" is not modified, could be declared constant [-gnatwk]
+test_judicial.adb:28:07: warning: "Tiny" is not modified, could be declared constant [-gnatwk]

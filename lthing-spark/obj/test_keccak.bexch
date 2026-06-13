@@ -1,0 +1,20 @@
+[GENERATED OBJECT FILE]
+b__test_keccak.o
+[PROJECT FILES]
+/home/user/psychic-octo-couscous/lthing-spark/lthing.gpr
+20260613192025 762525cac127484c3f56c5010d8e617e
+[BOUND OBJECT FILES]
+/home/user/psychic-octo-couscous/lthing-spark/obj/lthing_types.o
+/home/user/psychic-octo-couscous/lthing-spark/obj/lthing_kat_ffi.o
+/home/user/psychic-octo-couscous/lthing-spark/obj/test_keccak.o
+[GENERATED SOURCE FILES]
+b__test_keccak.ads
+b__test_keccak.adb
+b__test_keccak.ali
+[RESULTING OPTIONS]
+-L/home/user/psychic-octo-couscous/lthing-spark/obj/
+-L/home/user/psychic-octo-couscous/lthing-spark/obj/
+-L/usr/lib/gcc/x86_64-linux-gnu/13/adalib/
+-shared
+-lgnat-13
+-ldl

@@ -1,0 +1,33 @@
+lthing_judicial.adb:32:13: info: implicit aspect Always_Terminates on "Envelope_Ok" has been proved, subprogram will terminate
+lthing_judicial.adb:33:11: info: data dependencies proved
+lthing_judicial.adb:42:13: info: implicit aspect Always_Terminates on "Magic_Ok" has been proved, subprogram will terminate
+lthing_judicial.adb:43:11: info: data dependencies proved
+lthing_judicial.adb:49:52: info: overflow check proved
+lthing_judicial.adb:49:52: info: index check proved
+lthing_judicial.adb:53:13: info: implicit aspect Always_Terminates on "Digest_Equal" has been proved, subprogram will terminate
+lthing_judicial.adb:54:11: info: data dependencies proved
+lthing_judicial.adb:56:07: info: initialization of "A_Arr" proved
+lthing_judicial.adb:57:07: info: initialization of "B_Arr" proved
+lthing_judicial.adb:63:14: info: precondition proved
+lthing_judicial.adb:71:13: info: implicit aspect Always_Terminates on "Verify_Signature" has been proved, subprogram will terminate
+lthing_judicial.adb:74:11: info: data dependencies proved
+lthing_judicial.adb:90:20: info: predicate check proved
+lthing_judicial.adb:93:20: info: predicate check proved
+lthing_judicial.adb:106:07: info: initialization of "Recomputed_Chain" proved
+
+lthing_judicial.adb:111:14: warning: unused assignment
+  111 |      Result := (Status => Not_Verified, Trusted => False);
+      |      ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+lthing_judicial.adb:111:17: info: predicate check proved
+lthing_judicial.adb:115:20: info: predicate check proved
+lthing_judicial.adb:121:20: info: predicate check proved
+lthing_judicial.adb:127:07: info: precondition proved
+lthing_judicial.adb:133:20: info: predicate check proved
+lthing_judicial.adb:139:20: info: predicate check proved
+lthing_judicial.adb:144:17: info: predicate check proved
+lthing_judicial.ads:49:07: info: initialization of "Result" proved
+lthing_judicial.ads:50:11: info: data dependencies proved
+lthing_judicial.ads:51:21: info: postcondition proved
+lthing_judicial.ads:77:07: info: initialization of "Result" proved
+lthing_judicial.ads:78:11: info: data dependencies proved
+lthing_judicial.ads:82:21: info: postcondition proved

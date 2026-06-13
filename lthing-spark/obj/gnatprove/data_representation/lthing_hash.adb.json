@@ -1,0 +1,36 @@
+[
+{
+  "name": "LTHING_HASH.SHAKE512.STATE",
+  "location": "lthing_hash.adb:18:7",
+  "Size": 1600,
+  "Alignment": 8
+}
+,
+{
+  "name": "LTHING_HASH.SHAKE512.BUF",
+  "location": "lthing_hash.adb:19:7",
+  "Size": 512,
+  "Alignment": 1
+}
+,
+{
+  "name": "LTHING_HASH.CHAIN_HASH.CONCAT_LEN",
+  "location": "lthing_hash.adb:44:7",
+  "Size": 32,
+  "Alignment": 4
+}
+,
+{
+  "name": "LTHING_HASH.CHAIN_HASH.CONCAT",
+  "location": "lthing_hash.adb:45:7",
+  "Size": "??",
+  "Alignment": 1
+}
+,
+{
+  "name": "LTHING_HASH.CHAIN_HASH.J",
+  "location": "lthing_hash.adb:46:7",
+  "Size": 32,
+  "Alignment": 4
+}
+]

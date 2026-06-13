@@ -1,0 +1,16 @@
+[
+{
+  "name": "Lthing_Mldsa_Field.Fq",
+  "location": "lthing_mldsa_field.ads:27:12",
+  "Object_Size": 32,
+  "Value_Size": 23,
+  "Alignment": 4
+}
+,
+{
+  "name": "Lthing_Mldsa_Field.Wide",
+  "location": "lthing_mldsa_field.ads:30:12",
+  "Size": 64,
+  "Alignment": 8
+}
+]

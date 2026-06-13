@@ -1,0 +1,506 @@
+; ==============================================================================
+; keccak.asm — Keccak-f[1600] Permutation for SHAKE-256/512
+; ==============================================================================
+; LTHING Cryptographic Primitive (x86-64 Assembly / NASM)
+; FIPS 202 compliant SHAKE-256 implementation (XOF)
+; Zero external dependencies. Constant-time where applicable.
+;
+; License: GPL-3.0-or-later (copyleft)
+; Author: Anja Evermoor, Claude Sonnet 4.5
+; Specification: NIST FIPS 202 (SHA-3 Standard)
+; ==============================================================================
+
+BITS 64
+DEFAULT REL
+
+section .rodata
+align 8
+
+; Keccak-f[1600] round constants (24 rounds)
+; These are XOR constants applied in the ι (iota) step
+keccak_round_constants:
+    dq 0x0000000000000001, 0x0000000000008082
+    dq 0x800000000000808a, 0x8000000080008000
+    dq 0x000000000000808b, 0x0000000080000001
+    dq 0x8000000080008081, 0x8000000000008009
+    dq 0x000000000000008a, 0x0000000000000088
+    dq 0x0000000080008009, 0x000000008000000a
+    dq 0x000000008000808b, 0x800000000000008b
+    dq 0x8000000000008089, 0x8000000000008003
+    dq 0x8000000000008002, 0x8000000000000080
+    dq 0x000000000000800a, 0x800000008000000a
+    dq 0x8000000080008081, 0x8000000000008080
+    dq 0x0000000080000001, 0x8000000080008008
+
+; Rotation offsets for ρ (rho) step — indexed by [y][x]
+; Flattened to 1D array: offset = rho_offsets[y * 5 + x]
+rho_offsets:
+    dq  0,  1, 62, 28, 27   ; y=0, x=0..4
+    dq 36, 44,  6, 55, 20   ; y=1
+    dq  3, 10, 43, 25, 39   ; y=2
+    dq 41, 45, 15, 21,  8   ; y=3
+    dq 18,  2, 61, 56, 14   ; y=4
+
+section .bss
+align 64
+; Temporary storage for Keccak state (200 bytes = 25 x 64-bit lanes)
+keccak_state: resb 200
+keccak_temp_c: resq 5    ; For θ step column parity
+keccak_temp_d: resq 5    ; For θ step XOR distribution
+keccak_temp_b: resq 25   ; For combined ρ+π lane permutation (B buffer)
+
+section .note.GNU-stack noalloc noexec nowrite progbits
+
+section .text
+global keccak_f1600
+global shake256_absorb
+global shake256_squeeze
+
+; ==============================================================================
+; ROL64 — Rotate 64-bit value left by n bits (inline macro via function)
+; ==============================================================================
+; rdi = value (uint64_t), rsi = shift count (uint8_t)
+; Returns: rax = rotated value
+rol64:
+    mov rax, rdi
+    mov cl, sil
+    rol rax, cl
+    ret
+
+; ==============================================================================
+; keccak_f1600 — Keccak-f[1600] permutation (24 rounds)
+; ==============================================================================
+; C signature:
+;   void keccak_f1600(uint64_t state[25]);
+;
+; Arguments:
+;   rdi = state array (uint64_t *) — 25 x 64-bit lanes (200 bytes)
+;
+; Returns: void
+; Modifies: state array in-place
+;
+; Implements:
+;   θ (theta) — Column parity diffusion
+;   ρ (rho)   — Rotation
+;   π (pi)    — Permutation
+;   χ (chi)   — Non-linear mixing
+;   ι (iota)  — Round constant XOR
+; ==============================================================================
+keccak_f1600:
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14
+    push r15
+
+    mov r15, rdi          ; r15 = state pointer
+
+    ; Perform 24 rounds
+    xor r14, r14          ; round counter
+
+.round_loop:
+    cmp r14, 24
+    jge .rounds_done
+
+    ; ========== θ (theta) step ==========
+    ; Compute column parity: C[x] = A[x,0] ⊕ A[x,1] ⊕ A[x,2] ⊕ A[x,3] ⊕ A[x,4]
+    xor rbx, rbx          ; x = 0
+.theta_c_loop:
+    cmp rbx, 5
+    jge .theta_c_done
+
+    ; C[x] = state[x] ^ state[x+5] ^ state[x+10] ^ state[x+15] ^ state[x+20]
+    mov rax, qword [r15 + rbx*8]
+    xor rax, qword [r15 + rbx*8 + 40]
+    xor rax, qword [r15 + rbx*8 + 80]
+    xor rax, qword [r15 + rbx*8 + 120]
+    xor rax, qword [r15 + rbx*8 + 160]
+    lea r12, [rel keccak_temp_c]
+    mov qword [r12 + rbx*8], rax
+
+    inc rbx
+    jmp .theta_c_loop
+
+.theta_c_done:
+    ; Compute D[x] = C[x-1] ⊕ ROT(C[x+1], 1)
+    xor rbx, rbx
+.theta_d_loop:
+    cmp rbx, 5
+    jge .theta_d_done
+
+    ; x_prev = (x + 4) % 5, x_next = (x + 1) % 5
+    mov rax, rbx
+    add rax, 4
+    xor rdx, rdx
+    mov rcx, 5
+    div rcx               ; rdx = (x+4) % 5
+    lea r12, [rel keccak_temp_c]
+    mov r8, qword [r12 + rdx*8]  ; C[x-1]
+
+    mov rax, rbx
+    inc rax
+    xor rdx, rdx
+    div rcx               ; rdx = (x+1) % 5
+    mov r9, qword [r12 + rdx*8]  ; C[x+1]
+
+    ; ROT(C[x+1], 1)
+    mov rax, r9
+    rol rax, 1
+    xor r8, rax           ; D[x] = C[x-1] ^ ROT(C[x+1], 1)
+
+    lea r13, [rel keccak_temp_d]
+    mov qword [r13 + rbx*8], r8
+
+    inc rbx
+    jmp .theta_d_loop
+
+.theta_d_done:
+    ; Apply D to state: A[x,y] ^= D[x]
+    xor rbx, rbx          ; lane_idx = 0
+.theta_apply_loop:
+    cmp rbx, 25
+    jge .theta_apply_done
+
+    ; x = lane_idx % 5
+    mov rax, rbx
+    xor rdx, rdx
+    mov rcx, 5
+    div rcx               ; rdx = x
+    lea r13, [rel keccak_temp_d]
+    mov r8, qword [r13 + rdx*8]  ; D[x]
+    xor qword [r15 + rbx*8], r8
+
+    inc rbx
+    jmp .theta_apply_loop
+
+.theta_apply_done:
+
+    ; ========== ρ (rho) and π (pi) steps (combined) ==========
+    ; FIPS 202: B[y, (2x+3y) mod 5] = ROT(A[x,y], r[x,y])
+    ; Flat indexing here is idx = y*5 + x, so:
+    ;   src_idx = y*5 + x
+    ;   dst_idx = ((2x+3y) mod 5)*5 + y
+    ;   B[dst_idx] = ROL(A[src_idx], rho_offsets[src_idx])
+    ; A temp buffer is required because pi scatters lanes (cannot be in place).
+    ; We compute B into keccak_state (.bss scratch), then copy B back into A so
+    ; chi reads the permuted state. r[0,0]=0 so lane 0 is just moved, not rotated.
+
+    xor r10, r10              ; y = 0
+.rhopi_y:
+    cmp r10, 5
+    jge .rhopi_done
+    xor rbx, rbx              ; x = 0
+.rhopi_x:
+    cmp rbx, 5
+    jge .rhopi_x_done
+
+    ; src_idx = y*5 + x
+    mov rax, r10
+    imul rax, 5
+    add rax, rbx              ; rax = src_idx
+    mov r11, rax             ; save src_idx
+
+    ; load A[src_idx]
+    mov r8, qword [r15 + r11*8]
+
+    ; rotate left by rho_offsets[src_idx]
+    lea rax, [rel rho_offsets]
+    mov rcx, qword [rax + r11*8]   ; rcx = offset
+    rol r8, cl                     ; cl = low byte of offset (offsets < 64)
+
+    ; dst_idx = ((2x+3y) mod 5)*5 + y
+    mov rax, rbx
+    add rax, rax              ; 2x
+    mov rcx, r10
+    imul rcx, 3              ; 3y
+    add rax, rcx             ; 2x+3y
+    xor rdx, rdx
+    mov rcx, 5
+    div rcx                  ; rdx = (2x+3y) mod 5
+    mov rax, rdx
+    imul rax, 5             ; ((2x+3y) mod 5)*5
+    add rax, r10            ; + y  -> dst_idx
+
+    ; B[dst_idx] = rotated lane  (B lives in keccak_state scratch)
+    lea rcx, [rel keccak_temp_b]
+    mov qword [rcx + rax*8], r8
+
+    inc rbx
+    jmp .rhopi_x
+.rhopi_x_done:
+    inc r10
+    jmp .rhopi_y
+.rhopi_done:
+    ; copy B (keccak_state) back into A (state pointer) for chi
+    lea rcx, [rel keccak_temp_b]
+    xor rbx, rbx
+.rhopi_copy:
+    cmp rbx, 25
+    jge .rhopi_copy_done
+    mov r8, qword [rcx + rbx*8]
+    mov qword [r15 + rbx*8], r8
+    inc rbx
+    jmp .rhopi_copy
+.rhopi_copy_done:
+
+    ; ========== χ (chi) step ==========
+    ; A[x,y] = A[x,y] ⊕ ((~A[x+1,y]) & A[x+2,y])
+    ; Must snapshot each row BEFORE modifying, else later x in the row read
+    ; already-overwritten lanes. Snapshot the 5 row lanes into keccak_temp_c.
+    xor r10, r10          ; y = 0
+.chi_row_loop:
+    cmp r10, 5
+    jge .chi_done
+
+    ; snapshot row y: keccak_temp_c[i] = A[y*5 + i], i=0..4
+    mov rax, r10
+    imul rax, 5           ; row base = y*5
+    lea r9, [rel keccak_temp_c]
+    mov r8, qword [r15 + rax*8 + 0]
+    mov qword [r9 + 0], r8
+    mov r8, qword [r15 + rax*8 + 8]
+    mov qword [r9 + 8], r8
+    mov r8, qword [r15 + rax*8 + 16]
+    mov qword [r9 + 16], r8
+    mov r8, qword [r15 + rax*8 + 24]
+    mov qword [r9 + 24], r8
+    mov r8, qword [r15 + rax*8 + 32]
+    mov qword [r9 + 32], r8
+
+    ; For each x in row y, write A[y*5+x] = bc[x] ^ ((~bc[(x+1)%5]) & bc[(x+2)%5])
+    xor rbx, rbx          ; x = 0
+.chi_col_loop:
+    cmp rbx, 5
+    jge .chi_row_done
+
+    ; dst index = y*5 + x  (rax still = y*5)
+    mov r11, rax
+    add r11, rbx          ; dst idx
+
+    ; x1 = (x+1)%5, x2 = (x+2)%5  (into the 5-lane snapshot, not the state)
+    mov rcx, rbx
+    inc rcx
+    cmp rcx, 5
+    jb .chi_x1_ok
+    sub rcx, 5
+.chi_x1_ok:
+    mov r12, rcx          ; x1
+
+    mov rcx, rbx
+    add rcx, 2
+    cmp rcx, 5
+    jb .chi_x2_ok
+    sub rcx, 5
+.chi_x2_ok:
+    mov r13, rcx          ; x2
+
+    lea r9, [rel keccak_temp_c]
+    mov r8, qword [r9 + r12*8]   ; bc[x1]
+    not r8
+    and r8, qword [r9 + r13*8]   ; (~bc[x1]) & bc[x2]
+    mov rcx, qword [r9 + rbx*8]  ; bc[x]
+    xor rcx, r8
+    mov qword [r15 + r11*8], rcx ; A[dst] = result
+
+    inc rbx
+    jmp .chi_col_loop
+
+.chi_row_done:
+    inc r10
+    jmp .chi_row_loop
+
+.chi_done:
+
+    ; ========== ι (iota) step ==========
+    ; A[0,0] ^= RC[round]
+    lea rax, [rel keccak_round_constants]
+    mov rbx, qword [rax + r14*8]
+    xor qword [r15], rbx
+
+    inc r14
+    jmp .round_loop
+
+.rounds_done:
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
+; ==============================================================================
+; shake256_absorb — Absorb data into Keccak sponge
+; ==============================================================================
+; C signature:
+;   void shake256_absorb(uint64_t state[25], const uint8_t *data,
+;                        uint32_t data_len, uint32_t rate);
+;
+; Arguments:
+;   rdi = state array (uint64_t[25])
+;   rsi = data buffer (const uint8_t *)
+;   rdx = data_len (uint32_t)
+;   rcx = rate (uint32_t) — SHAKE256 uses rate=136 bytes
+;
+; Returns: void
+; Modifies: state array
+;
+; Absorption: XOR data into state in rate-sized blocks, permute after each block
+; ==============================================================================
+shake256_absorb:
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14
+    push r15
+
+    mov r12, rdi          ; state
+    mov r13, rsi          ; data
+    mov r14d, edx         ; data_len
+    mov r15d, ecx         ; rate
+
+    xor rbx, rbx          ; offset = 0
+
+.absorb_block_loop:
+    cmp ebx, r14d
+    jge .absorb_done
+
+    ; XOR min(rate, remaining) bytes into state
+    mov eax, r15d         ; rate
+    mov ecx, r14d
+    sub ecx, ebx
+    cmp eax, ecx
+    cmovg eax, ecx        ; chunk_len = min(rate, remaining)
+
+    xor r8, r8            ; byte_idx = 0
+.xor_loop:
+    cmp r8d, eax
+    jge .xor_done
+
+    ; state[byte_idx / 8] ^= (data[offset + byte_idx] << (byte_idx % 8 * 8))
+    ; Simplified: XOR byte-by-byte into state bytes
+    mov r9, r8
+    shr r9, 3             ; qword_idx = byte_idx / 8
+    push rax             ; preserve chunk_len bound (eax live across loop via cmp)
+    lea rax, [r13 + rbx] ; fold data_ptr+offset into one reg (x86-64: max 2 regs/addr)
+    movzx r10d, byte [rax + r8]
+    pop rax
+    mov r11, r8
+    and r11, 7
+    shl r11, 3            ; bit_shift = (byte_idx % 8) * 8
+    mov rcx, r11          ; load shift count into cl (was uninitialized)
+    shl r10, cl
+    xor qword [r12 + r9*8], r10
+
+    inc r8
+    jmp .xor_loop
+
+.xor_done:
+    ; Permute state after absorbing block
+    mov rdi, r12
+    call keccak_f1600
+
+    add ebx, eax          ; offset += chunk_len
+    jmp .absorb_block_loop
+
+.absorb_done:
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
+; ==============================================================================
+; shake256_squeeze — Squeeze output from Keccak sponge
+; ==============================================================================
+; C signature:
+;   void shake256_squeeze(uint64_t state[25], uint8_t *output,
+;                         uint32_t output_len, uint32_t rate);
+;
+; Arguments:
+;   rdi = state array (uint64_t[25])
+;   rsi = output buffer (uint8_t *)
+;   rdx = output_len (uint32_t)
+;   rcx = rate (uint32_t) — SHAKE256 uses rate=136 bytes
+;
+; Returns: void
+; Modifies: output buffer
+; ==============================================================================
+shake256_squeeze:
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14
+    push r15
+
+    mov r12, rdi          ; state
+    mov r13, rsi          ; output
+    mov r14d, edx         ; output_len
+    mov r15d, ecx         ; rate
+
+    xor rbx, rbx          ; offset = 0
+
+.squeeze_block_loop:
+    cmp ebx, r14d
+    jge .squeeze_done
+
+    ; Copy min(rate, remaining) bytes from state to output
+    mov eax, r15d
+    mov ecx, r14d
+    sub ecx, ebx
+    cmp eax, ecx
+    cmovg eax, ecx        ; chunk_len = min(rate, remaining)
+
+    xor r8, r8            ; byte_idx = 0
+.copy_loop:
+    cmp r8d, eax
+    jge .copy_done
+
+    ; output[offset + byte_idx] = (state[byte_idx / 8] >> (byte_idx % 8 * 8)) & 0xFF
+    mov r9, r8
+    shr r9, 3             ; qword_idx
+    mov r10, qword [r12 + r9*8]
+    mov r11, r8
+    and r11, 7
+    shl r11, 3
+    mov rcx, r11          ; load shift count into cl (was uninitialized)
+    shr r10, cl
+    and r10, 0xFF
+    push rax             ; preserve chunk_len bound (eax live across loop)
+    lea rax, [r13 + rbx] ; fold output_ptr+offset into one reg (x86-64: max 2 regs/addr)
+    mov byte [rax + r8], r10b
+    pop rax
+
+    inc r8
+    jmp .copy_loop
+
+.copy_done:
+    ; If more output needed, permute and continue
+    add ebx, eax
+    cmp ebx, r14d
+    jge .squeeze_done
+
+    mov rdi, r12
+    call keccak_f1600
+    jmp .squeeze_block_loop
+
+.squeeze_done:
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
+; ==============================================================================
+; End of keccak.asm
+; ==============================================================================

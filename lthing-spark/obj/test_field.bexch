@@ -1,0 +1,19 @@
+[GENERATED OBJECT FILE]
+b__test_field.o
+[PROJECT FILES]
+/home/claude/lthing-spark/lthing.gpr
+20260606181209 5ed94c9a46360c7d321d4e9bdfd60a4f
+[BOUND OBJECT FILES]
+/home/claude/lthing-spark/obj/lthing_mldsa_field.o
+/home/claude/lthing-spark/obj/test_field.o
+[GENERATED SOURCE FILES]
+b__test_field.ads
+b__test_field.adb
+b__test_field.ali
+[RESULTING OPTIONS]
+-L/home/claude/lthing-spark/obj/
+-L/home/claude/lthing-spark/obj/
+-L/usr/lib/gcc/x86_64-linux-gnu/13/adalib/
+-shared
+-lgnat-13
+-ldl

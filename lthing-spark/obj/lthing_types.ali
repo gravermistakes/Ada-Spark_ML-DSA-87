@@ -1,0 +1,49 @@
+V "GNAT Lib v13"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_IMPLICIT_LOOPS
+
+U lthing_types%s	lthing_types.ads	b17d392e NE OO PK
+W interfaces%s		interfac.ads		interfac.ali
+
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D lthing_types.ads	20260613191916 a48aa0ec lthing_types%s
+D system.ads		20240521074738 426dafb8 system%s
+G a e
+G c Z s s [byte_arrayIP lthing_types 28 9 none]
+G c Z s s [TdigestBIP lthing_types 32 4 none]
+G c Z s s [verified_recordIP lthing_types 51 9 none]
+X 1 interfac.ads
+38K9*Interfaces 232e15 2|15w6 19r20
+69M9*Unsigned_8 2|19r31
+X 2 lthing_types.ads
+17K9*LTHING_Types 58l5 58e17
+19M12*Byte{1|69M9} 28r55 32r43
+24N4*Max_Document_Bytes 26r46
+26I12*Index_Range{natural} 28r30
+28A9*Byte_Array(19M12)<integer>
+31I12*Digest_Index{natural} 32r26
+32A9*Digest(19M12)<integer>
+37E9*Verify_Status 45e20 52r17
+38n7*Verified{37E9} 56r61
+39n7*Bad_Envelope{37E9}
+40n7*Bad_Magic{37E9}
+41n7*Bad_Length{37E9}
+42n7*Seal_Mismatch{37E9}
+43n7*Chain_Broken{37E9}
+44n7*Signature_Invalid{37E9}
+45n7*Not_Verified{37E9} 52r34
+51R9*Verified_Record 55e6
+52e7*Status{37E9} 56r52
+53b7*Trusted{boolean} 56r25
+

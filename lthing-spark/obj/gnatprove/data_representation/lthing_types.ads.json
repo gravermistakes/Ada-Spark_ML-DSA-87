@@ -1,0 +1,68 @@
+[
+{
+  "name": "Lthing_Types.Byte",
+  "location": "lthing_types.ads:19:12",
+  "Size": 8,
+  "Alignment": 1
+}
+,
+{
+  "name": "Lthing_Types.Index_Range",
+  "location": "lthing_types.ads:26:12",
+  "Object_Size": 32,
+  "Value_Size": 21,
+  "Alignment": 4
+}
+,
+{
+  "name": "Lthing_Types.Byte_Array",
+  "location": "lthing_types.ads:28:9",
+  "Alignment": 1,
+  "Component_Size": 8
+}
+,
+{
+  "name": "Lthing_Types.Digest_Index",
+  "location": "lthing_types.ads:31:12",
+  "Object_Size": 32,
+  "Value_Size": 6,
+  "Alignment": 4
+}
+,
+{
+  "name": "Lthing_Types.Digest",
+  "location": "lthing_types.ads:32:9",
+  "Size": 512,
+  "Alignment": 1,
+  "Component_Size": 8
+}
+,
+{
+  "name": "Lthing_Types.Verify_Status",
+  "location": "lthing_types.ads:37:9",
+  "Object_Size": 8,
+  "Value_Size": 3,
+  "Alignment": 1
+}
+,
+{
+  "name": "Lthing_Types.Verified_Record",
+  "location": "lthing_types.ads:51:9",
+  "Size": 16,
+  "Alignment": 1,
+  "record": [
+    {
+      "name": "Status",
+      "Position": 0,
+      "First_Bit": 0,
+      "Size": 8
+    },
+    {
+      "name": "Trusted",
+      "Position": 1,
+      "First_Bit": 0,
+      "Size": 8
+    }
+  ]
+}
+]

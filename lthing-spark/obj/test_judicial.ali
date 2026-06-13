@@ -1,0 +1,114 @@
+V "GNAT Lib v13"
+M P W=b
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_ENUMERATION_MAPS
+RV NO_IO
+RV NO_DEFAULT_INITIALIZATION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U test_judicial%b	test_judicial.adb	ca6dba91 NE OO SU
+W ada%s			ada.ads			ada.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W lthing_judicial%s	lthing_judicial.adb	lthing_judicial.ali
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+Z system.assertions%s	s-assert.adb		s-assert.ali
+Z system.concat_2%s	s-conca2.adb		s-conca2.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+
+D ada.ads		20240521074738 76789da1 ada%s
+D a-assert.ads		20240521074737 ba465f5c ada.assertions%s
+D a-except.ads		20240521074738 2a7d8d70 ada.exceptions%s
+D a-ioexce.ads		20240521074738 40018c65 ada.io_exceptions%s
+D a-numeri.ads		20240521074738 84bea7a3 ada.numerics%s
+D a-nubinu.ads		20240521074738 93f1f3d1 ada.numerics.big_numbers%s
+D a-nbnbig.ads		20240521074738 711e0174 ada.numerics.big_numbers.big_integers_ghost%s
+D a-stream.ads		20240521074738 119b8fb3 ada.streams%s
+D a-string.ads		20240521074738 90ac6797 ada.strings%s
+D a-sttebu.ads		20240521074738 f1ad67a2 ada.strings.text_buffers%s
+D a-stuten.ads		20240521074738 c6ced0ae ada.strings.utf_encoding%s
+D a-tags.ads		20240521074738 9eaa38c6 ada.tags%s
+D a-textio.ads		20240521074738 5c2c6153 ada.text_io%s
+D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D i-cstrea.ads		20240521074738 e53d8b8e interfaces.c_streams%s
+D lthing_judicial.ads	20260606181445 4a7261be lthing_judicial%s
+D lthing_types.ads	20260606181020 a48aa0ec lthing_types%s
+D system.ads		20240521074738 426dafb8 system%s
+D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
+D s-casuti.ads		20240521074738 cf13d755 system.case_util%s
+D s-conca2.ads		20240521074738 b5fb73f7 system.concat_2%s
+D s-crtl.ads		20240521074738 8a0692f8 system.crtl%s
+D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
+D s-ficobl.ads		20240521074738 dc5161d4 system.file_control_block%s
+D s-imagei.ads		20240521074738 c707dfd0 system.image_i%s
+D s-imgint.ads		20240521074738 d4a52a9b system.img_int%s
+D s-parame.ads		20251218205951 1f39ba92 system.parameters%s
+D s-putima.ads		20240521074738 17291fe4 system.put_images%s
+D s-secsta.ads		20240521074738 578279f5 system.secondary_stack%s
+D s-soflin.ads		20240521074738 df77073e system.soft_links%s
+D s-stache.ads		20240521074738 0b81c1fe system.stack_checking%s
+D s-stalib.ads		20240521074738 1c9580f6 system.standard_library%s
+D s-stoele.ads		20240521074738 ab5468e4 system.storage_elements%s
+D s-stoele.adb		20240521074738 8f5a9db6 system.storage_elements%b
+D s-traent.ads		20240521074738 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20240521074738 fa2a7f59 system.unsigned_types%s
+D s-valint.ads		20240521074738 1f610d7a system.val_int%s
+D s-valuns.ads		20240521074738 e8a1f424 system.val_uns%s
+D s-valuti.ads		20240521074738 fcd603d8 system.val_util%s
+D s-valuei.ads		20240521074738 11081e09 system.value_i%s
+D s-vaispe.ads		20240521074738 44130d39 system.value_i_spec%s
+D s-valueu.ads		20240521074738 18770347 system.value_u%s
+D s-vauspe.ads		20240521074738 a67b2f28 system.value_u_spec%s
+D s-wchcon.ads		20240521074738 d9032363 system.wch_con%s
+D s-widuns.ads		20240521074738 866a5800 system.wid_uns%s
+D s-widthu.ads		20240521074738 b32f15e2 system.width_u%s
+D test_judicial.adb	20260606181523 78b91a90 test_judicial%b
+G a e
+G c Z b b [test_judicial standard 5 11 none]
+G r c none [test_judicial standard 5 11 none] [parse_unverified lthing_judicial 47 14 none]
+G r c none [test_judicial standard 5 11 none] [parse_and_verify lthing_judicial 73 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 48|3r6 3r27
+X 13 a-textio.ads
+58K13*Text_IO 787e16 48|3w10 3r31
+282U14*New_Line 48|41s4
+566U14*Put_Line 48|17s26 18s9 23s7 24s9 32s10 33s12 38s7 39s9 42s22 43s9
+X 15 interfac.ads
+69M9*Unsigned_8
+X 17 lthing_judicial.ads
+33K9*LTHING_Judicial 86e20 48|2w6 2r27
+47U14*Parse_Unverified 48|16s4
+73U14*Parse_And_Verify 48|21s4 30s7
+X 18 lthing_types.ads
+17K9*LTHING_Types 58e17 48|1w6 1r27
+19M12*Byte{15|69M9}
+28A9*Byte_Array(19M12)<integer> 48|6r11 7r11 28r14
+32A9*Digest(19M12)<integer> 48|8r11
+38n7*Verified{37E9} 48|37r32
+39n7*Bad_Envelope{37E9} 48|31r44
+44n7*Signature_Invalid{37E9} 48|22r41
+51R9*Verified_Record 55e6 48|9r11
+52e7*Status{37E9} 48|22r32 24r61 31r35 33r52 37r23
+53b7*Trusted{boolean} 48|17r13 22r13 31r16 37r10
+X 48 test_judicial.adb
+5U11*Test_Judicial 5b11 44l5 44t18
+6a4 Doc{18|28A9} 13m4 16r22 21r22
+7a4 PK{18|28A9} 21r33 30r37
+8a4 Zero{18|32A9} 21r27 30r31
+9r4 R{18|51R9} 16m27 16r27 17r11 21m37 21r37 22r11 22r30 24r59 30m41 30r41
+. 31r14 31r33 33r50 37r8 37r21
+10i4 Fails{natural} 18m64 18r73 24m76 24r85 33m67 33r76 39m47 39r56 42r7
+. 43r41
+28a7 Tiny{18|28A9} 30r25
+

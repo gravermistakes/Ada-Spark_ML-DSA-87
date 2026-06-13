@@ -1,0 +1,204 @@
+V "GNAT Lib v14"
+A -x
+A ada
+A -gnatA
+A -g
+A -g
+A -O0
+A -gnatwa
+A -gnata
+A -gnatc
+P GP
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_ELABORATION_CODE
+
+U lthing_judicial%b	lthing_judicial.adb	6c5aa9c3 OO PK
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.adb			i-c.ali
+W lthing_crypto_ffi%s	lthing_crypto_ffi.ads	lthing_crypto_ffi.ali
+W lthing_hash%s		lthing_hash.adb		lthing_hash.ali
+
+U lthing_judicial%s	lthing_judicial.ads	eef8c152 OO PK
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+
+D interfac.ads		20240507065137 9111f9c1 interfaces%s
+D i-c.ads		20240507065137 aac316ce interfaces.c%s
+D lthing_crypto_ffi.ads	20260606181329 11320ca4 lthing_crypto_ffi%s
+D lthing_hash.ads	20260606181440 f385d517 lthing_hash%s
+D lthing_judicial.ads	20260606181445 4a7261be lthing_judicial%s
+D lthing_judicial.adb	20260606181228 6e5c0700 lthing_judicial%b
+D lthing_types.ads	20260606181020 a48aa0ec lthing_types%s
+D system.ads		20240507065137 14286b0f system%s
+D s-parame.ads		20240507065137 3597fc11 system.parameters%s
+G a Z
+X 1 interfac.ads
+38K9*Interfaces 233e15 6|22r6 22r29
+70M9*Unsigned_8
+X 2 i-c.ads
+30K20*C 598e17 6|22w17 22r40
+59I9*int<integer>
+X 3 lthing_crypto_ffi.ads
+22K9*LTHING_Crypto_FFI 70e22 6|21w6 21r29
+58V13*Compare_CT{2|59I9} 6|63s14
+X 4 lthing_hash.ads
+15K9*LTHING_Hash 38e16 6|20w6 20r29
+30U14*Chain_Hash 6|127s7
+X 5 lthing_judicial.ads
+33K9*LTHING_Judicial 86l5 86e20 6|24b14 147l5 147t20
+36N4*Judicial_DocType 6|49r60
+47U14*Parse_Unverified 48>7 49<7 6|84b14 95l8 95t24
+48a7 Document{7|28A9} 6|85b7 89r27
+49r7 Result{7|51R9} 51r21 52r30 6|86b7 90m10 93m10
+73U14*Parse_And_Verify 74>7 75>7 76>7 77<7 6|100b14 145l8 145t24
+74a7 Document{7|28A9} 79r21 80r30 6|101b7 114r27 120r24 127r34 138r32
+75a7 Previous_Seal{7|32A9} 6|102b7 127r19
+76a7 Public_Key{7|28A9} 81r30 6|103b7 138r42
+77r7 Result{7|51R9} 82r25 82r56 84r22 84r40 6|104b7 111m7 115m10 121m10 133m10
+. 139m10 144m7
+X 6 lthing_judicial.adb
+32V13 Envelope_Ok{boolean} 32b13 32>26 38l8 38t19 89s14 114s14
+32a26 Document{7|28A9} 37r14
+42V13 Magic_Ok{boolean} 42b13 42>23 50l8 50t16 120s14
+42a23 Document{7|28A9} 48r14 49r27 49r37
+53V13 Digest_Equal{boolean} 53b13 53>27 53>30 64l8 64t20 132s14
+53a27 A{7|32A9} 60r23
+53a30 B{7|32A9} 61r23
+56a7 A_Arr{7|28A9} 60m10 63r26
+57a7 B_Arr{7|28A9} 61m10 63r33
+59i11 I{7|31I12} 60r17 60r26 61r17 61r26
+71V13 Verify_Signature{boolean} 71b13 72>7 73>7 79l8 79t24 138s14
+72a7 Document{7|28A9} 76r28
+73a7 Public_Key{7|28A9} 76r38
+106a7 Recomputed_Chain{7|32A9} 127m44 132r28 132r46
+X 7 lthing_types.ads
+17K9*LTHING_Types 5|31w6 31r24 7|58e17
+19M12*Byte{1|70M9}
+24N4*Max_Document_Bytes 5|80r49
+28A9*Byte_Array(19M12)<integer> 5|48r18 74r23 76r23 6|32r37 42r34 56r15 57r15
+. 72r20 73r20 85r18 101r23 103r23
+31I12*Digest_Index{natural} 6|59r16
+32A9*Digest(19M12)<integer> 5|75r23 6|53r34 102r23 106r26
+38n7*Verified{37E9} 5|52r47 82r42 84r56 6|144r28
+39n7*Bad_Envelope{37E9} 6|90r31 115r31
+40n7*Bad_Magic{37E9} 6|121r31
+43n7*Chain_Broken{37E9} 6|133r31
+44n7*Signature_Invalid{37E9} 6|139r31
+45n7*Not_Verified{37E9} 6|93r31 111r28
+51R9*Verified_Record 5|49r22 77r27 6|86r22 104r27 7|55e6
+52e7*Status{37E9} 5|52r37 82r32 84r47 6|90m21 93m21 111m18 115m21 121m21
+. 133m21 139m21 144m18
+53b7*Trusted{boolean} 5|51r28 82r63 84r29 6|90m45 93m45 111m42 115m45 121m42
+. 133m45 139m50 144m38
+
+QQ SPARKVERSION 0.0w
+GG EK_DIRECT_CALLS lthing_judicial__parse_unverified 1 lthing_judicial__envelope_ok
+GG EK_PROOF_DEPENDENCIES lthing_judicial__parse_unverified 0
+GG EK_GLOBALS lthing_judicial__parse_unverified local FALSE E_PROCEDURE FALSE ORIGIN_FLOW 1 lthing_judicial proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS lthing_judicial__parse_and_verify 5 lthing_judicial__envelope_ok lthing_judicial__magic_ok lthing_judicial__digest_equal lthing_judicial__verify_signature lthing_hash__chain_hash
+GG EK_PROOF_DEPENDENCIES lthing_judicial__parse_and_verify 0
+GG EK_GLOBALS lthing_judicial__parse_and_verify local FALSE E_PROCEDURE FALSE ORIGIN_FLOW 1 lthing_judicial proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS lthing_judicial__envelope_ok 0
+GG EK_PROOF_DEPENDENCIES lthing_judicial__envelope_ok 0
+GG EK_GLOBALS lthing_judicial__envelope_ok local TRUE E_FUNCTION FALSE ORIGIN_FLOW 1 lthing_judicial proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 TRUE FALSE FALSE FALSE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS lthing_judicial__magic_ok 0
+GG EK_PROOF_DEPENDENCIES lthing_judicial__magic_ok 0
+GG EK_GLOBALS lthing_judicial__magic_ok local TRUE E_FUNCTION FALSE ORIGIN_FLOW 1 lthing_judicial proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 TRUE FALSE FALSE FALSE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS lthing_judicial__digest_equal 1 lthing_crypto_ffi__compare_ct
+GG EK_PROOF_DEPENDENCIES lthing_judicial__digest_equal 0
+GG EK_GLOBALS lthing_judicial__digest_equal local TRUE E_FUNCTION FALSE ORIGIN_FLOW 1 lthing_judicial proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 TRUE FALSE FALSE FALSE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS lthing_judicial__verify_signature 0
+GG EK_PROOF_DEPENDENCIES lthing_judicial__verify_signature 0
+GG EK_GLOBALS lthing_judicial__verify_signature local TRUE E_FUNCTION FALSE ORIGIN_FLOW 1 lthing_judicial proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 TRUE FALSE FALSE FALSE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS lthing_judicial 0
+GG EK_PROOF_DEPENDENCIES lthing_judicial 0
+GG EK_GLOBALS lthing_judicial local FALSE E_PACKAGE TRUE ORIGIN_FLOW 0 proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_packages 0 local_var 0 TRUE FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__10 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__4 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_judicial TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE lthing_judicial__magic_ok FALSE FALSE FALSE FALSE TRUE lthing_judicial BODY_PART
+GG EK_FLOW_SCOPE system TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE lthing_judicial__verify_signature FALSE FALSE FALSE FALSE TRUE lthing_judicial BODY_PART
+GG EK_FLOW_SCOPE lthing_crypto_ffi__shake_absorb FALSE FALSE FALSE FALSE TRUE lthing_crypto_ffi VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_types__verified_recordPredicate FALSE FALSE FALSE FALSE TRUE lthing_types VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_judicial__parse_unverified FALSE FALSE FALSE FALSE TRUE lthing_judicial VISIBLE_PART
+GG EK_FLOW_SCOPE system__Olt FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__7 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_crypto_ffi__compare_ct FALSE FALSE FALSE FALSE TRUE lthing_crypto_ffi VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE system__Ole FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_hash__chain_hash FALSE FALSE FALSE FALSE TRUE lthing_hash VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__4 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_types TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___interfaces__c TRUE FALSE FALSE FALSE FALSE interfaces
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__10 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE system__Ogt FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__6 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__5 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_judicial__parse_and_verify FALSE FALSE FALSE FALSE TRUE lthing_judicial VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE system__Oge FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__8 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__9 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__5 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_judicial__digest_equal FALSE FALSE FALSE FALSE TRUE lthing_judicial BODY_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__6 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__8 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__is_nul_terminated__3 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__is_nul_terminated__2 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE system__Oeq FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__3 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__2 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__11 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__12 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__9 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_crypto_ffi__shake_squeeze FALSE FALSE FALSE FALSE TRUE lthing_crypto_ffi VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__11 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__is_nul_terminated__4 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__2 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__parameters TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__3 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__is_nul_terminated FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__c_length_ghost__2 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_ada__12 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__c_length_ghost__3 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_judicial__envelope_ok FALSE FALSE FALSE FALSE TRUE lthing_judicial BODY_PART
+GG EK_FLOW_SCOPE ada___system__parameters__default_stack_size FALSE FALSE FALSE FALSE TRUE ada___system__parameters VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__c_length_ghost__4 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_crypto_ffi TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___system__parameters__minimum_stack_size FALSE FALSE FALSE FALSE TRUE ada___system__parameters VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__to_c__7 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c__c_length_ghost FALSE FALSE FALSE FALSE TRUE ada___interfaces__c VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__parameters__adjust_storage_size FALSE FALSE FALSE FALSE TRUE ada___system__parameters VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_hash TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE lthing_hash__shake512 FALSE FALSE FALSE FALSE TRUE lthing_hash VISIBLE_PART
+GG EK_END_MARKER

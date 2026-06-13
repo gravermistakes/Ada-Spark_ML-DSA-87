@@ -1,0 +1,66 @@
+V "GNAT Lib v13"
+A -O0
+A -gnatA
+A -g
+A -gnatwa
+A -gnata
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U lthing_kat_ffi%s	lthing_kat_ffi.ads	999bf39f NE OO PK IU
+W interfaces%s		interfac.ads		interfac.ali
+W interfaces.c%s	i-c.adb			i-c.ali
+W lthing_types%s	lthing_types.ads	lthing_types.ali
+Z system.assertions%s	s-assert.adb		s-assert.ali
+
+D ada.ads		20240521074738 76789da1 ada%s
+D a-assert.ads		20240521074737 ba465f5c ada.assertions%s
+D a-unccon.ads		20240521074738 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240521074738 15f799c2 interfaces%s
+D i-c.ads		20240521074738 5c5a6c17 interfaces.c%s
+D lthing_kat_ffi.ads	20260613191950 74bca6a6 lthing_kat_ffi%s
+D lthing_types.ads	20260613191916 a48aa0ec lthing_types%s
+D system.ads		20240521074738 426dafb8 system%s
+D s-assert.ads		20240521074738 9c4520c7 system.assertions%s
+D s-exctab.ads		20240521074738 91bef6ef system.exception_table%s
+D s-parame.ads		20251218205951 1f39ba92 system.parameters%s
+D s-stalib.ads		20240521074738 1c9580f6 system.standard_library%s
+G a e
+G c Z s s [keccak_f1600 lthing_kat_ffi 23 14 none]
+G c Z s s [shake_absorb lthing_kat_ffi 31 14 none]
+G c Z s s [shake_squeeze lthing_kat_ffi 43 14 none]
+G c Z s s [Tkeccak_stateBIP lthing_kat_ffi 20 4 none]
+X 4 interfac.ads
+38K9*Interfaces 232e15 6|12w6 12r29 13r6 13r30 20r47 34r18 35r18 46r20 47r20
+69M9*Unsigned_8
+83M9*Unsigned_64 6|20r58
+X 5 i-c.ads
+29K20*C 597e17 6|13w17 13r41 34r29 35r29 46r31 47r31
+66M9*unsigned 6|34r31 35r31 46r33 47r33
+X 6 lthing_kat_ffi.ads
+16K9*LTHING_KAT_FFI 55l5 55e19
+19I12*Lane_Index{natural} 20r32
+20A9*Keccak_State(4|83M9)<integer> 24r22 32r25 44r27
+23U14*Keccak_F1600 24=7
+24a7 State{20A9}
+31U14*SHAKE_Absorb 32=7 33>7 34>7 35>7
+32a7 State{20A9}
+33a7 Data{7|28A9} 40r18
+34m7 Data_Len{5|66M9}
+35m7 Rate{5|66M9}
+43U14*SHAKE_Squeeze 44=7 45<7 46>7 47>7
+44a7 State{20A9}
+45a7 Output{7|28A9} 52r19 53r19 53r35
+46m7 Output_Len{5|66M9}
+47m7 Rate{5|66M9}
+X 7 lthing_types.ads
+17K9*LTHING_Types 6|14w6 14r29 7|58e17
+19M12*Byte{4|69M9}
+28A9*Byte_Array(19M12)<integer> 6|33r18 45r24
+

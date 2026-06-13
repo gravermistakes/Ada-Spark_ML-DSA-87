@@ -1,0 +1,949 @@
+{
+  "spark": {
+    " 3": "all",
+    " 1": "all",
+    " 2": "all"
+  },
+  "skip_flow_proof": [
+  ],
+  "skip_proof": [
+  ],
+  "progress": "PROGRESS_PROOF",
+  "stop_reason": "STOP_REASON_NONE",
+  "flow": [
+    {
+      "file": "lthing_hash.adb",
+      "line": 19,
+      "col": 7,
+      "rule": "INEFFECTIVE",
+      "severity": "warning",
+      "entity": 1,
+      "check_tree": {
+      },
+      "tracefile": "lthing_hash__flow__0.trace",
+      "msg_id": 0,
+      "how_proved": "flow"
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 28,
+      "col": 24,
+      "rule": "INEFFECTIVE",
+      "severity": "warning",
+      "entity": 1,
+      "check_tree": {
+      },
+      "msg_id": 1,
+      "how_proved": "flow"
+    },
+    {
+      "file": "lthing_hash.ads",
+      "line": 22,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "lthing_hash.ads",
+      "line": 23,
+      "col": 11,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 46,
+      "col": 7,
+      "rule": "INEFFECTIVE",
+      "severity": "warning",
+      "entity": 2,
+      "check_tree": {
+      },
+      "tracefile": "lthing_hash__flow__1.trace",
+      "msg_id": 2,
+      "how_proved": "flow"
+    },
+    {
+      "file": "lthing_hash.ads",
+      "line": 33,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "lthing_hash.ads",
+      "line": 34,
+      "col": 11,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    }
+  ],
+  "pragma_assume": [
+  ],
+  "proof": [
+    {
+      "file": "lthing_hash.adb",
+      "line": 24,
+      "col": 50,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 24,
+      "check_col": 50,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 21,
+      "col": 7,
+      "rule": "VC_PRECONDITION",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Trivial": {
+              "result": "Valid",
+              "steps": 2,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 21,
+      "check_col": 7,
+      "how_proved": "prover",
+      "stats": {
+        "Trivial": {
+          "count": 1,
+          "max_steps": 2,
+          "max_time": 0.00000000000000E+00
+        },
+        "Z3": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 27,
+      "col": 7,
+      "rule": "VC_PRECONDITION",
+      "severity": "info",
+      "entity": 1,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Trivial": {
+              "result": "Valid",
+              "steps": 2,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 27,
+      "check_col": 7,
+      "how_proved": "prover",
+      "stats": {
+        "Trivial": {
+          "count": 1,
+          "max_steps": 2,
+          "max_time": 0.00000000000000E+00
+        },
+        "Z3": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 44,
+      "col": 53,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 44,
+      "check_col": 53,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 44,
+      "col": 43,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 44,
+      "check_col": 43,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 45,
+      "col": 7,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+            "introduce_premises": [
+              {
+                "proof_attempts": {
+                },
+                "transformations": {
+                }
+              }
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 45,
+      "check_col": 7,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 45,
+      "col": 56,
+      "rule": "VC_LENGTH_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Trivial": {
+              "result": "Valid",
+              "steps": 2,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 45,
+      "check_col": 56,
+      "how_proved": "prover",
+      "stats": {
+        "Trivial": {
+          "count": 1,
+          "max_steps": 2,
+          "max_time": 0.00000000000000E+00
+        },
+        "Z3": {
+          "count": 3,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 49,
+      "col": 18,
+      "rule": "VC_INDEX_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 49,
+      "check_col": 18,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 56,
+      "col": 18,
+      "rule": "VC_INDEX_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+            "introduce_premises": [
+              {
+                "proof_attempts": {
+                },
+                "transformations": {
+                }
+              }
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 56,
+      "check_col": 18,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 57,
+      "col": 17,
+      "rule": "VC_OVERFLOW_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 57,
+      "check_col": 17,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 54,
+      "col": 25,
+      "rule": "VC_OVERFLOW_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 54,
+      "check_col": 25,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 4,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 54,
+      "col": 20,
+      "rule": "VC_OVERFLOW_CHECK",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 54,
+      "check_col": 20,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 4,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 54,
+      "col": 13,
+      "rule": "VC_LOOP_INVARIANT_INIT",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 54,
+      "check_col": 13,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 54,
+      "col": 13,
+      "rule": "VC_LOOP_INVARIANT_PRESERV",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 54,
+      "check_col": 13,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "lthing_hash.adb",
+      "line": 60,
+      "col": 7,
+      "rule": "VC_PRECONDITION",
+      "severity": "info",
+      "entity": 2,
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "lthing_hash.adb",
+      "check_line": 60,
+      "check_col": 7,
+      "how_proved": "prover",
+      "stats": {
+        "Z3": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": 3
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": 4
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": 5
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": 4
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": 5
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": 4
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": 1
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": 1
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": 1
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": 2
+      }
+    }
+  ],
+  "timings": {
+    "global": {
+      "init_why_sections": 5.77999977394938E-04,
+      "globals (advanced)": 2.02800007537007E-03,
+      "flow analysis": 2.69300001673400E-03,
+      "marking": 4.13000001572073E-04,
+      "translation of standard": 2.29800003580749E-03,
+      "properties (advanced)": 2.99999992421363E-05,
+      "globals (basic)": 1.01030003279448E-02
+    },
+    " 1": {
+      "gnat2why.vc_generation": 4.39199991524220E-03,
+      "gnatwhy3.run_vcs": 3.99900000047637E-06,
+      "gnatwhy3.register_vcs": 9.99000008050643E-07,
+      "gnatwhy3.schedule_vcs": 3.99900000047637E-06,
+      "gnatwhy3.save_session": 3.38199897669256E-03,
+      "gnatwhy3.init": 3.97543996572495E-01
+    },
+    " 2": {
+      "gnat2why.vc_generation": 2.78370007872581E-02,
+      "gnatwhy3.run_vcs": 1.20000004244503E-05,
+      "gnatwhy3.register_vcs": 0.00000000000000E+00,
+      "gnatwhy3.schedule_vcs": 3.89989982068073E-05,
+      "gnatwhy3.save_session": 1.23619986698031E-02,
+      "gnatwhy3.init": 4.00032013654709E-01
+    }
+  },
+  "entities": {
+    " 1": {
+      "name": "LTHING_Hash.SHAKE512",
+      "sloc": [
+        {
+          "file": "lthing_hash.ads",
+          "line": 20
+        }
+      ]
+    },
+    " 2": {
+      "name": "LTHING_Hash.Chain_Hash",
+      "sloc": [
+        {
+          "file": "lthing_hash.ads",
+          "line": 30
+        }
+      ]
+    },
+    " 3": {
+      "name": "LTHING_Hash",
+      "sloc": [
+        {
+          "file": "lthing_hash.ads",
+          "line": 15
+        }
+      ]
+    },
+    " 4": {
+      "name": "LTHING_Crypto_FFI.SHAKE_Squeeze",
+      "sloc": [
+        {
+          "file": "lthing_crypto_ffi.ads",
+          "line": 45
+        }
+      ]
+    },
+    " 5": {
+      "name": "LTHING_Crypto_FFI.SHAKE_Absorb",
+      "sloc": [
+        {
+          "file": "lthing_crypto_ffi.ads",
+          "line": 33
+        }
+      ]
+    }
+  }
+}

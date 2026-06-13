@@ -1,0 +1,28 @@
+lthing_mldsa_field.adb:15:20: info: division check proved
+lthing_mldsa_field.adb:15:20: info: range check proved
+lthing_mldsa_field.adb:22:20: info: division check proved
+lthing_mldsa_field.adb:22:20: info: range check proved
+lthing_mldsa_field.adb:29:20: info: division check proved
+lthing_mldsa_field.adb:29:20: info: range check proved
+lthing_mldsa_field.adb:34:20: info: division check proved
+lthing_mldsa_field.adb:34:20: info: range check proved
+lthing_mldsa_field.ads:33:13: info: implicit aspect Always_Terminates on "Add" has been proved, subprogram will terminate
+lthing_mldsa_field.ads:34:11: info: data dependencies proved
+lthing_mldsa_field.ads:35:21: info: postcondition proved
+lthing_mldsa_field.ads:35:81: info: division check proved
+lthing_mldsa_field.ads:38:13: info: implicit aspect Always_Terminates on "Sub" has been proved, subprogram will terminate
+lthing_mldsa_field.ads:39:11: info: data dependencies proved
+lthing_mldsa_field.ads:40:21: info: postcondition proved
+lthing_mldsa_field.ads:40:82: info: division check proved
+lthing_mldsa_field.ads:43:13: info: implicit aspect Always_Terminates on "Mul" has been proved, subprogram will terminate
+lthing_mldsa_field.ads:44:11: info: data dependencies proved
+lthing_mldsa_field.ads:45:21: info: postcondition proved
+lthing_mldsa_field.ads:45:81: info: division check proved
+lthing_mldsa_field.ads:48:13: info: implicit aspect Always_Terminates on "Reduce" has been proved, subprogram will terminate
+lthing_mldsa_field.ads:49:11: info: data dependencies proved
+lthing_mldsa_field.ads:51:21: info: postcondition proved
+lthing_mldsa_field.ads:51:52: info: division check proved
+lthing_mldsa_field.ads:54:13: info: implicit aspect Always_Terminates on "To_Centered" has been proved, subprogram will terminate
+lthing_mldsa_field.ads:55:11: info: data dependencies proved
+lthing_mldsa_field.ads:56:21: info: postcondition proved
+lthing_mldsa_field.ads:57:50: info: division check proved
