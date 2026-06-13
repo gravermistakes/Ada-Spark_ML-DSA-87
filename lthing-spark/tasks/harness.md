@@ -1,47 +1,100 @@
-# Agent task: Test harness + CI
+# Agent task: aggregating test runner + Makefile + CI
 
-Read root `CLAUDE.md` and `lthing-spark/CLAUDE.md` first.
+Read root `CLAUDE.md` and `lthing-spark/CLAUDE.md` first. Toolchain: `gnatmake`/
+`gprbuild` on PATH; `gnatprove` at `/root/.alire/bin`. The asm lib lives at
+`lthing-spark/lib/liblthing_crypto_asm.{so,a}` (test_judicial links it for the
+working `Compare_CT` — do not change that).
 
-## Goal
-Give the project a single aggregating test runner that **exits non-zero on any
-failure**, and a CI workflow that installs the toolchain and runs build + tests
-+ proof. This is the process gap (no driver, no CI) from the coverage analysis.
+You create ONLY these three NEW files. Do NOT edit any `src/*.adb`, `lthing.gpr`,
+or other files.
 
-## Files you own (all new)
-- `lthing-spark/run_tests.sh`
-- `lthing-spark/Makefile`
-- `.github/workflows/ci.yml`  (repo root)
-Do not edit any `src/*.adb` or other agents' files.
-
-## Steps
-1. `run_tests.sh`: discover every `src/test_*.adb`, build each with
-   `gnatmake -q -D obj_tests -aIsrc -o obj_tests/<name> src/<name>.adb`, run it,
-   capture exit code AND grep its output for `[FAIL]`. Aggregate; print a summary;
-   `exit 1` if any main failed to build, exited non-zero, or printed `[FAIL]`.
-   Make it robust to mains that don't exist yet.
-2. `Makefile` targets:
-   - `build` — `gprbuild -P lthing.gpr` (or gnatmake all mains);
-   - `test`  — run `./run_tests.sh`;
-   - `prove` — `PATH=/root/.alire/bin:$PATH gnatprove -P lthing.gpr --level=2 --report=all -j0`;
-   - `clean`.
-3. `.github/workflows/ci.yml`: on push/PR, Ubuntu runner:
-   - `apt-get install -y gnat gprbuild`;
-   - install Alire and `alr install gnatprove` (or document the pin), put it on PATH;
-   - `make -C lthing-spark test` and `make -C lthing-spark prove`.
-   Keep it straightforward; it's fine if the proof step is a separate job.
-
-## Ralph loop (repeat until green LOCALLY)
+## 1. `lthing-spark/run_tests.sh` (exactly this; `chmod +x` it)
 ```sh
-cd lthing-spark && ./run_tests.sh ; echo "exit=$?"
+#!/usr/bin/env bash
+# Build and run every src/test_*.adb; exit non-zero if any fails to build,
+# exits non-zero, or prints [FAIL].
+set -u
+cd "$(dirname "$0")"
+export PATH=/root/.alire/bin:$PATH
+OBJ=obj_tests; rm -rf "$OBJ"; mkdir -p "$OBJ"
+LIB="$PWD/lib"
+fail=0
+for src in src/test_*.adb; do
+  [ -e "$src" ] || continue
+  name=$(basename "$src" .adb)
+  echo "=== build $name ==="
+  if ! gnatmake -q -D "$OBJ" -aIsrc -o "$OBJ/$name" "$src" \
+        -largs -L"$LIB" -llthing_crypto_asm -Wl,-rpath,"$LIB" \
+        >"$OBJ/$name.log" 2>&1; then
+    echo "[BUILD-FAIL] $name"; sed 's/^/    /' "$OBJ/$name.log"; fail=1; continue
+  fi
+  echo "=== run $name ==="
+  out=$(LD_LIBRARY_PATH="$LIB" "$OBJ/$name"); rc=$?
+  echo "$out"
+  if [ "$rc" -ne 0 ] || grep -q "\[FAIL\]" <<<"$out"; then
+    echo "[FAIL] $name (rc=$rc)"; fail=1
+  fi
+done
+echo
+if [ "$fail" -eq 0 ]; then echo "ALL TEST MAINS PASSED"; else echo "TEST SUITE FAILED"; fi
+exit "$fail"
 ```
-Definition of done for YOUR local run: the asm-free suites
-(`test_field`, `test_ntt`, `test_keccak`) build, run, and report `[PASS]`, and
-`run_tests.sh` exits 0 when they all pass / non-zero if you force a failure.
-NOTE: in your worktree `test_hash.adb` does not exist yet and `test_judicial`
-may still need the asm lib — that's expected; your script must simply skip/мreport
-mains it can't build without crashing, and they will pass after the merge. Do not
-hand-edit src to make them build.
 
-## Done
-Commit to branch `claude/ralph-harness`; report the branch and a sample
-`run_tests.sh` run.
+## 2. `lthing-spark/Makefile` (exactly this; use TABS for recipe lines)
+```make
+SHELL := /bin/bash
+export PATH := /root/.alire/bin:$(PATH)
+
+.PHONY: build test prove clean
+build:
+	gprbuild -P lthing.gpr || true
+test:
+	./run_tests.sh
+prove:
+	gnatprove -P lthing.gpr --level=2 --report=all -j0
+clean:
+	rm -rf obj obj_prove obj_tests
+```
+
+## 3. `.github/workflows/ci.yml` (repo root; exactly this)
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  test-and-prove:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GNAT + gprbuild
+        run: sudo apt-get update && sudo apt-get install -y gnat gprbuild
+      - name: Install gnatprove (Alire)
+        run: |
+          curl -sSL -o alr.zip https://github.com/alire-project/alire/releases/download/v2.0.2/alr-2.0.2-bin-x86_64-linux.zip
+          unzip -q alr.zip -d alr_install
+          ./alr_install/bin/alr -n settings --global --set toolchain.assistant false || true
+          ./alr_install/bin/alr -n install gnatprove
+          echo "$HOME/.alire/bin" >> "$GITHUB_PATH"
+      - name: Tests
+        run: make -C lthing-spark test
+      - name: Prove
+        run: make -C lthing-spark prove
+```
+
+## 4. Ralph loop — repeat until green LOCALLY
+```sh
+cd lthing-spark && chmod +x run_tests.sh && ./run_tests.sh ; echo "exit=$?"
+```
+In your worktree `test_hash.adb` does not exist yet (another agent adds it) —
+that's fine, the loop over `src/test_*.adb` just won't see it. Done =
+`run_tests.sh` builds+runs the present suites (`test_field`, `test_ntt`,
+`test_judicial`, `test_keccak`), they all print `[PASS]`, and the script
+exits 0. Sanity-check the failure path too (e.g. temporarily point it at a
+bogus main) and confirm it exits non-zero, then revert. Do NOT edit any src.
+
+## 5. Commit AND PUSH
+```sh
+git checkout -b claude/ralph-harness
+git add -A && git commit -m "Add aggregating test runner, Makefile, and CI workflow"
+git push -u origin claude/ralph-harness
+```
+Report: the branch name and a sample `run_tests.sh` run (its final lines + exit code).
