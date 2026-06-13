@@ -124,6 +124,18 @@ unblocked. **But the regression that proves this lives nowhere in the repo:**
   3. Add `test_hash.adb` driving `LTHING_Hash.SHAKE512`/`Chain_Hash` with those
      same vectors plus a determinism check.
 
+  *Status (this PR):* rather than KAT-gate the fragile asm, the hash core has
+  been **reimplemented in pure Ada/SPARK** — `lthing-spark/src/lthing_keccak.ads/.adb`
+  (Keccak-f[1600] + rate-parametrized SHAKE, `SPARK_Mode (On)`, AoRTE as the
+  proof target) with `test_keccak.adb` as the committed KAT gate: `keccak_f1600(0)`,
+  SHAKE256 ""/"abc", and the rate-72 "SHAKE512" empty + 73-byte non-aligned
+  production vectors, plus a determinism check. The algorithm was validated
+  byte-for-byte against FIPS 202 and Python `hashlib` before transcription. This
+  removes the FFI trust boundary for hashing and makes the four historical
+  Keccak bug classes (bad indexing, in-place χ corruption, wrong shift) provably
+  impossible. *It still needs `gnatprove` + a live build run; neither GNAT nor a
+  SPARK toolchain was available in the authoring environment.*
+
 **3.2 `lthing_judicial`: three status codes are unreachable or untested.**
 `test_judicial` covers `Bad_Envelope`, `Signature_Invalid`, the
 `Parse_Unverified` no-trust guarantee, and the invariant — good. But:
