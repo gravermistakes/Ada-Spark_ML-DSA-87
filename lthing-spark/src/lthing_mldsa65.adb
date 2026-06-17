@@ -174,6 +174,12 @@ package body LTHING_MLDSA65 is
          end loop;
 
          for R in 0 .. K_Dim - 1 loop
+            --  Every fully-computed W1 row so far is bounded by M_Bins - 1;
+            --  this carries the per-coefficient bound out to step 8, where
+            --  W1_Encode requires all coeffs of each row <= M_Bins - 1.
+            pragma Loop_Invariant
+              (for all RR in 0 .. R - 1 =>
+                 (for all J in FPoly'Range => W1 (RR) (J) <= Rnd.M_Bins - 1));
             declare
                Acc    : FPoly := (others => 0);
                T1d    : FPoly;
@@ -199,7 +205,13 @@ package body LTHING_MLDSA65 is
                Ntt.Inv_NTT (W_Poly);
 
                --  ---- step 7: w1(r) = UseHint(h(r), w(r)) ----
+               --  Use_Hint returns a value in 0 .. M_Bins - 1; the invariant
+               --  carries that bound across every written coefficient so the
+               --  W1_Encode precondition (all coeffs <= M_Bins - 1) discharges.
                for I in FPoly'Range loop
+                  pragma Loop_Invariant
+                    (for all J in FPoly'First .. I - 1 =>
+                       W1 (R) (J) <= Rnd.M_Bins - 1);
                   W1 (R) (I) := Rnd.Use_Hint (H (R) (I), W_Poly (I));
                end loop;
             end;
@@ -250,8 +262,14 @@ package body LTHING_MLDSA65 is
       end loop;
 
       --  (b) hint weight <= omega
+      --  Each H (R) (I) is a Hint_Bit (0 .. 1), so the accumulator grows by at
+      --  most 1 per coefficient; over k*256 = 1536 coefficients it stays well
+      --  below Natural'Last. The invariants pin that bound so the running add
+      --  cannot overflow.
       for R in 0 .. K_Dim - 1 loop
+         pragma Loop_Invariant (Hint_Weight <= R * N);
          for I in Cod.Hint_Poly'Range loop
+            pragma Loop_Invariant (Hint_Weight <= R * N + I);
             Hint_Weight := Hint_Weight + Natural (H (R) (I));
          end loop;
       end loop;
