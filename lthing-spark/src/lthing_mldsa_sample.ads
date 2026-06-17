@@ -1,12 +1,11 @@
 ------------------------------------------------------------------------------
 --  LTHING.MLDSA.Sample — Part 3: ExpandA + SampleInBall (FIPS 204)
 --
---  Uses the hardened Keccak asm core (SHAKE128 for ExpandA, SHAKE256 for
---  SampleInBall) via a thin Ada SHAKE wrapper.
+--  no it is not using asm.
 --
 --  SampleInBall self-gate: output polynomial must have exactly tau=49 nonzero
 --  coefficients, each +1 or -1. ExpandA self-gate: determinism + range [0,q).
---  Full correctness is confirmed downstream by the ML-DSA-65 sigVer KAT.
+--  
 --
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
@@ -35,7 +34,7 @@ package LTHING_MLDSA_Sample is
      (Rho : Byte_Array;
       A   : out Matrix);
 
-   --  count nonzero coeffs (for the self-gate / debugging)
-   function Count_Nonzero (C : Poly) return Natural;
+   --  count nonzero coeffs (for the self-gate / debugging) <-- NOT ALLOWED
+   -- function Count_Nonzero (C : Poly) return Natural;
 
 end LTHING_MLDSA_Sample;
