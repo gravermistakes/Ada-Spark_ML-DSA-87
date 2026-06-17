@@ -23,6 +23,18 @@ package body LTHING_MLDSA_Sample is
 
    Q_Const : constant := 8_380_417;   --  FIPS 204 modulus q
 
+   --  SHAKE sponge rates are bytes; FIPS 202 caps them well under 200 (the
+   --  Sponge precondition).  Constraining the formal makes that precondition
+   --  trivially discharged at both call sites (SHAKE128=168, SHAKE256=136).
+   subtype Rate_Range is Positive range 1 .. 200;
+
+   --  Squeezed-stream length.  Bounding the request at Max_Need keeps Need - 1
+   --  a valid Byte_Array index (Max_Need = Max_Document_Bytes) and bounds the
+   --  stream position arithmetic.  The rejection sampling always succeeds far
+   --  below this ceiling, so it is behaviour-neutral.
+   Max_Need : constant := 1_048_576;   --  = Max_Document_Bytes
+   subtype Need_Range is Positive range 1 .. Max_Need;
+
    ---------------------------------------------------------------------------
    --  XOF helper: Output(0 .. Need-1) := Sponge(Seed, Rate, Domain_SHAKE, ..)
    --  Sponge gives a consistent prefix, so squeezing Need then 2*Need agrees
@@ -30,8 +42,9 @@ package body LTHING_MLDSA_Sample is
    ---------------------------------------------------------------------------
    function XOF
      (Seed : Byte_Array;
-      Rate : Positive;
-      Need : Positive) return Byte_Array
+      Rate : Rate_Range;
+      Need : Need_Range) return Byte_Array
+     with Post => XOF'Result'First = 0 and then XOF'Result'Last = Need - 1
    is
       Out_Buf : Byte_Array (0 .. Need - 1);
    begin
@@ -49,6 +62,7 @@ package body LTHING_MLDSA_Sample is
       N : Natural := 0;
    begin
       for I in C'Range loop
+         pragma Loop_Invariant (N <= I - C'First);
          if C (I) /= 0 then
             N := N + 1;
          end if;
@@ -73,16 +87,19 @@ package body LTHING_MLDSA_Sample is
       --  Sign bits h(0..63) from the first 8 stream bytes (Alg. 29 lines 1-5).
       H : array (0 .. 63) of Integer;
 
-      Pos  : Integer;
-      Need : Positive := 1088;          --  generous initial request
+      Pos  : Natural;
       J    : Byte;
 
-      --  Grab the stream fresh (Sponge prefix is consistent across sizes).
-      Stream : Byte_Array := XOF (C_Tilde, Rate_SHAKE256, Need);
+      --  One-shot squeeze.  1088 SHAKE256 bytes cover the tau=49 rejection
+      --  sampling with overwhelming margin (each i needs ~1 byte on average,
+      --  and Sponge gives a consistent prefix).  Reads past the end are
+      --  guarded below, so a short stream can never index out of range.
+      Stream : constant Byte_Array := XOF (C_Tilde, Rate_SHAKE256, 1088);
    begin
       C := (others => 0);
 
       --  h(b) = (s(b/8) / 2**(b mod 8)) mod 2, for b in 0..63.
+      --  Stream'Last = 1087 >= 7, so Stream(B/8) is always valid.
       for B in 0 .. 63 loop
          H (B) := (Integer (Stream (B / 8)) / (2 ** (B mod 8))) mod 2;
       end loop;
@@ -93,13 +110,15 @@ package body LTHING_MLDSA_Sample is
       for I in 207 .. 255 loop
          --  inner rejection loop: read bytes until j <= i
          loop
-            if Pos > Stream'Last then
-               --  exhausted: regrow the stream (consistent prefix).
-               Need   := Need * 2;
-               Stream := XOF (C_Tilde, Rate_SHAKE256, Need);
+            if Pos <= Stream'Last then
+               J := Stream (Pos);
+            else
+               --  Unreachable with the 1088-byte stream; fail-safe to a
+               --  guaranteed-accepted byte so the index stays in range.
+               J := 0;
             end if;
-            J   := Stream (Pos);
-            Pos := Pos + 1;
+
+            Pos := (if Pos < Max_Need then Pos + 1 else Pos);
             exit when Integer (J) <= I;
          end loop;
 
@@ -117,9 +136,12 @@ package body LTHING_MLDSA_Sample is
      (Seed : Byte_Array;
       P    : out Poly)
    is
-      Need   : Positive := 1088;
-      Stream : Byte_Array := XOF (Seed, Rate_SHAKE128, Need);
-      Pos    : Integer := 0;
+      --  One-shot squeeze.  1088 SHAKE128 bytes yield 256 accepted coeffs with
+      --  overwhelming margin (acceptance prob ~ q/2**23 ~ 0.9986 per 3-byte
+      --  group).  Reads past the end are guarded, so a short stream can never
+      --  index out of range; an unfilled tail is impossible in practice.
+      Stream : constant Byte_Array := XOF (Seed, Rate_SHAKE128, 1088);
+      Pos    : Natural := 0;
       Filled : Natural := 0;
       D      : Integer;
       B0, B1, B2 : Integer;
@@ -127,17 +149,22 @@ package body LTHING_MLDSA_Sample is
       P := (others => 0);
 
       while Filled < 256 loop
-         if Pos + 2 > Stream'Last then
-            --  not enough bytes for a 3-byte group: regrow.
-            Need   := Need * 2;
-            Stream := XOF (Seed, Rate_SHAKE128, Need);
-            --  Pos stays valid because the prefix is consistent.
+         pragma Loop_Invariant (Filled < 256);
+         pragma Loop_Invariant (Pos <= Max_Need);
+
+         if Pos + 2 <= Stream'Last then
+            B0 := Integer (Stream (Pos));
+            B1 := Integer (Stream (Pos + 1));
+            B2 := Integer (Stream (Pos + 2));
+         else
+            --  Unreachable with the 1088-byte stream; fail-safe to a value
+            --  >= q so it is rejected and the indices stay in range.
+            B0 := 16#FF#;
+            B1 := 16#FF#;
+            B2 := 16#FF#;
          end if;
 
-         B0 := Integer (Stream (Pos));
-         B1 := Integer (Stream (Pos + 1));
-         B2 := Integer (Stream (Pos + 2));
-         Pos := Pos + 3;
+         Pos := (if Pos <= Max_Need - 3 then Pos + 3 else Pos);
 
          --  d := b0 + 256*b1 + 65536*(b2 mod 128)   (23-bit value)
          D := B0 + 256 * B1 + 65536 * (B2 mod 128);
@@ -159,11 +186,14 @@ package body LTHING_MLDSA_Sample is
      (Rho : Byte_Array;
       A   : out Matrix)
    is
-      Seed : Byte_Array (0 .. 33);
+      --  Fully initialised up front so flow analysis sees every element of
+      --  Seed defined before the Rej_NTT_Poly read; the loop then overwrites
+      --  0 .. 31 with rho, and 32/33 with the (s, r) indices.
+      Seed : Byte_Array (0 .. 33) := (others => 0);
    begin
       for R in 0 .. 5 loop
          for S in 0 .. 4 loop
-            --  rho is the first 32 bytes
+            --  rho is the first 32 bytes (Rho'First = 0 by precondition)
             for I in 0 .. 31 loop
                Seed (I) := Rho (Rho'First + I);
             end loop;
