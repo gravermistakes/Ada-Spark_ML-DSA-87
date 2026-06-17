@@ -68,13 +68,26 @@ package LTHING_MLDSA65 is
    --  Context is the application context string (length 0 .. 255). The
    --  verifier forms the external prefix  M' = 0x00 || len(ctx) || ctx ||
    --  Message  internally (Alg. 3) before hashing into mu.
+   --  Upper bound on the application message length. The verifier forms the
+   --  internal prefix  M' = 0x00 || len(ctx) || ctx || Message  (2 framing
+   --  bytes + up to 255 context bytes) and then the hash input  tr || M'
+   --  (64 extra bytes). The largest derived buffer is therefore indexed up to
+   --  65 + Context'Length + Message'Length, which must stay <= Index_Range'Last
+   --  (= Max_Document_Bytes). A 512-byte headroom comfortably covers the
+   --  64 (tr) + 2 (framing) + 255 (ctx) overhead. Real documents (judicial
+   --  bodies and the KAT vectors, all < 8200 bytes) are far under this
+   --  ceiling, so the bound is non-restrictive in practice.
+   Max_Message_Bytes : constant := Max_Document_Bytes - 512;
+
    function Verify
      (PK      : Public_Key;
       Message : Byte_Array;
       Context : Byte_Array;
       Sig     : Signature) return Boolean
      with Global => null,
-          Pre    => Message'Length > 0 and then Context'Length <= 255;
+          Pre    => Message'Length > 0
+                    and then Message'Length <= Max_Message_Bytes
+                    and then Context'Length <= 255;
 
    --  Exposed so the judicial layer and tests can assert the current posture.
    --  Flipped to True now that the FIPS 204 arithmetic core (Alg. 8) is
