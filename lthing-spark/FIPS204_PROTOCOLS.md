@@ -71,10 +71,31 @@ Returns ⊥ (→ Verify_internal step 3 `false`) on any of:
 Conformance: `lthing_mldsa_codec.adb` `Sig_Decode` — `:190` (Last<Index or Last>Omega),
 `:204` (JJ>Index and Pos<=Prev), `:220-222` (padding ≠ 0) → all three present, exact. ✓
 
+## Algorithm 29 — SampleInBall(ρ)  +  Alg 14/30/32 (sampling)
+`LTHING_MLDSA_Sample` (`lthing_mldsa_sample.adb`).
+- **Alg 29 SampleInBall**: c←0; sign bits h = BytesToBits(first 8 squeezed bytes),
+  i.e. `h[b] = (s[b/8] >> (b mod 8)) & 1` — `:104` matches (LE per-byte). Loop
+  `i ∈ 256−τ..255 = 207..255` (τ=49) — `:110`. Inner rejection `while j>i` →
+  `exit when J<=I` `:120`. `c_i ← c_j` (`:123`) then `c_j ← (−1)^h[i+τ−256]`
+  (`:124-125`, index `I−207 = i+49−256`); +1→`1`, −1→`q−1` (`:77-78`). XOF=SHAKE256
+  (H), rate 136 `:97`. ✓
+- **Alg 14 CoeffFromThreeBytes**: `z = 2^16·(b2 mod 128) + 2^8·b1 + b0`, reject z≥q
+  — `:164` `B0 + 256*B1 + 65536*(B2 mod 128)`, `:166` `if D < Q_Const`. ✓
+- **Alg 30 RejNTTPoly**: absorb seed, squeeze 3 bytes/iter, accept via Alg 14, fill
+  256 coeffs; output already in NTT domain — `:153-170`. XOF=SHAKE128 (G), rate 168
+  `:141`. ✓
+- **Alg 32 ExpandA**: ρ′ = ρ ∥ IntegerToBytes(s,1) ∥ IntegerToBytes(r,1); A[r,s]←
+  RejNTTPoly(ρ′); r∈0..k−1=0..5, s∈0..ℓ−1=0..4 — `:188-197`, `Seed(32)=byte(s)`,
+  `Seed(33)=byte(r)`. ✓
+- Verdict: **CONFORMANT, no code change.** (Header lists an unreferenced
+  `Count_Nonzero` self-gate helper — benign; gnatprove warns but proves it.)
+
 ## Loop status
 - **N=0 `lthing_mldsa65` (Verify, Alg 3+8): CONFORMANT** (note: redundant ω check in
   final return; fixed stale "stubbed/returns Invalid" header).
 - **N=1 `lthing_mldsa_codec` (sigDecode/HintBitUnpack, Alg 27/21): CONFORMANT** (all
   three ⊥ conditions exact; no correction needed).
-- N=2.. (sample: Alg 29/30/32; round: Alg 36/40; ntt) — pending. All are KAT-validated
-  (sigVer 15/15, incl. 12 reject vectors) + gnatprove 0 unproved; spec cross-check pending.
+- **N=2 `lthing_mldsa_sample` (SampleInBall/RejNTTPoly/ExpandA, Alg 29/14/30/32):
+  CONFORMANT** (no correction needed; all step-by-step exact, KAT 15/15 still green).
+- N=3 `lthing_mldsa_round` (Alg 35/36/37/38/40, w1Encode/Alg 28) — next.
+- N=4 `lthing_mldsa_ntt` (Alg 41/42; negacyclic-convolution ground-truth gate) — pending.
