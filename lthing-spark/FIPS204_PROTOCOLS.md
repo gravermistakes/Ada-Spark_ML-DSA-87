@@ -90,6 +90,25 @@ Conformance: `lthing_mldsa_codec.adb` `Sig_Decode` — `:190` (Last<Index or Las
 - Verdict: **CONFORMANT, no code change.** (Header lists an unreferenced
   `Count_Nonzero` self-gate helper — benign; gnatprove warns but proves it.)
 
+## Algorithms 35-40 + w1Encode (rounding / hint)
+`LTHING_MLDSA_Round` (`lthing_mldsa_round.adb`). Params (`.ads:35-42`): q=8380417,
+2^d=8192, γ2=261888, 2γ2=523776, m=(q−1)/(2γ2)=16, all match.
+- **mod± def** (FIPS §2 line 626): unique m′∈(−⌈α/2⌉, ⌊α/2⌋]. For even α this is
+  (−α/2, α/2]. `Mod_Pm` `:18-28`: M=R mod A∈[0,A−1]; if M>A/2 → M−A∈(−A/2,0), else
+  M∈[0,A/2]; result in (−A/2, A/2], congruent to R mod A. ✓ (`.ads` Post proves it).
+- **Alg 35 Power2Round**: r0 ← r⁺ mod± 2^d; r1 ← (r⁺−r0)/2^d — `:35-44`
+  (`Low=Mod_Pm(Rr,8192)`, `Hi=(Rr−Low)/8192`). ✓
+- **Alg 36 Decompose**: r0 ← r⁺ mod± 2γ2; if r⁺−r0 = q−1 then r1=0, r0=r0−1 else
+  r1=(r⁺−r0)/2γ2 — `:50-72` exact, both branches. ✓
+- **Alg 37 HighBits / Alg 38 LowBits**: = Decompose(r).r1 / .r0 — `:77-94`. ✓
+- **Alg 40 UseHint**: m=16; if h=1∧r0>0 → (r1+1) mod m; if h=1∧r0≤0 → (r1−1) mod m;
+  else r1 — `:99-111` (`elsif H=1` = h=1∧r0≤0; `(R1−1+M_Bins) mod M_Bins` is the
+  same residue, safe). ✓
+- **w1Encode (Alg 28) + SimpleBitPack (Alg 16)**: w1 coeffs ∈[0,m−1]=[0,15],
+  bitlen(15)=4; IntegerToBits LE (Alg 9) + BitsToBytes LE (Alg 12) ⇒ byte t =
+  w1(2t) + 16·w1(2t+1) (low nibble first). `:116-127` exact. ✓
+- Verdict: **CONFORMANT, no code change.**
+
 ## Loop status
 - **N=0 `lthing_mldsa65` (Verify, Alg 3+8): CONFORMANT** (note: redundant ω check in
   final return; fixed stale "stubbed/returns Invalid" header).
@@ -97,5 +116,7 @@ Conformance: `lthing_mldsa_codec.adb` `Sig_Decode` — `:190` (Last<Index or Las
   three ⊥ conditions exact; no correction needed).
 - **N=2 `lthing_mldsa_sample` (SampleInBall/RejNTTPoly/ExpandA, Alg 29/14/30/32):
   CONFORMANT** (no correction needed; all step-by-step exact, KAT 15/15 still green).
-- N=3 `lthing_mldsa_round` (Alg 35/36/37/38/40, w1Encode/Alg 28) — next.
-- N=4 `lthing_mldsa_ntt` (Alg 41/42; negacyclic-convolution ground-truth gate) — pending.
+- **N=3 `lthing_mldsa_round` (Power2Round/Decompose/HighBits/LowBits/UseHint/w1Encode,
+  Alg 35/36/37/38/40 + Alg 28/16): CONFORMANT** (no correction needed; mod± and both
+  Decompose branches exact).
+- N=4 `lthing_mldsa_ntt` (Alg 41/42; negacyclic-convolution ground-truth gate) — next.
