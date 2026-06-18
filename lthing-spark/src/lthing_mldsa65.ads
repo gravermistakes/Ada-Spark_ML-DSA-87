@@ -11,15 +11,18 @@
 --    signature   = 3309 bytes   (c_tilde:48 || z enc || h enc)
 --    c_tilde length for ML-DSA-65 = 48 bytes (384 bits, lambda/4)
 --
---  SCOPE (honest): this package provides the FIPS 204 Algorithm 3 (ML-DSA.Verify)
---  control flow, byte (de)serialization shapes, and parameter constants under
---  SPARK contracts. The polynomial-arithmetic core (NTT, matrix expansion
---  ExpandA, SampleInBall, UseHint, decode helpers) is declared with contracts
---  but its body REJECTS until each routine is implemented and validated against
---  the FIPS 204 known-answer tests. Verify therefore returns Invalid today.
---  This is fail-closed by construction: an unfinished verifier rejects, it
---  never accepts. Do NOT alter Verify to return Valid before the arithmetic
---  core passes KATs.
+--  SCOPE: this package implements the full FIPS 204 Algorithm 3 (ML-DSA.Verify,
+--  external/pure) and Algorithm 8 (ML-DSA.Verify_internal) — pkDecode, sigDecode
+--  (with ⊥ on malformed/over-weight hint), ExpandA, SampleInBall, the
+--  NTT⁻¹(Â∘NTT(z) − NTT(c)∘NTT(t1·2^d)) recomputation, UseHint, w1Encode, and the
+--  final ‖z‖∞ < γ1−β ∧ c̃=c̃' acceptance. The arithmetic core is COMPLETE and
+--  passes the 15-vector ML-DSA-65 sigVer KAT (3 accept / 12 reject). The whole
+--  unit is SPARK_Mode (On) and gnatprove-clean (0 unproved).
+--  Fail-closed is preserved: any decode failure, malformed/over-weight hint,
+--  norm overflow, or challenge mismatch returns False; Verify returns True only
+--  on a genuine FIPS 204 acceptance. See FIPS204_PROTOCOLS.md for the conformance
+--  map. Do NOT make Verify return True on any path that has not genuinely passed
+--  Algorithm 8.
 --
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
@@ -60,10 +63,9 @@ package LTHING_MLDSA65 is
    --  Verify result: deliberately just a Boolean here; the judicial layer
    --  maps False -> Signature_Invalid (fail-closed).
    --
-   --  Postcondition note: we cannot yet prove cryptographic soundness (that
-   --  True implies a genuine FIPS 204 acceptance) because the arithmetic core
-   --  is stubbed. We CAN and do guarantee the safety direction: while the
-   --  core is incomplete, Verify returns False unconditionally.
+   --  Soundness note: SPARK proves AoRTE + flow for this unit, NOT cryptographic
+   --  soundness (that True implies a genuine FIPS 204 acceptance) — that property
+   --  is established by the authoritative 15-vector sigVer KAT, not by gnatprove.
    --  FIPS 204 Algorithm 3 (ML-DSA.Verify), external/pure interface.
    --  Context is the application context string (length 0 .. 255). The
    --  verifier forms the external prefix  M' = 0x00 || len(ctx) || ctx ||
