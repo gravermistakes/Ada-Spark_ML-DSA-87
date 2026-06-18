@@ -87,8 +87,11 @@ package LTHING_MLDSA65 is
       Context : Byte_Array;
       Sig     : Signature) return Boolean
      with Global => null,
-          Pre    => Message'Length > 0
-                    and then Message'Length <= Max_Message_Bytes
+          --  FIPS 204 permits an empty message (M = epsilon); the verifier must
+          --  not false-reject it. The body forms M' = 0x00 || len(ctx) || ctx
+          --  with an empty message tail (M_Prime range 0 .. 1; the copy loop is
+          --  a null range), so Message'Length = 0 is well-defined and accepted.
+          Pre    => Message'Length <= Max_Message_Bytes
                     and then Context'Length <= 255;
 
    --  Exposed so the judicial layer and tests can assert the current posture.

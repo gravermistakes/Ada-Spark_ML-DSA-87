@@ -37,6 +37,18 @@ begin
    Chk ("1-bit public-key tamper rejects",
         not LTHING_MLDSA65.Verify (PK, Msg, Ctx, Sg));
 
+   --  FIPS 204 permits an empty message (M = epsilon). The verifier must
+   --  accept the call (no false-reject at the precondition / no exception) and
+   --  fail-closed against a signature minted for a different (non-empty)
+   --  message. This locks in the removal of the old Message'Length > 0 guard.
+   declare
+      PK0   : constant LTHING_MLDSA65.Public_Key := V.PK;   --  untampered
+      Empty : constant Byte_Array (1 .. 0) := (others => 0);
+   begin
+      Chk ("empty message is well-defined and fail-closed",
+           not LTHING_MLDSA65.Verify (PK0, Empty, Ctx, V.Sig));
+   end;
+
    New_Line;
    if Fails = 0 then Put_Line ("VERIFY-ADV GATE PASSED: accepts valid, rejects 1-bit tamper");
    else Put_Line ("VERIFY-ADV FAILURES:" & Fails'Image);
