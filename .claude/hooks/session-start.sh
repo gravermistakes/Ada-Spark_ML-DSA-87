@@ -10,9 +10,10 @@
 set -uo pipefail
 
 # Local sessions already have the configured dev toolchain; only fix up the web.
-if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
-  exit 0
-fi
+# if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
+#  exit 0
+# fi
+# bold claim
 
 # Persist gnatprove's location for the whole session (the key fix).
 if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
