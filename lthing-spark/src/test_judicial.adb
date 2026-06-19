@@ -1,26 +1,28 @@
 --  test_judicial — fail-closed verification of the LTHING envelope
 --  (LTHING_HEADER_SPEC.md §2/§3/§5/§6/§9).
 --
---  Two kinds of gate are exercised:
+--  Three kinds of gate are exercised:
 --    * structural / magic / length gates (T1..T8) — pure rejections;
 --    * a WELL-FORMED genesis envelope (T9..T13) whose seal hashes are
 --      recomputed here exactly as the verifier does (LTHING SHAKE512 via the
 --      same Sponge), so every seal gate (§9.6 artifact, §9.7 chain, §9.8
 --      seal-id, §9.9 relation) PASSES and the verifier reaches the signature
---      gate. Since there is no signer yet (Sign is unimplemented) the ML-DSA
---      signature is not valid, so a fully-formed envelope fails closed at the
---      LAST gate (Signature_Invalid) — and tampering any earlier field trips
---      its specific earlier gate. This proves the pipeline is not over-
---      rejecting (gates accept a good seal) without faking a Verified result.
+--      gate (with a non-signer key it fails closed there, Signature_Invalid);
+--    * a GENUINELY SIGNED envelope (T15/T16): KeyGen + Sign produce a real
+--      ML-DSA-65 signature over header‖body‖seal, so Parse_And_Verify returns
+--      Verified/Trusted — and flipping a signature byte fails closed. This is
+--      the full end-to-end relational gate: a real signed judicial document
+--      verifies, tamper does not, and no Verified result is ever faked.
 pragma SPARK_Mode (Off);
 
-with LTHING_Types;     use LTHING_Types;
-with LTHING_Judicial;  use LTHING_Judicial;
+with LTHING_Types;      use LTHING_Types;
+with LTHING_Judicial;   use LTHING_Judicial;
 with LTHING_Keccak;
-with LTHING_MLDSA65;
-with Interfaces;       use Interfaces;
-with Ada.Text_IO;      use Ada.Text_IO;
-with Ada.Command_Line; use Ada.Command_Line;
+with LTHING_MLDSA65;    use LTHING_MLDSA65;
+with LTHING_MLDSA_Sign; use LTHING_MLDSA_Sign;
+with Interfaces;        use Interfaces;
+with Ada.Text_IO;       use Ada.Text_IO;
+with Ada.Command_Line;  use Ada.Command_Line;
 
 procedure Test_Judicial is
 
@@ -272,6 +274,40 @@ begin
       Parse_And_Verify (Env (0 .. Last), Zero, PK, R);
       Chk ("genesis with ancestor/=0 -> Seal_Mismatch",
            (not R.Trusted) and then R.Status = Seal_Mismatch);
+   end;
+
+   ---------------------------------------------------------------------------
+   --  Genuinely signed envelope: full end-to-end accept + tamper reject
+   ---------------------------------------------------------------------------
+
+   --  T15: a real ML-DSA-65 signature over header‖body‖seal -> Verified.
+   declare
+      Seed    : Byte_Array (0 .. 31);
+      GPK     : Public_Key;
+      SK      : Secret_Key;
+      Sg      : Signature;
+      Ok      : Boolean;
+      Sig_Off : constant := 40 + 8 + 196;           --  header+body+seal = 244
+      Empty   : constant Byte_Array (1 .. 0) := (others => 0);
+   begin
+      for I in Seed'Range loop Seed (I) := Byte (I * 5 + 3); end loop;
+      Key_Gen (Seed, GPK, SK);
+
+      Build_Genesis (16#5A#, Env, Last);
+      Sign (SK, Env (0 .. Sig_Off - 1), Empty, Sg, Ok);
+      for I in 0 .. Sig_Bytes - 1 loop
+         Env (Sig_Off + I) := Sg (I);
+      end loop;
+
+      Parse_And_Verify (Env (0 .. Last), Zero, GPK, R);
+      Chk ("genuine signed genesis envelope -> Verified/Trusted",
+           Ok and then R.Trusted and then R.Status = Verified);
+
+      --  T16: flip one signature byte -> Signature_Invalid (fail-closed).
+      Env (Sig_Off + 50) := Env (Sig_Off + 50) xor 1;
+      Parse_And_Verify (Env (0 .. Last), Zero, GPK, R);
+      Chk ("tampered signature in signed envelope -> Signature_Invalid",
+           (not R.Trusted) and then R.Status = Signature_Invalid);
    end;
 
    --  T14: the trust invariant can never desync.
