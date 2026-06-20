@@ -131,21 +131,6 @@ package body LTHING_Judicial is
       return R;
    end LTHING_SHAKE512;
 
-   --  Constant-time digest equality, pure SPARK Ada (no asm FFI). Data-
-   --  independent XOR-accumulate; one test at the end. (GNAT does not
-   --  guarantee a constant-time lowering, but the control flow is data-
-   --  independent — the standard software mitigation.)
-   function Digest_Equal (A, B : Digest) return Boolean
-     with Global => null
-   is
-      Acc : Byte := 0;
-   begin
-      for I in Digest_Index loop
-         Acc := Acc or (A (I) xor B (I));
-      end loop;
-      return Acc = 0;
-   end Digest_Equal;
-
    --  Compare a computed digest H against the 64-byte window D(Off .. Off+63),
    --  constant-time over the 64 bytes.
    function Window_Equal
