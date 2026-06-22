@@ -10,10 +10,9 @@
 --          ||z||_inf < gamma1 - beta
 --      AND c_tilde2 = c_tilde AND popcount(h) <= omega.
 --
---  Composes the SPARK_Mode (Off) NTT / sampling layers (in-place transforms,
---  C-free pure-Ada Keccak), so this body is SPARK_Mode (Off). The field layer
---  it leans on is proved; AoRTE for the whole project is unaffected because
---  gnatprove treats an Off body as not-analyzed (its spec contract still holds).
+--  SPARK_Mode (On) throughout (NTT / sampling layers included); the proof
+--  target is AoRTE + flow. Earlier this body and the NTT/sample units were
+--  
 --
 --  Fail-closed is preserved: any decode failure, malformed hint, norm overflow,
 --  challenge mismatch, or excess hint weight returns False. Verify only returns
@@ -22,7 +21,7 @@
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
-pragma SPARK_Mode (Off);
+pragma SPARK_Mode (On);
 
 with LTHING_Keccak;       use LTHING_Keccak;
 with LTHING_MLDSA_Field;
@@ -73,7 +72,8 @@ package body LTHING_MLDSA65 is
       Sig     : Signature) return Boolean
    is
       --  --- Alg. 3: build M' = 0x00 || len(ctx) || ctx || msg ---
-      M_Prime : Byte_Array (0 .. Message'Length + Context'Length + 1);
+      M_Prime : Byte_Array (0 .. Message'Length + Context'Length + 1) :=
+        (others => 0);
 
       --  --- decode outputs ---
       Rho     : Cod.Rho_Array;
@@ -92,7 +92,7 @@ package body LTHING_MLDSA65 is
       Mu      : Byte_Array (0 .. 63);
       C_Tilde2 : Byte_Array (0 .. C_Tilde_Bytes - 1);
 
-      W1_Bytes : Byte_Array (0 .. K_Dim * 128 - 1);
+      W1_Bytes : Byte_Array (0 .. K_Dim * 128 - 1) := (others => 0);
 
       Hint_Weight : Natural := 0;
    begin
@@ -132,7 +132,7 @@ package body LTHING_MLDSA65 is
               Output => Tr);
 
       declare
-         Tr_Mp : Byte_Array (0 .. 64 + M_Prime'Length - 1);
+         Tr_Mp : Byte_Array (0 .. 64 + M_Prime'Length - 1) := (others => 0);
       begin
          for I in 0 .. 63 loop
             Tr_Mp (I) := Tr (I);
@@ -164,8 +164,10 @@ package body LTHING_MLDSA65 is
       --                            - c_hat o NTT(t1(r) * 2^d) ) ----
       --  Pre-transform z(s) once.
       declare
-         Z_Hat : array (0 .. L_Dim - 1) of FPoly;
-         W1    : array (0 .. K_Dim - 1) of Rnd.Poly;
+         Z_Hat : array (0 .. L_Dim - 1) of FPoly :=
+           (others => (others => 0));
+         W1    : array (0 .. K_Dim - 1) of Rnd.Poly :=
+           (others => (others => 0));
       begin
          for S in 0 .. L_Dim - 1 loop
             for I in FPoly'Range loop
@@ -175,6 +177,12 @@ package body LTHING_MLDSA65 is
          end loop;
 
          for R in 0 .. K_Dim - 1 loop
+            --  Every fully-computed W1 row so far is bounded by M_Bins - 1;
+            --  this carries the per-coefficient bound out to step 8, where
+            --  W1_Encode requires all coeffs of each row <= M_Bins - 1.
+            pragma Loop_Invariant
+              (for all RR in 0 .. R - 1 =>
+                 (for all J in FPoly'Range => W1 (RR) (J) <= Rnd.M_Bins - 1));
             declare
                Acc    : FPoly := (others => 0);
                T1d    : FPoly;
@@ -200,7 +208,13 @@ package body LTHING_MLDSA65 is
                Ntt.Inv_NTT (W_Poly);
 
                --  ---- step 7: w1(r) = UseHint(h(r), w(r)) ----
+               --  Use_Hint returns a value in 0 .. M_Bins - 1; the invariant
+               --  carries that bound across every written coefficient so the
+               --  W1_Encode precondition (all coeffs <= M_Bins - 1) discharges.
                for I in FPoly'Range loop
+                  pragma Loop_Invariant
+                    (for all J in FPoly'First .. I - 1 =>
+                       W1 (R) (J) <= Rnd.M_Bins - 1);
                   W1 (R) (I) := Rnd.Use_Hint (H (R) (I), W_Poly (I));
                end loop;
             end;
@@ -220,7 +234,7 @@ package body LTHING_MLDSA65 is
 
       --  c_tilde2 := H(mu || w1bytes, 48)
       declare
-         Mu_W1 : Byte_Array (0 .. 64 + W1_Bytes'Length - 1);
+         Mu_W1 : Byte_Array (0 .. 64 + W1_Bytes'Length - 1) := (others => 0);
       begin
          for I in 0 .. 63 loop
             Mu_W1 (I) := Mu (I);
@@ -251,8 +265,14 @@ package body LTHING_MLDSA65 is
       end loop;
 
       --  (b) hint weight <= omega
+      --  Each H (R) (I) is a Hint_Bit (0 .. 1), so the accumulator grows by at
+      --  most 1 per coefficient; over k*256 = 1536 coefficients it stays well
+      --  below Natural'Last. The invariants pin that bound so the running add
+      --  cannot overflow.
       for R in 0 .. K_Dim - 1 loop
+         pragma Loop_Invariant (Hint_Weight <= R * N);
          for I in Cod.Hint_Poly'Range loop
+            pragma Loop_Invariant (Hint_Weight <= R * N + I);
             Hint_Weight := Hint_Weight + Natural (H (R) (I));
          end loop;
       end loop;
