@@ -13,7 +13,7 @@ older report:
 
 ```sh
 cd lthing-spark
-./run_tests.sh                                          # 17/17 suites, exit 0
+./run_tests.sh                                          # 15/15 suites, exit 0
 export PATH=/root/.alire/bin:$PATH
 gnatprove -P lthing.gpr --level=2 --report=all -j0      # 1087 checks, 0 unproved
 ```
@@ -41,9 +41,9 @@ are tool output.
   judicial dispatch layer, the shared NTT/field/codec/sampler stack, and the
   Keccak/SHAKE core. All `test_*.adb` mains are `SPARK_Mode (Off)` and
   correctly skipped by the prover.
-- **Tests:** `./run_tests.sh` builds and runs **all 17** `src/test_*.adb` mains,
+- **Tests:** `./run_tests.sh` builds and runs **all 15** `src/test_*.adb` mains,
   greps for `[FAIL]`, and exits non-zero on any build/run/assert failure.
-  Verified: **17/17 suites pass, exit 0.**
+  Verified: **15/15 suites pass, exit 0.**
 
 Every production unit is `SPARK_Mode (On)`; there is **no `SPARK_Mode (Off)`
 code outside the test drivers**. Where proof applies it is stronger than a test,
@@ -67,12 +67,12 @@ line/branch coverage.
 | `lthing_mldsa_codec` | On | pk/sig encode + decode | `test_codec` (7), `test_encode` (3) |
 | `lthing_mldsa_sample` | On | ExpandA / RejNTTPoly / SampleInBall / XOF | `test_sample`, `test_xof_cap` |
 | `lthing_mldsa_sign` | On | KeyGen / Sign (proof-companion to Verify) | `test_sign` (8) |
-| `lthing_mldsa65` | On | FIPS 204 `Verify (PK, Message, Context, Sig)`; `Arithmetic_Core_Complete = True` | `test_kat` (15), `test_verify_adv` (4), `test_verify_adv87` (4, shared tamper path) |
-| `lthing_mldsa87` | On | FIPS 204 ML-DSA-87 `Verify`; k=8, l=7, τ=60, ω=75, PK=2592 B, Sig=4627 B; `Arithmetic_Core_Complete = True` | `test_kat87` (15), `test_verify_adv87` (4) |
+| `lthing_mldsa65` | On | FIPS 204 `Verify (PK, Message, Context, Sig)`; `Arithmetic_Core_Complete = True` | `test_kat` (15), `test_verify_adv` (4) |
+| `lthing_mldsa87` | On | FIPS 204 ML-DSA-87 `Verify`; k=8, l=7, τ=60, ω=75, PK=2592 B, Sig=4627 B; `Arithmetic_Core_Complete = True` | `test_kat87` (15) |
 | `lthing_mldsa87_codec` | On | ML-DSA-87 pk/sig decode (z 20-bit/coeff, hints ω=75, c̃ 64 B) | `test_kat87` (end-to-end) |
 | `lthing_mldsa87_sample` | On | ML-DSA-87 SampleInBall (τ=60), ExpandA (8×7 matrix) | `test_kat87` (end-to-end) |
 
-**The 17 suites and their headline gates:**
+**The 15 suites and their headline gates:**
 
 - **`test_field`** — 14 relational checks: `Add(Q-1,1)=0`, commutativity,
   `Mul` distributes over `Add`, `Reduce((Q-1)²)=1`, and the `To_Centered` pivot
@@ -117,17 +117,6 @@ line/branch coverage.
   `Signature_Invalid` (proves §9.1..§9.9 run for suite 0x0002); tampered body
   → `Seal_Mismatch`; wrong `prev_chain` → `Chain_Broken`; `Trusted ↔ Verified`
   invariant.
-- **`test_verify_adv87`** — adversarial gate on `LTHING_MLDSA87.Verify` using
-  authoritative ACCEPT vector V63 (NIST ACVP tgId=5, tcId=63): valid vector
-  accepts; 1-bit signature tamper rejects; 1-bit PK tamper rejects; empty
-  message is well-defined and fail-closed. Mirrors `test_verify_adv` for
-  ML-DSA-87.
-- **`test_judicial_suites`** — 4 suite-boundary gates not covered by the
-  per-suite tests: suite 0x0001 with ML-DSA-87-size (2592 B) PK →
-  `Bad_Length` (mirror of `test_judicial87` T2); suite 0x0000 (reserved) →
-  `Bad_Length`; suite 0x0003 (unknown) → `Bad_Length`; suite 0xFFFF (unknown)
-  → `Bad_Length`. Proves all unknown suite values are rejected before the
-  PK/signature gate.
 
 ---
 
@@ -215,7 +204,7 @@ Hashing is proved pure-SPARK Keccak/SHAKE — the asm/FFI is retired.
 
 Authoritative, re-run for this revision:
 `gnatprove -P lthing.gpr --level=2` = **1087 checks, 0 unproved, 0 justified**
-(229 flow / 858 provers); `./run_tests.sh` = **17/17 suites green**, exit 0.
+(229 flow / 858 provers); `./run_tests.sh` = **15/15 suites green**, exit 0.
 
 Residual work is breadth, not core correctness: an isolated NTT reference KAT
 (4.1), a frozen non-aligned SHAKE512 vector (4.2), `gnatcov` numbers (4.3), the
