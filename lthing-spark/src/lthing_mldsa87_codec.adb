@@ -76,6 +76,119 @@ package body LTHING_MLDSA87_Codec is
    end Simple_Bit_Unpack;
 
    ----------------------------------------------------------------------------
+   --  Simple_Bit_Pack (Algorithm 16) — inverse of Simple_Bit_Unpack.
+   ----------------------------------------------------------------------------
+   function Simple_Bit_Pack
+     (V : Poly; Bit_Len : Positive; Hi : Coeff) return Byte_Array
+   is
+      pragma Unreferenced (Hi);
+      R : Byte_Array (0 .. (N * Bit_Len) / 8 - 1) := (others => 0);
+   begin
+      for I in Poly'Range loop
+         declare
+            Tmp : Coeff := V (I);
+         begin
+            for J in 0 .. Bit_Len - 1 loop
+               pragma Loop_Invariant (Tmp >= 0);
+               if Tmp mod 2 = 1 then
+                  declare
+                     P : constant Natural := I * Bit_Len + J;
+                  begin
+                     R (P / 8) := R (P / 8) or
+                       Shift_Left (Byte (1), P mod 8);
+                  end;
+               end if;
+               Tmp := Tmp / 2;
+            end loop;
+         end;
+      end loop;
+      return R;
+   end Simple_Bit_Pack;
+
+   ----------------------------------------------------------------------------
+   --  Pk_Encode (Algorithm 22) — inverse of Pk_Decode (k=8, l=7, PK=2592B).
+   ----------------------------------------------------------------------------
+   function Pk_Encode (Rho : Rho_Array; T1 : T1_Vec) return Public_Key is
+      PK : Public_Key := (others => 0);
+   begin
+      for I in Rho_Array'Range loop
+         PK (I) := Rho (I);
+      end loop;
+
+      for I in T1_Vec'Range loop
+         declare
+            Base   : constant Natural := 32 + T1_Bytes * I;
+            Packed : constant Byte_Array := Simple_Bit_Pack (T1 (I), 10, 1023);
+         begin
+            for J in 0 .. T1_Bytes - 1 loop
+               PK (Base + J) := Packed (Packed'First + J);
+            end loop;
+         end;
+      end loop;
+      return PK;
+   end Pk_Encode;
+
+   ----------------------------------------------------------------------------
+   --  Sig_Encode (Algorithm 26) — c_tilde || BitPack(z) || HintBitPack(h).
+   --  Omega = 75, K_Dim = 8. Hint_Off = 4544.
+   ----------------------------------------------------------------------------
+   function Sig_Encode
+     (C_Tilde : C_Tilde_Array; Z : Z_Vec; H : H_Vec) return Signature
+   is
+      Sig : Signature := (others => 0);
+   begin
+      for I in C_Tilde_Array'Range loop
+         Sig (I) := C_Tilde (I);
+      end loop;
+
+      for I in Z_Vec'Range loop
+         declare
+            Raw : Poly := (others => 0);
+         begin
+            for J in Poly'Range loop
+               pragma Loop_Invariant
+                 (for all JJ in 0 .. J - 1 => Raw (JJ) in 0 .. 1_048_575);
+               declare
+                  Cen : constant Coeff :=
+                    (if Z (I) (J) > Gamma1 then Z (I) (J) - Q else Z (I) (J));
+               begin
+                  Raw (J) := (Gamma1 - Cen) mod 1_048_576;
+               end;
+            end loop;
+            pragma Assert (for all JJ in Poly'Range => Raw (JJ) in 0 .. 1_048_575);
+
+            declare
+               Base   : constant Natural := C_Tilde_Bytes + Z_Bytes * I;
+               Packed : constant Byte_Array :=
+                 Simple_Bit_Pack (Raw, Z_Bit_Len, 1_048_575);
+            begin
+               for J in 0 .. Z_Bytes - 1 loop
+                  Sig (Base + J) := Packed (Packed'First + J);
+               end loop;
+            end;
+         end;
+      end loop;
+
+      declare
+         Index : Natural := 0;
+      begin
+         for I in H_Vec'Range loop
+            pragma Loop_Invariant (Index <= Omega);
+            for J in Hint_Poly'Range loop
+               pragma Loop_Invariant (Index <= Omega);
+               if H (I) (J) = 1 and then Index < Omega then
+                  Sig (Hint_Off + Index) := Byte (J);
+                  Index := Index + 1;
+               end if;
+            end loop;
+            Sig (Hint_Off + Omega + I) := Byte (Index);
+         end loop;
+      end;
+
+      return Sig;
+   end Sig_Encode;
+
+   ----------------------------------------------------------------------------
    --  Pk_Decode (Algorithm 23)
    --    rho = pk(0..31); t1(i) = SimpleBitUnpack(pk(32+320i .. +319), 10)
    --  k = K_Dim = 8 for ML-DSA-87.
