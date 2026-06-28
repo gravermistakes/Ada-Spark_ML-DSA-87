@@ -93,6 +93,28 @@ package LTHING_MLDSA87_Codec is
           Post   => (for all I in T1_Vec'Range =>
                        (for all J in Poly'Range => T1 (I) (J) in 0 .. 1023));
 
+   --  ----- encode primitives (inverses of the decoders above) -----
+
+   function Simple_Bit_Pack
+     (V : Poly; Bit_Len : Positive; Hi : Coeff) return Byte_Array
+     with Global => null,
+          Pre    => Bit_Len <= 20
+                    and then Hi in 1 .. 1_048_575
+                    and then (for all I in Poly'Range => V (I) in 0 .. Hi),
+          Post   => Simple_Bit_Pack'Result'First = 0
+                    and then Simple_Bit_Pack'Result'Length = (N * Bit_Len) / 8;
+
+   function Pk_Encode (Rho : Rho_Array; T1 : T1_Vec) return Public_Key
+     with Global => null,
+          Pre    => (for all I in T1_Vec'Range =>
+                       (for all J in Poly'Range => T1 (I) (J) in 0 .. 1023));
+
+   function Sig_Encode
+     (C_Tilde : C_Tilde_Array; Z : Z_Vec; H : H_Vec) return Signature
+     with Global => null,
+          Pre    => (for all I in Z_Vec'Range =>
+                       (for all J in Poly'Range => Z (I) (J) in 0 .. Q - 1));
+
    --  ----- sigDecode (Algorithm 27) + HintBitUnpack (Algorithm 21) -----
    --  Ok is fail-closed: False on any malformed hint encoding. The hint section
    --  is omega + k = 75 + 8 = 83 bytes for ML-DSA-87.
