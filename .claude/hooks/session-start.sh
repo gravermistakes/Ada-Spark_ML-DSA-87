@@ -28,6 +28,20 @@ if ! command -v gnatmake >/dev/null 2>&1; then
     || echo "WARN: could not apt-install gnat/gprbuild (no network or not root?)" >&2
 fi
 
+# gnatprove: prefer the Alire install above; if absent (e.g. containers where
+# github.com is intercepted and Alire cannot download), pull the toolchain
+# prebuilt from the NixOS binary cache instead. Set SKIP_NIX_TOOLCHAIN=1 to
+# opt out (the install is ~1 GB from cache.nixos.org on first run).
+if ! command -v gnatprove >/dev/null 2>&1 && [ "${SKIP_NIX_TOOLCHAIN:-0}" != "1" ]; then
+  "${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}/lthing-spark/tools/setup-spark-toolchain.sh" \
+    || echo "WARN: Nix toolchain setup failed -- SPARK proofs unavailable." >&2
+  # Mirror the script's PATH wiring for the status report below.
+  if [ -e /root/.nix-profile/bin/gnatmake ]; then
+    W="$(dirname "$(readlink -f /root/.nix-profile/bin/gnatmake)")"
+    export PATH="$W:/root/.nix-profile/bin:$PATH"
+  fi
+fi
+
 # Report toolchain status (non-fatal: never block session startup).
 echo "gnatmake : $(gnatmake --version 2>/dev/null | head -1 || echo MISSING)"
 if command -v gnatprove >/dev/null 2>&1; then
