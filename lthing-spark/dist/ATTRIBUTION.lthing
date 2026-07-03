@@ -1,0 +1,12 @@
+"attribution_name": "l'Evermoor"
+"cryptographic_stack":
+    "aead": "Deoxys-II-256-128"
+    "hash_algorithm": "SHAKE512"
+    "seal_id": "a8162688a2632c24b2d1fd6239c2dd138b5ed570d09d1d921cc408b9f7d20d4f6a6b18dc2406c3f757ef480124340b2430416730ca275f9e751ddaf3cd88f413"
+    "signature_scheme": "ML-DSA-65"
+"date_epoch_masked": "0aef6ffbfd3037f0"
+"hash-prov-inh": "https://raw.githubusercontent.com/gravermistakes/Ada-Spark_ML-DSA-87/claude/check-function-hrzp7u/lthing-spark/dist/PROVENANCE_SEAL.lthing"
+"license": "ESL-ANCSA-MRA-IndiModSHA v1.3"
+"modifications": ""
+"modified": false
+"source_uri": "https://github.com/gravermistakes/Ada-Spark_ML-DSA-87/tree/claude/check-function-hrzp7u/lthing-spark"
