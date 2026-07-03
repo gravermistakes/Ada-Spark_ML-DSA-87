@@ -6,6 +6,11 @@
 # Build output (ask before building artifacts)
 build/
 dist/
+# Exception: lthing-spark/dist/ holds an intentionally-committed, signed
+# distribution package (packaged ML-DSA-87 signer + Evermoor Sanctuary
+# License v1.3 + Provenance Seal) -- confirmed for commit, not a build byproduct.
+!lthing-spark/dist/
+!lthing-spark/dist/**
 
 # Ada/SPARK object & proof dirs
 obj/
