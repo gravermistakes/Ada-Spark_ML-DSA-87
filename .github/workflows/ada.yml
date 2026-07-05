@@ -1,0 +1,52 @@
+name: Ada (GNAT)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up GNAT toolchain
+      run: >
+        sudo apt-get update &&
+        sudo apt-get install gnat gprbuild
+
+    - name: Build
+      run: gprbuild -j0 -p
+- name: Project Report Generator
+  # You may pin to the exact commit or the version.
+  # uses: msrajawat298/project-report-generator@7a10921dcd2643bc5edd9f3713a25dc0c6bfbdd8
+  uses: msrajawat298/project-report-generator@v1.0.6
+  with:
+    # The format of the report (html or md).
+    report_format: # default is md
+    # Comma-separated list of files or folders to exclude from analysis.
+    exclude_files: # optional, default is node_modules,build,.git
+    # Upload the generated report as an artifact.
+    upload_artifact: # optional, default is false
+    # Commit the generated report to the repository.
+    commit_report: # optional, default is false
+    # Allows you to customize the committer username
+    commit_username: # optional, default is github-actions
+    # Allows you to customize the committer committer_email
+    commit_email: # optional, default is github-actions@github.com
+  - name: qcrypt-scan
+  # You may pin to the exact commit or the version.
+  # uses: varmabudharaju/qcrypt@da2ead3f1ddfad27c6ce0cc1a6cc7e2033dafb0a
+  uses: varmabudharaju/qcrypt@v0.2.1
+  with:
+    # Fail if new findings at this level: critical, warning, any
+    fail-on: # optional, default is critical
+    # Path to scan (relative to repo root)
+    path: # optional, default is .
+    # GitHub token for PR comments
+    github-token: # optional, default is ${{ github.token }}
