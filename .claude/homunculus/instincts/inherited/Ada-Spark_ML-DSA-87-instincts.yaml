@@ -1,0 +1,298 @@
+# Instincts generated from https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+# Generated: 2026-07-05T02:20:20.634Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: Ada-Spark_ML-DSA-87-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ML DSA 87 Commit Length
+
+## Action
+
+Keep commit messages concise (~42 characters)
+
+## Evidence
+
+- Average commit message length: 42 chars
+- Based on 4 commits
+
+---
+id: Ada-Spark_ML-DSA-87-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ML DSA 87 Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: Ada-Spark_ML-DSA-87-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ML DSA 87 Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: Ada-Spark_ML-DSA-87-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ML DSA 87 Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: Ada-Spark_ML-DSA-87-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ML DSA 87 Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: ada-spark_ml-dsa-87-instinct-filename-pascalcase
+trigger: "When creating a new file in the codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Filename Pascalcase
+
+## Action
+
+Name the file using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.files: PascalCase
+
+---
+id: ada-spark_ml-dsa-87-instinct-function-camelcase
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Function Camelcase
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions: camelCase
+
+---
+id: ada-spark_ml-dsa-87-instinct-class-pascalcase
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Class Pascalcase
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes: PascalCase
+
+---
+id: ada-spark_ml-dsa-87-instinct-constant-screaming-snake
+trigger: "When declaring a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Constant Screaming Snake
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: ada-spark_ml-dsa-87-instinct-import-relative
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Import Relative
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle: relative
+
+---
+id: ada-spark_ml-dsa-87-instinct-export-named
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Export Named
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: ada-spark_ml-dsa-87-instinct-test-separate-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Test Separate Location
+
+## Action
+
+Place test files in a separate location from source files
+
+## Evidence
+
+- Pattern in architecture.testLocation: separate
+
+---
+id: ada-spark_ml-dsa-87-instinct-git-freeform-commits
+trigger: "When writing a commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Git Freeform Commits
+
+## Action
+
+Use a freeform commit message without a strict prefix
+
+## Evidence
+
+- Pattern in commits.type: freeform
+- Examples: 'Add qcrypt-scan step to ada.yml workflow', 'Delete .github/workflows/codeql.yml'
+
+---
+id: ada-spark_ml-dsa-87-instinct-git-short-commits
+trigger: "When composing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Git Short Commits
+
+## Action
+
+Keep the commit message concise (around 40 characters on average)
+
+## Evidence
+
+- Pattern in commits.averageLength: 42
+
+---
+id: ada-spark_ml-dsa-87-instinct-workflow-location-github
+trigger: "When adding or modifying CI/CD workflows"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Workflow Location Github
+
+## Action
+
+Place workflow configuration files in the .github/workflows directory
+
+## Evidence
+
+- Pattern in architecture.commonFolders: .github
+- Pattern in architecture.configFiles: .github/workflows/ada.yml, .github/workflows/codeql.yml
+
