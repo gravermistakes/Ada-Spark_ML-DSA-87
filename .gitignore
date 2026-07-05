@@ -17,4 +17,8 @@ obj/
 obj_prove/
 obj_tests/
 
-# Python caches should not be ever
+# Python caches
+__pycache__/
+
+# Compiled tool binaries (provenance_seal/bin/ etc.)
+**/tools/**/bin/
