@@ -49,6 +49,9 @@ G3  MAIN     swap oracle for real P; run official deoxysii256v141 suite
 P1/P2 and M1 run concurrently after G0; they share only the frozen seam.
 
 ## Dispatch
+- Model cap (owner directive): SUBAGENT-P and SUBAGENT-M run at Sonnet tier or
+  lower (explicit `model: sonnet` or `haiku`; never a fork, which would inherit
+  MAIN's model). MAIN itself is unconstrained.
 - Give SUBAGENT-P: AGENTS.md#SUBAGENT-P, and its READ list resolves the exact
   DEOXY_1_41 / DEOXYSIIS sections. Nothing from M-*.
 - Give SUBAGENT-M: AGENTS.md#SUBAGENT-M, plus a KAT-backed TBC oracle stub so M1
