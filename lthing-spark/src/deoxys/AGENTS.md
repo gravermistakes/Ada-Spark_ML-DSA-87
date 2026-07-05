@@ -10,6 +10,11 @@ depends: DEOXY_1_41.md, DEOXYSIIS.md
 Two subagents, one main. P and M are independent after G0 because the seam
 (`deoxysii-tbc.ads`, P-9) is frozen. Dispatch them in PARALLEL.
 
+**Model cap (owner directive):** subagents run at **Sonnet tier or lower** —
+dispatch with an explicit `model: sonnet` (or `haiku`) override, never
+Opus/Fable/Mythos tier. Do not dispatch as forks (a fork inherits MAIN's
+model and ignores the override).
+
 ```
                 MAIN (orchestrator)
                  |  freezes seam @ G0
