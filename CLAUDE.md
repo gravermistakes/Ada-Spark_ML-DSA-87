@@ -7,7 +7,16 @@
   that replaces the project's historically-buggy x86-64 asm hash.
 - `TEST_COVERAGE_ANALYSIS.md` — the standing coverage analysis (keep it accurate;
   back every claim with a command, not a reading).
-- `collaborative_neon_garden.py` — unrelated; ignore for this work.
+
+## Language policy (non-negotiable)
+**Ada and Bash only.** No Python, Go, Rust, Ruby, Perl, JavaScript, or any other
+language — anywhere. This covers everything: library code, test harnesses,
+tooling, build scripts, KAT generators, one-off helper scripts, and anything
+run to *produce* a committed artifact. Do not write, run, or add a dependency
+on code in any other language, and do not reintroduce files in other languages.
+If a task seems to need another language, do it in Ada or Bash or stop and ask.
+Library/crypto/control code is Ada (SPARK_Mode On where proof obligations
+apply); tooling glue is Bash.
 
 ## Working branch
 `claude/test-coverage-analysis-p6s11z`. Develop here; commit and push here.
@@ -37,10 +46,13 @@ mains pass.
   `True`/accept until it genuinely verifies. Never weaken a judicial
   postcondition. The audit (FINDING-002/006) is the whole reason this layer exists.
 - **No frozen / self-derived test vectors.** A test asserts either (a) an
-  *authoritative* KAT (FIPS 204+ / `hashlib`, e.g. `keccak_f1600(0)`, SHA3-512,
-  SHAKE256), or (b) a *relational / property* fact (determinism, `Chain_Hash ==
-  SHAKE512(prev‖art)`, input-sensitivity, fail-closed-on-garbage). Never paste a
-  magic digest you computed yourself and call it a gate.
+  *authoritative* KAT taken from a published standard or pinned reference file
+  (FIPS 204+, the Keccak reference vectors — e.g. `keccak_f1600(0)`, SHA3-512,
+  SHAKE256 — or the pinned Deoxys vector files), or (b) a *relational /
+  property* fact (determinism, `Chain_Hash == SHAKE512(prev‖art)`,
+  input-sensitivity, fail-closed-on-garbage). Never paste a magic digest you
+  computed yourself and call it a gate, and never generate vectors with a
+  non-Ada/Bash tool (see language policy).
 - **SPARK_Mode (On)** for new crypto/control code; the proof target is AoRTE +
   flow + stated contracts. A change is **done only when** it builds, every test
   main prints all `[PASS]` and exits 0, **and** `gnatprove` reports **0 unproved**.

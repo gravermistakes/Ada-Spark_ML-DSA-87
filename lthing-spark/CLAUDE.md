@@ -31,5 +31,7 @@ gnatmake -q -D /tmp/b -aIsrc -o /tmp/b/<main> src/<main>.adb && /tmp/b/<main>
 gnatprove -P lthing.gpr --level=2 --report=all -j0            # whole project
 gnatprove -P lthing.gpr -u <unit>.adb --level=2 --report=all  # one unit
 ```
-Authoritative KAT values come from Python `hashlib` (`sha3_512`, `sha3_256`,
-`shake_256`, `shake_128`) — generate, never hand-write.
+Authoritative KAT values come from published standards and pinned reference
+vector files (FIPS 202/204, the Keccak reference vectors) — never hand-write
+a digest, and never generate one with a non-Ada/Bash tool. **Language policy
+(root `CLAUDE.md`): Ada and Bash only — no Python, Go, Rust, or anything else.**

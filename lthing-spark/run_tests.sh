@@ -14,7 +14,7 @@ for src in src/test_*.adb; do
   [ -e "$src" ] || continue
   name=$(basename "$src" .adb)
   echo "=== build $name ==="
-  if ! gnatmake -q -D "$OBJ" -aIsrc -o "$OBJ/$name" "$src" \
+  if ! gnatmake -q -D "$OBJ" -aIsrc -aIsrc/ml-dsa -o "$OBJ/$name" "$src" \
         >"$OBJ/$name.log" 2>&1; then
     echo "[BUILD-FAIL] $name"; sed 's/^/    /' "$OBJ/$name.log"; fail=1; continue
   fi
