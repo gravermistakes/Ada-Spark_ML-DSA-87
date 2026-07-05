@@ -113,15 +113,7 @@ source: repo-analysis
 source_repo: gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ml Dsa 87 Instinct File Naming
-
-## Action
-
-Name the file using snake_case
-
-## Evidence
-
-- Pattern in namingConventions.files: snake_case
+# Don't
 
 ---
 id: ada-spark_ml-dsa-87-instinct-function-naming
@@ -134,13 +126,7 @@ source_repo: gravermistakes/Ada-Spark_ML-DSA-87
 
 # Ada Spark_ml Dsa 87 Instinct Function Naming
 
-## Action
-
-Name the function using camelCase
-
-## Evidence
-
-- Pattern in namingConventions.functions: camelCase
+## Don't
 
 ---
 id: ada-spark_ml-dsa-87-instinct-class-naming
@@ -151,58 +137,9 @@ source: repo-analysis
 source_repo: gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ml Dsa 87 Instinct Class Naming
-
-## Action
-
-Name the class using PascalCase
-
-## Evidence
-
-- Pattern in namingConventions.classes: PascalCase
+# Delete it and write in Ada or Bash
 
 ---
-id: ada-spark_ml-dsa-87-instinct-constant-naming
-trigger: "When defining a constant in Python"
-confidence: 0.9
-domain: code-style
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Ada Spark_ml Dsa 87 Instinct Constant Naming
-
-## Action
-
-Name the constant using SCREAMING_SNAKE_CASE
-
-## Evidence
-
-- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
-
----
-id: ada-spark_ml-dsa-87-instinct-import-style
-trigger: "When importing modules in Python"
-confidence: 0.8
-domain: code-style
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Ada Spark_ml Dsa 87 Instinct Import Style
-
-## Action
-
-Use relative imports
-
-## Evidence
-
-- Pattern in importStyle: relative
-
----
-id: ada-spark_ml-dsa-87-instinct-export-style
-trigger: "When exporting from a Python module"
-confidence: 0.8
 domain: code-style
 source: repo-analysis
 source_repo: gravermistakes/Ada-Spark_ML-DSA-87
@@ -227,16 +164,7 @@ source: repo-analysis
 source_repo: gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ml Dsa 87 Instinct Commit Format
-
-## Action
-
-Write a freeform message without a required prefix, averaging around 55 characters
-
-## Evidence
-
-- Pattern in commits.type: freeform
-- Pattern in commits.averageLength: 55
+# Don't
 
 ---
 id: ada-spark_ml-dsa-87-instinct-test-location
