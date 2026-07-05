@@ -1,5 +1,5 @@
 <!--
-epoch: 1783266933
+epoch: 1783267091
 currentStage: rnDEOXYSii
 leadEngineer: Ada von Fable (5)
 -->
@@ -384,12 +384,13 @@ leadEngineer: Ada von Fable (5)
     <div class="lis big" aria-hidden="true">&#9884;</div>
     <p class="eyebrow">Ada / SPARK &middot; FIPS 204 &middot; Engineering status &middot; 2026-07-05</p>
     <h1>lthing&#8209;spark</h1>
-    <p class="subtitle">A formally verified ML&#8209;DSA&#8209;65 signature verifier and fail&#8209;closed
+    <p class="subtitle">A formally verified ML&#8209;DSA&#8209;65 + ML&#8209;DSA&#8209;87 signature suite and fail&#8209;closed
     <span class="mono">.jd.lthing</span> judicial&#8209;document layer, on a pure&#8209;Ada Keccak/SHAKE core.
     Every gate closes on a passing vector or a discharged proof obligation &mdash; never inspection.</p>
     <ul class="stamps">
       <li class="stamp pass"><span class="k">gnatprove</span> <b>131 / 131</b> proved</li>
       <li class="stamp pass"><span class="k">ML-DSA-65 KAT</span> <b>15 / 15</b></li>
+      <li class="stamp pass"><span class="k">ML-DSA-87 KAT</span> <b>15 / 15</b></li>
       <li class="stamp pass"><span class="k">PR #20</span> <b>merged</b></li>
       <li class="stamp"><span class="k">Languages</span> <b>Ada + Bash only</b></li>
     </ul>
@@ -449,13 +450,23 @@ leadEngineer: Ada von Fable (5)
           </tr>
           <tr>
             <td class="unit">lthing_judicial</td>
-            <td>Full LTHING envelope verify: header geometry, seal-hash recompute, ML-DSA-65 signature over <code>header&#8214;body&#8214;seal</code>; fail-closed</td>
+            <td>Full LTHING envelope verify: header geometry, seal-hash recompute, ML-DSA signature over <code>header&#8214;body&#8214;seal</code> (suite <code>0x0001</code> = ML-DSA-65, <code>0x0002</code> = ML-DSA-87 / CNSA 2.0); fail-closed</td>
             <td><span class="chip">Post + AoRTE proved</span></td>
           </tr>
           <tr>
             <td class="unit">lthing_mldsa65</td>
             <td>ML-DSA-65 Verify (FIPS 204 Alg 3/8) + samplers</td>
             <td><span class="chip">KAT 15/15 &middot; clean</span></td>
+          </tr>
+          <tr>
+            <td class="unit">lthing_mldsa87</td>
+            <td>ML-DSA-87 Verify (FIPS 204, NIST Level 5) + codec (z 20-bit/coeff, hints &omega;=75) + samplers (8&times;7 ExpandA)</td>
+            <td><span class="chip">KAT 15/15 &middot; clean</span></td>
+          </tr>
+          <tr>
+            <td class="unit">lthing_mldsa87_sign</td>
+            <td>ML-DSA-87 Key_Gen + Sign (FIPS 204 Alg 6/7); <code>sign_doc87</code> CLI</td>
+            <td><span class="chip">KAT-validated</span></td>
           </tr>
           <tr>
             <td class="unit">lthing_mldsa_ntt</td>
@@ -476,7 +487,7 @@ leadEngineer: Ada von Fable (5)
       </table>
     </div>
       <div class="params" role="note">
-        <span class="params-label">ML-DSA-65 parameters &middot; FIPS 204</span>
+        <span class="params-label">ML-DSA-65 &middot; FIPS 204 &middot; Level 3</span>
         <span class="p">q <b>8&#8201;380&#8201;417</b></span>
         <span class="p">(k,&#8202;&#8467;) <b>(6,&#8202;5)</b></span>
         <span class="p">&tau; <b>49</b></span>
@@ -486,6 +497,22 @@ leadEngineer: Ada von Fable (5)
         <span class="p">&eta; <b>4</b></span>
         <span class="p">&beta; <b>196</b></span>
         <span class="p">&omega; <b>55</b></span>
+        <span class="p">pk <b>1952&#8201;B</b></span>
+        <span class="p">sig <b>3309&#8201;B</b></span>
+      </div>
+      <div class="params" role="note">
+        <span class="params-label">ML-DSA-87 &middot; FIPS 204 &middot; Level 5 / CNSA 2.0</span>
+        <span class="p">q <b>8&#8201;380&#8201;417</b></span>
+        <span class="p">(k,&#8202;&#8467;) <b>(8,&#8202;7)</b></span>
+        <span class="p">&tau; <b>60</b></span>
+        <span class="p">&lambda; <b>256</b></span>
+        <span class="p">&gamma;<sub>1</sub> <b>2<sup>19</sup></b></span>
+        <span class="p">&gamma;<sub>2</sub> <b>(q&minus;1)/32</b></span>
+        <span class="p">&eta; <b>2</b></span>
+        <span class="p">&beta; <b>120</b></span>
+        <span class="p">&omega; <b>75</b></span>
+        <span class="p">pk <b>2592&#8201;B</b></span>
+        <span class="p">sig <b>4627&#8201;B</b></span>
       </div>
   </section>
 
