@@ -51,6 +51,41 @@ do not impose a single case convention.
   `lthing-status.html` (owner's mixed style)
 
 ---
+id: ada-spark_ml-dsa-87-instinct-file-naming
+trigger: "When creating a new Python file"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Don't
+
+---
+id: ada-spark_ml-dsa-87-instinct-function-naming
+trigger: "When defining a new Python function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Ada Spark_ml Dsa 87 Instinct Function Naming
+
+## Don't
+
+---
+id: ada-spark_ml-dsa-87-instinct-class-naming
+trigger: "When defining a new Python class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Delete it and write in Ada or Bash
+
+---
 id: Ada-Spark_ML-DSA-87-language-policy
 trigger: "when tempted to write Python, TypeScript, or any non-Ada/Bash code"
 confidence: 1.0
