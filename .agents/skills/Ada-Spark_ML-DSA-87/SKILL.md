@@ -17,8 +17,11 @@ Ruby, Perl, or JavaScript. If a task seems to need another language, do it in Ad
 or Bash, or stop and ask.
 
 ## Coding conventions
-- **File naming:** snake_case; library units are `lthing_*.ads` (spec) / `lthing_*.adb` (body).
-  Examples: `lthing_keccak.ads`, `lthing_mldsa87_sign.adb`.
+- **File naming:** GNAT default — the lowercase Ada unit name, one unit per pair:
+  `lthing_*.ads` (spec) / `lthing_*.adb` (body). Examples: `lthing_keccak.ads`,
+  `lthing_mldsa87_sign.adb`.
+- **Identifiers:** Ada `Mixed_Case_With_Underscores` — `LTHING_Keccak`,
+  `Parse_And_Verify`, `Set_Exit_Status`. Not snake_case, not camelCase.
 - **SPARK:** `pragma SPARK_Mode (On)` for crypto/control code; proof target is
   AoRTE + flow + stated contracts.
 - **Fail-closed is sacred:** no gate (e.g. `Verify_Signature`, `Parse_And_Verify`)

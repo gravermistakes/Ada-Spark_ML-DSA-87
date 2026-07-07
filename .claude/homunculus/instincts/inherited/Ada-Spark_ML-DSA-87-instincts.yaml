@@ -34,16 +34,20 @@ source: repo-analysis
 source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Naming Files
+# Naming Files And Identifiers
 
 ## Action
 
-Use snake_case. Ada library units are `lthing_*.ads` (spec) / `lthing_*.adb`
-(body); test mains are `test_*.adb`; Bash tooling is `*.sh`.
+Name files by the GNAT default: the lowercase Ada unit name — `lthing_*.ads`
+(spec) / `lthing_*.adb` (body); test mains are `test_*.adb`; Bash tooling is
+`*.sh`. Identifiers inside the code use Ada Mixed_Case_With_Underscores
+(`LTHING_Keccak`, `Parse_And_Verify`) — not snake_case, not camelCase.
 
 ## Evidence
 
 - `lthing_keccak.ads`, `lthing_mldsa87_sign.adb`, `test_kat87.adb`, `run_tests.sh`
+- Identifiers throughout `lthing-spark/src/`: `Set_Exit_Status`, `Chain_Hash`,
+  `Verify_Signature`
 
 ---
 id: Ada-Spark_ML-DSA-87-language-policy
