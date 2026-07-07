@@ -7,7 +7,10 @@
     "explanations": false
   },
   "domains": [
-    "Ada"
+    "Ada",
+    "SPARK",
+    "Bash",
+    "post-quantum cryptography"
   ],
   "suggestedBy": "ecc-tools-repo-analysis",
   "createdAt": "2026-07-05T16:00:57.628Z"
