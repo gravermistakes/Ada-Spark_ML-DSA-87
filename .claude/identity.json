@@ -1,0 +1,14 @@
+{
+  "version": "0.0",
+  "technicalLevel": "academically dense",
+  "preferredStyle": {
+    "verbosity": "detailed but not verbose",
+    "codeComments": false,
+    "explanations": false
+  },
+  "domains": [
+    "Ada"
+  ],
+  "suggestedBy": "ecc-tools-repo-analysis",
+  "createdAt": "2026-07-05T16:00:57.628Z"
+}
