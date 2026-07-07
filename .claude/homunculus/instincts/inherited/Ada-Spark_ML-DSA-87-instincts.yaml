@@ -1,6 +1,8 @@
 # Instincts for https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 # Corrected by hand from the auto-generated ECC bundle, which misdetected the
 # repo as TypeScript/Python. Ground truth is the root CLAUDE.md.
+# The three "When ... Python ..." instincts are the owner's, verbatim.
+# If someone deletes them, the owner deletes the someone.
 # Version: 2.0
 # NOTE: This file supplements (does not replace) any existing curated instincts.
 
