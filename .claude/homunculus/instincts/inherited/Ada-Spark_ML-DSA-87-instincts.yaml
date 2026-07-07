@@ -1,187 +1,156 @@
-# Instincts generated from https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
-# Generated: 2026-07-05T13:25:16.598Z
+# Instincts for https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+# Corrected by hand from the auto-generated ECC bundle, which misdetected the
+# repo as TypeScript/Python. Ground truth is the root CLAUDE.md.
 # Version: 2.0
 # NOTE: This file supplements (does not replace) any existing curated instincts.
-# High-confidence manually curated instincts should be preserved alongside these.
 
 ---
-id: Ada-Spark_ML-DSA-87-commit-length
+id: Ada-Spark_ML-DSA-87-commit-format
 trigger: "when writing a commit message"
-confidence: 0.6
+confidence: 0.8
 domain: git
 source: repo-analysis
 source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ML DSA 87 Commit Length
+# Commit Format
 
 ## Action
 
-Write moderate-length commit messages (~55 characters)
+Write freeform imperative commit messages, ~50-60 characters on the subject
+line, area-prefixed where natural (`changelog:`, `deoxys:`).
 
 ## Evidence
 
-- Average commit message length: 55 chars
-- Based on 1 commits
+- Repo history: "Fix CI: add ml-dsa source path to run_tests.sh", "deoxys: cap
+  subagent model tier at Sonnet", "changelog: add ML-DSA-87 to the status sheet"
 
 ---
 id: Ada-Spark_ML-DSA-87-naming-files
 trigger: "when creating a new file"
-confidence: 0.8
+confidence: 0.9
 domain: code-style
 source: repo-analysis
 source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ML DSA 87 Naming Files
+# Naming Files
 
 ## Action
 
-Use snake_case naming convention
+Use snake_case. Ada library units are `lthing_*.ads` (spec) / `lthing_*.adb`
+(body); test mains are `test_*.adb`; Bash tooling is `*.sh`.
 
 ## Evidence
 
-- Analyzed file naming patterns in repository
-- Dominant pattern: snake_case
+- `lthing_keccak.ads`, `lthing_mldsa87_sign.adb`, `test_kat87.adb`, `run_tests.sh`
 
 ---
-id: Ada-Spark_ML-DSA-87-import-relative
-trigger: "when importing modules"
-confidence: 0.75
+id: Ada-Spark_ML-DSA-87-language-policy
+trigger: "when tempted to write Python, TypeScript, or any non-Ada/Bash code"
+confidence: 1.0
 domain: code-style
 source: repo-analysis
 source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ML DSA 87 Import Relative
+# Language Policy
 
 ## Action
 
-Use relative imports for project files
+Don't. Delete it and write it in Ada or Bash. The policy covers everything:
+library code, tests, tooling, KAT generators, and anything run to produce a
+committed artifact. No Python (including hashlib), Go, Rust, Ruby, Perl, or
+JavaScript.
 
 ## Evidence
 
-- Import analysis shows relative import pattern
-- Example: import { x } from '../lib/x'
+- Root CLAUDE.md "Language policy (non-negotiable)"
+- PR #20 rewrote the last Python scripts (`rule30_salt.py`, `build_seal.py`)
+  into Ada and Bash
 
 ---
-id: Ada-Spark_ML-DSA-87-export-style
-trigger: "when exporting from a module"
-confidence: 0.7
+id: Ada-Spark_ML-DSA-87-modules
+trigger: "when wiring one unit to another"
+confidence: 0.9
 domain: code-style
 source: repo-analysis
 source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ML DSA 87 Export Style
+# Modules
 
 ## Action
 
-Prefer named exports
+Use Ada context clauses (`with LTHING_Keccak; use LTHING_Keccak;`) and package
+specs. There are no imports/exports in the JS sense.
 
 ## Evidence
 
-- Export pattern analysis
-- Dominant style: named
+- Every unit in `lthing-spark/src/` and `lthing-spark/src/ml-dsa/`
 
 ---
-id: Ada-Spark_ML-DSA-87-test-separate
-trigger: "when writing tests"
-confidence: 0.8
+id: Ada-Spark_ML-DSA-87-test-location
+trigger: "when adding or organizing tests"
+confidence: 0.9
 domain: testing
 source: repo-analysis
 source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ML DSA 87 Test Separate
+# Test Location
 
 ## Action
 
-Place tests in the tests/ or __tests__/ directory, mirroring src structure
+Add a test main at `lthing-spark/src/test_<unit>.adb` that prints
+`[PASS]`/`[FAIL]` and calls `Set_Exit_Status (Failure)` on any failure.
+`run_tests.sh` discovers and runs every `src/test_*.adb` automatically.
 
 ## Evidence
 
-- Separate test directory pattern detected
-- Tests live in dedicated test folders
+- `test_keccak.adb`, `test_kat87.adb`, `test_judicial.adb` colocated in `src/`
+- `run_tests.sh` glob: `for src in src/test_*.adb`
 
 ---
-id: ada-spark_ml-dsa-87-instinct-file-naming
-trigger: "When creating a new Python file"
-confidence: 0.9
-domain: code-style
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Don't
-
----
-id: ada-spark_ml-dsa-87-instinct-function-naming
-trigger: "When defining a new Python function"
-confidence: 0.9
-domain: code-style
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Ada Spark_ml Dsa 87 Instinct Function Naming
-
-## Don't
-
----
-id: ada-spark_ml-dsa-87-instinct-class-naming
-trigger: "When defining a new Python class"
-confidence: 0.9
-domain: code-style
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Delete it and write in Ada or Bash
-
----
-domain: code-style
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Ada Spark_ml Dsa 87 Instinct Export Style
-
-## Action
-
-Use named exports
-
-## Evidence
-
-- Pattern in exportStyle: named
-
----
-id: ada-spark_ml-dsa-87-instinct-commit-format
-trigger: "When writing a git commit message"
-confidence: 0.7
-domain: git
-source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
----
-
-# Don't
-
----
-id: ada-spark_ml-dsa-87-instinct-test-location
-trigger: "When adding or organizing tests"
-confidence: 0.8
+id: Ada-Spark_ML-DSA-87-test-vectors
+trigger: "when writing test assertions or adding test vectors"
+confidence: 1.0
 domain: testing
 source: repo-analysis
-source_repo: gravermistakes/Ada-Spark_ML-DSA-87
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
 ---
 
-# Ada Spark_ml Dsa 87 Instinct Test Location
+# Test Vectors
 
 ## Action
 
-Place tests in a separate folder from source code
+Assert only authoritative KATs (published standard or pinned reference file) or
+relational/property facts. Never paste a self-computed digest; never generate
+vectors with a non-Ada/Bash tool.
 
 ## Evidence
 
-- Pattern in architecture.folderStructure.testLocation: separate
+- Root CLAUDE.md "No frozen / self-derived test vectors"
+- `mldsa_kat_vectors.ads` / `mldsa87_kat_vectors.ads` (NIST ACVP sigVer),
+  pinned Deoxys vector files in `lthing-spark/src/deoxys/vectors/`
 
+---
+id: Ada-Spark_ML-DSA-87-definition-of-done
+trigger: "when deciding whether a change is finished"
+confidence: 1.0
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/gravermistakes/Ada-Spark_ML-DSA-87
+---
+
+# Definition Of Done
+
+## Action
+
+A change is done only when it builds, every test main prints all `[PASS]` and
+exits 0, and `gnatprove -P lthing.gpr --level=2` reports 0 unproved. Fail-closed
+gates are never weakened to get there.
+
+## Evidence
+
+- Root CLAUDE.md conventions; baseline 131 checks / 0 unproved
