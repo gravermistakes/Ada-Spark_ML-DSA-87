@@ -20,8 +20,8 @@ or Bash, or stop and ask.
 - **File naming:** GNAT default — the lowercase Ada unit name, one unit per pair:
   `lthing_*.ads` (spec) / `lthing_*.adb` (body). Examples: `lthing_keccak.ads`,
   `lthing_mldsa87_sign.adb`.
-- **Identifiers:** Ada `Mixed_Case_With_Underscores` — `LTHING_Keccak`,
-  `Parse_And_Verify`, `Set_Exit_Status`. Not snake_case, not camelCase.
+- **Identifiers:** MixedCase — `LTHING_Keccak`, `Parse_And_Verify`,
+  `Set_Exit_Status`.
 - **SPARK:** `pragma SPARK_Mode (On)` for crypto/control code; proof target is
   AoRTE + flow + stated contracts.
 - **Fail-closed is sacred:** no gate (e.g. `Verify_Signature`, `Parse_And_Verify`)
