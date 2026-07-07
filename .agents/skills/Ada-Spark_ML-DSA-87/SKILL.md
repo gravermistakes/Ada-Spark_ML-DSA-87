@@ -66,3 +66,4 @@ and `gnatprove` reports **0 unproved**.
 3. Update the stamp row (gnatprove count, KAT tallies), the verified-units table,
    the FIPS 204 parameter strips, and/or the Deoxys phase pipeline as needed.
 4. Commit with a `changelog:` prefixed message.
+This skill provides guidance for contributing to the Ada-Spark_ML-DSA-87 Ada codebase. It covers coding conventions, file organization, commit patterns, and project-specific workflows, including how to update the project's engineering status sheet. The repository uses Ada with SPARK on and follows no clear, consistent conventions for code structure, as there has been no collaboration.
