@@ -17,11 +17,14 @@ Ruby, Perl, or JavaScript. If a task seems to need another language, do it in Ad
 or Bash, or stop and ask.
 
 ## Coding conventions
-- **File naming:** GNAT default — the lowercase Ada unit name, one unit per pair:
-  `lthing_*.ads` (spec) / `lthing_*.adb` (body). Examples: `lthing_keccak.ads`,
-  `lthing_mldsa87_sign.adb`.
-- **Identifiers:** MixedCase — `LTHING_Keccak`, `Parse_And_Verify`,
-  `Set_Exit_Status`.
+- **Ada source files:** GNAT requires the lowercase Ada unit name, one unit per
+  pair: `lthing_*.ads` (spec) / `lthing_*.adb` (body). Examples:
+  `lthing_keccak.ads`, `lthing_mldsa87_sign.adb`. That's a compiler rule, not a
+  style choice.
+- **Everything else:** naming is deliberately mixed — sometimesMixedCases,
+  some_with_underscores, some-with-hyphens (`Ada-Spark_ML-DSA-87`, `rnDEOXYSii`,
+  `leadEngineer`, `DEOXY_1_41.md`, `lthing-status.html`). Match the file or
+  context you're in; don't impose a case convention.
 - **SPARK:** `pragma SPARK_Mode (On)` for crypto/control code; proof target is
   AoRTE + flow + stated contracts.
 - **Fail-closed is sacred:** no gate (e.g. `Verify_Signature`, `Parse_And_Verify`)
