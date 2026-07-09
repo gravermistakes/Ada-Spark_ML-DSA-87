@@ -5,7 +5,7 @@ epoch: 1783124123
 depends: DEOXY_1_41.md (reference extraction)
 consumers: MAIN (all), SUBAGENT-P (P-lane + shared), SUBAGENT-M (M-lane + shared)
 license: THE EVERMOOR SANCTUARY LICENSE (ESL-ANCSA-MRA-IndiModSHA v1.3),
-         per the repository LICENSE file. GPL-3.0-or-later compatible copyleft.
+         per the repository LICENSE file.
 -->
 
 # DEOXYSIIS — Ada/SPARK build specification, Deoxys-II-256-128

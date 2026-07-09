@@ -11,7 +11,7 @@
 --
 --  Copyright (c) l'Evermoor.
 --  Licensed under THE EVERMOOR SANCTUARY LICENSE
---    (ESL-ANCSA-MRA-IndiModSHA).  GPL-3.0-or-later compatible copyleft.
+--    (ESL-ANCSA-MRA-IndiModSHA v1.3). See repository LICENSE for full terms.
 ------------------------------------------------------------------------------
 
 pragma SPARK_Mode (On);
