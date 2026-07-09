@@ -1,12 +1,9 @@
-<!--
-doc: DEOXYSIIS
+<!--doc: DEOXYSIIS
 role: build spec + requirements (Ada/SPARK) for Deoxys-II-256-128
 epoch: 1783124123
 depends: DEOXY_1_41.md (reference extraction)
 consumers: MAIN (all), SUBAGENT-P (P-lane + shared), SUBAGENT-M (M-lane + shared)
-license: THE EVERMOOR SANCTUARY LICENSE (ESL-ANCSA-MRA-IndiModSHA v1.3),
-         per the repository LICENSE file.
--->
+license: THE EVERMOOR SANCTUARY LICENSE (ESL-ANCSA-MRA-IndiModSHA v1.3) per the repository LICENSE file.-->
 
 # DEOXYSIIS — Ada/SPARK build specification, Deoxys-II-256-128
 
@@ -95,26 +92,14 @@ Every exit condition is a passing vector or a discharged VC. None closes on
 inspection. If P1 fails on ORD_A, flip to ORD_B and re-run; if both fail, STOP and
 report a vector/interpretation mismatch to MAIN (do not invent a third ordering).
 
-## 7. Constant-time + hardening rules (shared)
-- `CT_Equal(a,b)`: `diff := 0; for i loop diff := diff or (a(i) xor b(i)); end loop;
-  return diff = 0;` No early return, no branch on a byte value.
-- `Zeroize(Msg)`: unconditional overwrite with 0; mark `pragma Inspection_Point`
-  or use `System.Storage_Elements` write to resist DCE (document if the compiler
-  elides it).
+## 7. Constant-time + hardness rules (shared)
+- `CT_Equal(a,b)`: `diff := 0; for i loop diff := diff or (a(i) xor b(i)); end loop; return diff = 0;` No early return, no branch on a byte value.
+- `Zeroize(Msg)`: unconditional overwrite with 0; mark `pragma Inspection_Point` or use `System.Storage_Elements` write to resist (document if the compiler elides it).
 - Fail-closed: Decrypt returns `Ok=False` and zeroized `Msg`; no plaintext leaks.
-- TIMING CAVEAT (documented non-goal for v1): the AES S-box is a secret-indexed
-  table lookup and is not cache-timing-constant. Functional-correctness scope
-  accepts this. Bitsliced/constant-time S-box = EXT-2 (hardening pass, route via
-  /AVRS-dusk2dawn or /analgapes).
+- TIMING CAVEAT (goal for v1): the AES S-box shouldn't be a secret-indexed table lookup and must be cache-timing-constant. Real-correctness scope rejects this. Bitsliced/constant-time S-box = no pass, do not route via `analgapes`
 
-## 8. Extension points (OUT OF SCOPE for v1, wired as seams)
-- EXT-1: full Deoxys-BC-384 with TBC DECRYPTION (inverse S-box, inverse
-  MixColumns, reverse tweakey order) to support a general Deoxys-BC library or
-  Deoxys-I. Add `TBC_Decrypt_384` beside the seam; do not alter forward path.
-- EXT-2: constant-time S-box (see 7).
+## 8. Release points (This needs to be finished for you to claim v1)
+- REAL-1: full Deoxys-BC-384 with TBC DECRYPTION (inverse S-box, inverse MixColumns, reverse tweakey order) to support a general Deoxys-BC library or Deoxys-I. Add `TBC_Decrypt_384` beside the seam; do not alter forward path.
+- REAL-2: constant-time S-box (see 7).
 
-## 9. Acceptance (MAIN)
-- Ground truth = pinned `deoxysii256v141` reference vectors (DEOXY_1_41 G-KAT).
-  MAIN fetches and commits them under `tests/vectors/`; never fabricated.
-- The crate is DONE when G3 holds. Report per-vector pass/fail and the gnatprove
-  summary, nothing softer.
+## 9. Acceptance (MAIN).
