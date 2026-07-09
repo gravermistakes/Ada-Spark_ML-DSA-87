@@ -9,8 +9,9 @@
 --  on any verification failure; no plaintext leaves the procedure on the
 --  failure path.
 --
---  GPL-3.0-or-later (research/hardening lineage; RELICENSE before any
---  commercial distribution).
+--  Copyright (c) l'Evermoor.
+--  Licensed under THE EVERMOOR SANCTUARY LICENSE
+--    (ESL-ANCSA-MRA-IndiModSHA).  GPL-3.0-or-later compatible copyleft.
 ------------------------------------------------------------------------------
 
 pragma SPARK_Mode (On);
