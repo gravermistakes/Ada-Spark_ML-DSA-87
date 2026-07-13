@@ -2,10 +2,15 @@
 --  Deoxysii.TBC.Tables — P-lane constants (SUBAGENT-P owns).
 --
 --  Compile-time constant arrays per DEOXY_1_41.md:
---    SBOX  (P-3, AES forward S-box; SBOX(16#25#) = 16#3F# self-test below),
---    SR    (P-4, ShiftRows destination map; gather form new[i] := old[SR[i]]),
---    H     (P-7, tweakey byte permutation; gather form new[i] := old[H[i]]),
---    RCON  (P-8, 17 round constants; RCON(0) = 16#2F#, LANDMINE-1 resolved:
+--    SBOX   (P-3, AES forward S-box; SBOX(16#25#) = 16#3F# self-test below).
+--           Kept as a correctness oracle for tests/sbox_const_time.adb; the
+--           runtime Sub_Bytes/Inv_Sub_Bytes path (deoxysii-tbc.adb, REAL-2)
+--           no longer reads this table — it computes the S-box via
+--           constant-time GF(2^8) inversion + affine transform instead.
+--    SR     (P-4, ShiftRows destination map; gather: new[i] := old[SR[i]]),
+--    Inv_SR (REAL-1, functional inverse of SR, for TBC_Decrypt_384 only),
+--    H      (P-7, tweakey byte permutation; gather form new[i] := old[H[i]]),
+--    RCON   (P-8, 17 round constants; RCON(0) = 16#2F#, LANDMINE-1 resolved:
 --           table row authoritative, RCON(i) = x^(15+i) in GF(2^8)/0x11B).
 ------------------------------------------------------------------------------
 
@@ -79,6 +84,13 @@ package Deoxysii.TBC.Tables is
 
    SR : constant Perm16 :=
      (0, 5, 10, 15,  4, 9, 14, 3,  8, 13, 2, 7,  12, 1, 6, 11);
+
+   --  REAL-1: inverse ShiftRows permutation, the functional inverse of SR
+   --  (Inv_SR(SR(i)) = i for all i), derived mechanically: for each i,
+   --  Inv_SR(SR(i)) := i. Used by TBC_Decrypt_384 only. -----------------
+
+   Inv_SR : constant Perm16 :=
+     (0, 13, 10, 7,  4, 1, 14, 11,  8, 5, 2, 15,  12, 9, 6, 3);
 
    --  P-7: tweakey byte permutation h (v1.41 l.593-620 == JoC 438-460). -----
 
