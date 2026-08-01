@@ -23,9 +23,8 @@ package body LTHING_MLDSA_Round is
    function Mod_Pm (R : Integer_64; A : Integer_64) return Integer_64 is
       M    : constant Integer_64 := R mod A;
       Half : constant Integer_64 := A / 2;
-      Diff : constant Unsigned_64 := Unsigned_64 (Half) - Unsigned_64 (M);
-      Gt   : constant Unsigned_64 := Shift_Right (Diff, 63);
-      Corr : constant Integer_64 := Integer_64 (Gt) * A;
+      Gt   : constant Integer_64 := Boolean'Pos (M > Half);
+      Corr : constant Integer_64 := Gt * A;
    begin
       return M - Corr;
    end Mod_Pm;
