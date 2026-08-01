@@ -11,8 +11,9 @@ with Ada.Command_Line; use Ada.Command_Line;
 with Interfaces;       use Interfaces;
 with LTHING_Types;     use LTHING_Types;
 with LTHING_Keccak;
-with LTHING_MLDSA87;
-with LTHING_MLDSA87_Sign;
+with LTHING_MLDSA_Params_87;
+with LTHING_MLDSA_Verify_G87;
+with LTHING_MLDSA_Sign_G87;
 
 procedure Test_Sign87 is
 
@@ -46,9 +47,9 @@ procedure Test_Sign87 is
    Seed1 : constant Byte_Array := Derive_Seed ("needmldsa87encoder");
    Seed2 : constant Byte_Array := Derive_Seed ("differentpassphrase");
 
-   PK1, PK2 : LTHING_MLDSA87.Public_Key;
-   SK1, SK2 : LTHING_MLDSA87_Sign.Secret_Key;
-   Sig1a, Sig1b : LTHING_MLDSA87.Signature;
+   PK1, PK2 : LTHING_MLDSA_Params_87.Public_Key;
+   SK1, SK2 : LTHING_MLDSA_Sign_G87.Secret_Key;
+   Sig1a, Sig1b : LTHING_MLDSA_Params_87.Signature;
    Ok : Boolean;
 
    Msg : constant Byte_Array (0 .. 6) :=
@@ -56,14 +57,14 @@ procedure Test_Sign87 is
    Ctx : constant Byte_Array (1 .. 0) := (others => 0);  --  empty context
 
 begin
-   LTHING_MLDSA87_Sign.Key_Gen (Seed1, PK1, SK1);
-   LTHING_MLDSA87_Sign.Key_Gen (Seed2, PK2, SK2);
+   LTHING_MLDSA_Sign_G87.Key_Gen (Seed1, PK1, SK1);
+   LTHING_MLDSA_Sign_G87.Key_Gen (Seed2, PK2, SK2);
 
    --  1. Sign twice with same key+message
-   LTHING_MLDSA87_Sign.Sign (SK1, Msg, Ctx, Sig1a, Ok);
+   LTHING_MLDSA_Sign_G87.Sign (SK1, Msg, Ctx, Sig1a, Ok);
    Check ("sign-ok-first", Ok);
 
-   LTHING_MLDSA87_Sign.Sign (SK1, Msg, Ctx, Sig1b, Ok);
+   LTHING_MLDSA_Sign_G87.Sign (SK1, Msg, Ctx, Sig1b, Ok);
    Check ("sign-ok-second", Ok);
 
    --  2. Determinism: same inputs produce same signature
@@ -71,20 +72,20 @@ begin
 
    --  3. Round-trip
    Check ("verify-round-trip",
-          LTHING_MLDSA87.Verify (PK1, Msg, Ctx, Sig1a));
+          LTHING_MLDSA_Verify_G87.Verify (PK1, Msg, Ctx, Sig1a));
 
    --  4. Tamper-reject: flip first byte of signature
    declare
-      Bad_Sig : LTHING_MLDSA87.Signature := Sig1a;
+      Bad_Sig : LTHING_MLDSA_Params_87.Signature := Sig1a;
    begin
       Bad_Sig (0) := Bad_Sig (0) xor 16#FF#;
       Check ("tamper-reject",
-             not LTHING_MLDSA87.Verify (PK1, Msg, Ctx, Bad_Sig));
+             not LTHING_MLDSA_Verify_G87.Verify (PK1, Msg, Ctx, Bad_Sig));
    end;
 
    --  5. Wrong-key reject
    Check ("wrong-key-reject",
-          not LTHING_MLDSA87.Verify (PK2, Msg, Ctx, Sig1a));
+          not LTHING_MLDSA_Verify_G87.Verify (PK2, Msg, Ctx, Sig1a));
 
    if not Passed then
       Set_Exit_Status (Failure);

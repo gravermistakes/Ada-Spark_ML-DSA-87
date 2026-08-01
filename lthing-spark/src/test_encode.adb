@@ -9,8 +9,8 @@
 pragma SPARK_Mode (Off);
 
 with LTHING_Types;       use LTHING_Types;
-with LTHING_MLDSA65;     use LTHING_MLDSA65;
-with LTHING_MLDSA_Codec; use LTHING_MLDSA_Codec;
+with LTHING_MLDSA_Params_65;  use LTHING_MLDSA_Params_65;
+with LTHING_MLDSA_Codec_G65; use LTHING_MLDSA_Codec_G65;
 with Interfaces;         use Interfaces;
 with Ada.Text_IO;        use Ada.Text_IO;
 with Ada.Command_Line;   use Ada.Command_Line;
@@ -49,7 +49,7 @@ begin
       for I in Rho_Array'Range loop Rho (I) := Byte (Rand_Mod (256)); end loop;
       for I in T1_Vec'Range loop
          for J in T1 (I)'Range loop
-            T1 (I) (J) := LTHING_MLDSA_Codec.Coeff (Rand_Mod (1024));   --  10-bit
+            T1 (I) (J) := Coeff (Rand_Mod (1024));   --  10-bit
          end loop;
       end loop;
 
@@ -87,7 +87,7 @@ begin
             declare
                C : constant Integer := Rand_Mod (2 * Gamma1) - (Gamma1 - 1);
             begin
-               Z (I) (J) := LTHING_MLDSA_Codec.Coeff (if C < 0 then C + Q else C);
+               Z (I) (J) := Coeff (if C < 0 then C + Q else C);
             end;
          end loop;
       end loop;

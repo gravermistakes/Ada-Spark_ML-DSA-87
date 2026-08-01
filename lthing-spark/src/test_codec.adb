@@ -1,8 +1,8 @@
 --  test_codec — pk/sig decode on an AUTHORITATIVE vector (V31) + fail-closed hint.
 --  Genuine: decodes a real ML-DSA-65 key/signature and checks ranges, then a
 --  one-byte hint corruption must drive Sig_Decode to Ok=False (Alg 21 ⊥).
-with LTHING_MLDSA_Codec; use LTHING_MLDSA_Codec;
-with LTHING_MLDSA65;      use LTHING_MLDSA65;
+with LTHING_MLDSA_Codec_G65; use LTHING_MLDSA_Codec_G65;
+with LTHING_MLDSA_Params_65; use LTHING_MLDSA_Params_65;
 with MLDSA_KAT_Vectors;
 with LTHING_Types;        use LTHING_Types;
 with Interfaces;          use Interfaces;

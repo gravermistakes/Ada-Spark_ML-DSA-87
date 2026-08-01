@@ -18,8 +18,8 @@ pragma SPARK_Mode (Off);
 with LTHING_Types;      use LTHING_Types;
 with LTHING_Judicial;   use LTHING_Judicial;
 with LTHING_Keccak;
-with LTHING_MLDSA65;    use LTHING_MLDSA65;
-with LTHING_MLDSA_Sign; use LTHING_MLDSA_Sign;
+with LTHING_MLDSA_Params_65;  use LTHING_MLDSA_Params_65;
+with LTHING_MLDSA_Sign_G65;  use LTHING_MLDSA_Sign_G65;
 with Interfaces;        use Interfaces;
 with Ada.Text_IO;       use Ada.Text_IO;
 with Ada.Command_Line;  use Ada.Command_Line;
@@ -27,8 +27,8 @@ with Ada.Command_Line;  use Ada.Command_Line;
 procedure Test_Judicial is
 
    Hash_Bytes : constant := 64;
-   Sig_Bytes  : constant := LTHING_MLDSA65.Sig_Bytes;   --  3309
-   PK_Bytes   : constant := LTHING_MLDSA65.PK_Bytes;     --  1952
+   Sig_Bytes  : constant := LTHING_MLDSA_Params_65.Sig_Bytes;   --  3309
+   PK_Bytes   : constant := LTHING_MLDSA_Params_65.PK_Bytes;     --  1952
 
    Fails : Natural := 0;
 

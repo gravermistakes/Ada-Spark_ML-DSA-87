@@ -1,6 +1,6 @@
 --  test_sample — SampleInBall (tau=49, coeffs +-1) + ExpandA determinism +
 --  input-sensitivity (adversarial). c_tilde / rho sourced from KAT vector V31.
-with LTHING_MLDSA_Sample; use LTHING_MLDSA_Sample;
+with LTHING_MLDSA_Sample_G65; use LTHING_MLDSA_Sample_G65;
 with LTHING_MLDSA_NTT;    use LTHING_MLDSA_NTT;     --  Poly
 with LTHING_MLDSA_Field;  use LTHING_MLDSA_Field;   --  Fq, To_Centered
 with MLDSA_KAT_Vectors;

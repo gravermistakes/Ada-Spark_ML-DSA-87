@@ -26,7 +26,7 @@
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
-with LTHING_MLDSA65;
+with LTHING_MLDSA_Verify_G65;
 with MLDSA_KAT_Vectors;
 with LTHING_Types;     use LTHING_Types;
 with Ada.Text_IO;      use Ada.Text_IO;
@@ -66,28 +66,19 @@ procedure Test_KAT is
          Ctx (I - 1) := V.Ctx (I);
       end loop;
 
-      Result := LTHING_MLDSA65.Verify
+      Result := LTHING_MLDSA_Verify_G65.Verify
                   (PK      => V.PK,
                    Message => Msg,
                    Context => Ctx (0 .. V.Ctx_Len - 1),
                    Sig     => V.Sig);
 
-      if LTHING_MLDSA65.Arithmetic_Core_Complete then
-         Chk ("tcId" & Natural'Image (Id), Result = V.Expected);
-      else
-         Chk ("tcId" & Natural'Image (Id) & " (stub rejects)",
-              Result = False);
-      end if;
+      Chk ("tcId" & Natural'Image (Id), Result = V.Expected);
    end Run;
 
 begin
    Put_Line ("ML-DSA-65 sigVer KAT gate -- "
              & Natural'Image (M.Count) & " vectors (tcId 31..45)");
-   if LTHING_MLDSA65.Arithmetic_Core_Complete then
-      Put_Line ("  mode: FULL gate (Result must equal Expected)");
-   else
-      Put_Line ("  mode: NEGATIVE gate (stub: Verify must reject all)");
-   end if;
+   Put_Line ("  mode: FULL gate (Result must equal Expected)");
 
    Run (31, M.V31);
    Run (32, M.V32);

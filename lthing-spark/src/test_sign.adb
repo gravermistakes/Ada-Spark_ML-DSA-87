@@ -8,8 +8,9 @@ pragma SPARK_Mode (Off);
 
 with Interfaces;        use Interfaces;
 with LTHING_Types;      use LTHING_Types;
-with LTHING_MLDSA65;    use LTHING_MLDSA65;
-with LTHING_MLDSA_Sign; use LTHING_MLDSA_Sign;
+with LTHING_MLDSA_Params_65;  use LTHING_MLDSA_Params_65;
+with LTHING_MLDSA_Verify_G65; use LTHING_MLDSA_Verify_G65;
+with LTHING_MLDSA_Sign_G65;  use LTHING_MLDSA_Sign_G65;
 with Ada.Text_IO;       use Ada.Text_IO;
 with Ada.Command_Line;  use Ada.Command_Line;
 

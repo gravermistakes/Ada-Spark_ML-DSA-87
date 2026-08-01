@@ -9,8 +9,8 @@ with Ada.Streams.Stream_IO;
 with Interfaces;         use Interfaces;
 with LTHING_Types;       use LTHING_Types;
 with LTHING_Keccak;
-with LTHING_MLDSA87;
-with LTHING_MLDSA87_Sign;
+with LTHING_MLDSA_Params_87;
+with LTHING_MLDSA_Sign_G87;
 
 procedure Sign_Doc87 is
 
@@ -67,9 +67,9 @@ procedure Sign_Doc87 is
       return Seed;
    end Derive_Seed;
 
-   PK  : LTHING_MLDSA87.Public_Key;
-   SK  : LTHING_MLDSA87_Sign.Secret_Key;
-   Sig : LTHING_MLDSA87.Signature;
+   PK  : LTHING_MLDSA_Params_87.Public_Key;
+   SK  : LTHING_MLDSA_Sign_G87.Secret_Key;
+   Sig : LTHING_MLDSA_Params_87.Signature;
    Ok  : Boolean;
    Ctx : constant Byte_Array (1 .. 0) := (others => 0);  --  empty context
 
@@ -84,8 +84,8 @@ begin
       Seed : constant Byte_Array := Derive_Seed (Argument (2));
       Doc  : constant Byte_Array := Read_File (Argument (1));
    begin
-      LTHING_MLDSA87_Sign.Key_Gen (Seed, PK, SK);
-      LTHING_MLDSA87_Sign.Sign (SK, Doc, Ctx, Sig, Ok);
+      LTHING_MLDSA_Sign_G87.Key_Gen (Seed, PK, SK);
+      LTHING_MLDSA_Sign_G87.Sign (SK, Doc, Ctx, Sig, Ok);
 
       if not Ok then
          Put_Line (Standard_Error, "SIGN FAILED (rejection loop exhausted)");
