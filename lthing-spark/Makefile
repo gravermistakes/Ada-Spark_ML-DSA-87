@@ -3,7 +3,7 @@ export PATH := /root/.alire/bin:$(PATH)
 
 .PHONY: build test prove clean
 build:
-	gprbuild -P lthing.gpr || true
+	gprbuild -P lthing.gpr
 test:
 	./run_tests.sh
 prove:
