@@ -21,8 +21,6 @@ package body LTHING_MLDSA87_Sample is
 
    Q_Const : constant := 8_380_417;
 
-   subtype Rate_Range is Positive range 1 .. 200;
-
    Max_Need  : constant := 1_048_576;
    subtype Need_Range is Positive range 1 .. Max_Need;
 
@@ -34,15 +32,14 @@ package body LTHING_MLDSA87_Sample is
    ---------------------------------------------------------------------------
    function XOF
      (Seed : Byte_Array;
-      Rate : Rate_Range;
+      Mode : Sponge_Mode;
       Need : Need_Range) return Byte_Array
      with Post => XOF'Result'First = 0 and then XOF'Result'Last = Need - 1
    is
       Out_Buf : Byte_Array (0 .. Need - 1);
    begin
       Sponge (Input  => Seed,
-              Rate   => Rate,
-              Domain => Domain_SHAKE,
+              Mode   => Mode,
               Output => Out_Buf);
       return Out_Buf;
    end XOF;
@@ -88,7 +85,7 @@ package body LTHING_MLDSA87_Sample is
          declare
             Need   : constant Need_Range := Base_Need * (2 ** Round);
             Stream : constant Byte_Array :=
-              XOF (C_Tilde, Rate_SHAKE256, Need);
+              XOF (C_Tilde, Mode_SHAKE256, Need);
          begin
             C := (others => 0);
 
@@ -146,7 +143,7 @@ package body LTHING_MLDSA87_Sample is
 
          declare
             Need   : constant Need_Range := Base_Need * (2 ** Round);
-            Stream : constant Byte_Array := XOF (Seed, Rate_SHAKE128, Need);
+            Stream : constant Byte_Array := XOF (Seed, Mode_SHAKE128, Need);
          begin
             Filled := 0;
             Pos    := 0;

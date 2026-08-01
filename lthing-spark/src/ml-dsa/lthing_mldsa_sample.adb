@@ -40,11 +40,6 @@ package body LTHING_MLDSA_Sample is
 
    Q_Const : constant := 8_380_417;   --  FIPS 204 modulus q
 
-   --  SHAKE sponge rates are bytes; FIPS 202 caps them well under 200 (the
-   --  Sponge precondition).  Constraining the formal makes that precondition
-   --  trivially discharged at both call sites (SHAKE128=168, SHAKE256=136).
-   subtype Rate_Range is Positive range 1 .. 200;
-
    --  Squeezed-stream length.  Bounding the request at Max_Need keeps Need - 1
    --  a valid Byte_Array index (Max_Need = Max_Document_Bytes) and bounds the
    --  stream position arithmetic.  The escalating-squeeze schedule
@@ -59,21 +54,20 @@ package body LTHING_MLDSA_Sample is
    Max_Round : constant := 2;          --  -> max Need = 1088 * 4 = 4352
 
    ---------------------------------------------------------------------------
-   --  XOF helper: Output(0 .. Need-1) := Sponge(Seed, Rate, Domain_SHAKE, ..)
+   --  XOF helper: Output(0 .. Need-1) := Sponge(Seed, Mode, ..)
    --  Sponge gives a consistent prefix, so squeezing Need then 2*Need agrees
    --  on the first Need bytes.
    ---------------------------------------------------------------------------
    function XOF
      (Seed : Byte_Array;
-      Rate : Rate_Range;
+      Mode : Sponge_Mode;
       Need : Need_Range) return Byte_Array
      with Post => XOF'Result'First = 0 and then XOF'Result'Last = Need - 1
    is
       Out_Buf : Byte_Array (0 .. Need - 1);
    begin
       Sponge (Input  => Seed,
-              Rate   => Rate,
-              Domain => Domain_SHAKE,
+              Mode   => Mode,
               Output => Out_Buf);
       return Out_Buf;
    end XOF;
@@ -130,7 +124,7 @@ package body LTHING_MLDSA_Sample is
             --  all within Need_Range (1 .. Max_Need).
             Need   : constant Need_Range := Base_Need * (2 ** Round);
             Stream : constant Byte_Array :=
-              XOF (C_Tilde, Rate_SHAKE256, Need);
+              XOF (C_Tilde, Mode_SHAKE256, Need);
          begin
             --  Reset per round and consume from scratch.
             C := (others => 0);
@@ -208,7 +202,7 @@ package body LTHING_MLDSA_Sample is
             --  1088 * 2**Round for Round in 0 .. 2 -> 1088, 2176, 4352,
             --  all within Need_Range (1 .. Max_Need).
             Need   : constant Need_Range := Base_Need * (2 ** Round);
-            Stream : constant Byte_Array := XOF (Seed, Rate_SHAKE128, Need);
+            Stream : constant Byte_Array := XOF (Seed, Mode_SHAKE128, Need);
          begin
             Filled := 0;
             Pos    := 0;

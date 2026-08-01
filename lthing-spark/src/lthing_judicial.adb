@@ -124,8 +124,7 @@ package body LTHING_Judicial is
    begin
       LTHING_Keccak.Sponge
         (Input  => Input,
-         Rate   => LTHING_Keccak.Rate_SHA3_512,
-         Domain => LTHING_Keccak.Domain_SHAKE,
+         Mode   => LTHING_Keccak.Mode_LTHING_512,
          Output => Buf);
       for I in Digest_Index loop
          R (I) := Buf (I);

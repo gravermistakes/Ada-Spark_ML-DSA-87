@@ -127,8 +127,7 @@ package body LTHING_MLDSA65 is
 
       --  ---- step 4: tr := H(pk, 64); mu := H(tr || M', 64) ----
       Sponge (Input  => Byte_Array (PK),
-              Rate   => Rate_SHAKE256,
-              Domain => Domain_SHAKE,
+              Mode   => Mode_SHAKE256,
               Output => Tr);
 
       declare
@@ -141,8 +140,7 @@ package body LTHING_MLDSA65 is
             Tr_Mp (64 + I) := M_Prime (I);
          end loop;
          Sponge (Input  => Tr_Mp,
-                 Rate   => Rate_SHAKE256,
-                 Domain => Domain_SHAKE,
+                 Mode   => Mode_SHAKE256,
                  Output => Mu);
       end;
 
@@ -243,8 +241,7 @@ package body LTHING_MLDSA65 is
             Mu_W1 (64 + I) := W1_Bytes (I);
          end loop;
          Sponge (Input  => Mu_W1,
-                 Rate   => Rate_SHAKE256,
-                 Domain => Domain_SHAKE,
+                 Mode   => Mode_SHAKE256,
                  Output => C_Tilde2);
       end;
 

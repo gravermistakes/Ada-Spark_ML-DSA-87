@@ -44,8 +44,7 @@ package body LTHING_MLDSA87_Sign is
    is
    begin
       Sponge (Input  => Input,
-              Rate   => Rate_SHAKE256,
-              Domain => Domain_SHAKE,
+              Mode   => Mode_SHAKE256,
               Output => Output);
    end Shake256;
 
