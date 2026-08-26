@@ -2,8 +2,8 @@
 --  fail-closed hint corruption. Genuine: decodes a real Level-5 key/signature
 --  and checks coefficient ranges, then a one-byte hint corruption must drive
 --  Sig_Decode to Ok=False (Alg 21 ⊥).
-with LTHING_MLDSA87_Codec; use LTHING_MLDSA87_Codec;
-with LTHING_MLDSA87;       use LTHING_MLDSA87;
+with LTHING_MLDSA_Codec_G87; use LTHING_MLDSA_Codec_G87;
+with LTHING_MLDSA_Params_87; use LTHING_MLDSA_Params_87;
 with MLDSA87_KAT_Vectors;
 with LTHING_Types;         use LTHING_Types;
 with Interfaces;           use Interfaces;

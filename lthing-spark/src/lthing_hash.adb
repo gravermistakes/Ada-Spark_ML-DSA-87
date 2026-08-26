@@ -15,8 +15,7 @@ package body LTHING_Hash is
    is
       Buf : Byte_Array (0 .. 63);
    begin
-      --  LTHING "SHAKE512" = Keccak sponge at rate 72 with the SHAKE domain.
-      Sponge (Input, Rate_SHA3_512, Domain_SHAKE, Buf);
+      Sponge (Input, Mode_LTHING_512, Buf);
       for I in Digest_Index loop
          Output (I) := Buf (I);
       end loop;

@@ -1,31 +1,25 @@
 ------------------------------------------------------------------------------
---  LTHING.MLDSA87.Codec body — FIPS 204 decoding, SPARK_Mode (On).
+--  LTHING_MLDSA_G_Codec body — generic FIPS 204 byte codec, SPARK_Mode (On).
 --
---  Mirror of LTHING_MLDSA_Codec sized to ML-DSA-87: k=8, l=7, omega=75,
---  c_tilde=64B, Sig_Bytes=4627, PK_Bytes=2592.  Only the decode path is
---  present (Get_Bit, Simple_Bit_Unpack, Pk_Decode, Sig_Decode) since the
---  Level-5 package has no signer.
---
---  Every routine is proved free of run-time errors (AoRTE); exact values
---  are validated by the FIPS 204 ML-DSA-87 sigVer KAT (test_kat87).
+--  Unifies the ML-DSA-65 and ML-DSA-87 codec bodies.  All parameter-set
+--  differences (k, l, omega, c_tilde, sig/pk sizes) come from the Params
+--  formal package; the algorithmic code is identical across security levels.
 --
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
 pragma SPARK_Mode (On);
 
-package body LTHING_MLDSA87_Codec is
+package body LTHING_MLDSA_G_Codec is
 
-   --  ML-DSA-87: gamma1 = 2**19, so z fields are 20 bits each (same as -65).
    Z_Bit_Len : constant := 20;
-   Z_Bytes   : constant := (N * Z_Bit_Len) / 8;   --  640 per polynomial
-   T1_Bytes  : constant := (N * 10) / 8;          --  320 per polynomial
+   Z_Bytes   : constant := (256 * Z_Bit_Len) / 8;   --  640 per polynomial
+   T1_Bytes  : constant := (256 * 10) / 8;           --  320 per polynomial
 
-   --  Hint encoding layout: last Omega + K_Dim = 75 + 8 = 83 bytes of Sig.
-   Hint_Off  : constant := Sig_Bytes - (Omega + K_Dim);   --  4544
+   Hint_Off  : constant Natural := Sig_Bytes - (Omega + K_Dim);
 
    ----------------------------------------------------------------------------
-   --  Get_Bit (FIPS 204 bit indexing within a byte slice)
+   --  Get_Bit
    ----------------------------------------------------------------------------
    function Get_Bit (V : Byte_Array; N : Natural) return Coeff is
       B       : constant Byte := V (V'First + N / 8);
@@ -36,7 +30,6 @@ package body LTHING_MLDSA87_Codec is
 
    ----------------------------------------------------------------------------
    --  Simple_Bit_Unpack (Algorithm 19)
-   --    coeff(i) = sum_{j=0..bitlen-1} bit(i*bitlen + j) * 2**j
    ----------------------------------------------------------------------------
    function Simple_Bit_Unpack
      (V : Byte_Array; Bit_Len : Positive; Hi : Coeff) return Poly
@@ -76,13 +69,13 @@ package body LTHING_MLDSA87_Codec is
    end Simple_Bit_Unpack;
 
    ----------------------------------------------------------------------------
-   --  Simple_Bit_Pack (Algorithm 16) — inverse of Simple_Bit_Unpack.
+   --  Simple_Bit_Pack (Algorithm 16)
    ----------------------------------------------------------------------------
    function Simple_Bit_Pack
      (V : Poly; Bit_Len : Positive; Hi : Coeff) return Byte_Array
    is
       pragma Unreferenced (Hi);
-      R : Byte_Array (0 .. (N * Bit_Len) / 8 - 1) := (others => 0);
+      R : Byte_Array (0 .. (Params.N * Bit_Len) / 8 - 1) := (others => 0);
    begin
       for I in Poly'Range loop
          declare
@@ -106,7 +99,36 @@ package body LTHING_MLDSA87_Codec is
    end Simple_Bit_Pack;
 
    ----------------------------------------------------------------------------
-   --  Pk_Encode (Algorithm 22) — inverse of Pk_Decode (k=8, l=7, PK=2592B).
+   --  Pk_Decode (Algorithm 23)
+   ----------------------------------------------------------------------------
+   procedure Pk_Decode
+     (PK  : Public_Key;
+      Rho : out Rho_Array;
+      T1  : out T1_Vec)
+   is
+   begin
+      for I in Rho_Array'Range loop
+         Rho (I) := PK (I);
+      end loop;
+
+      T1 := (others => (others => 0));
+
+      for I in T1_Vec'Range loop
+         pragma Loop_Invariant
+           (for all II in 0 .. I - 1 =>
+              (for all J in Poly'Range => T1 (II) (J) in 0 .. 1023));
+
+         declare
+            Base  : constant Natural := 32 + T1_Bytes * I;
+            Slice : constant Byte_Array := PK (Base .. Base + T1_Bytes - 1);
+         begin
+            T1 (I) := Simple_Bit_Unpack (Slice, 10, 1023);
+         end;
+      end loop;
+   end Pk_Decode;
+
+   ----------------------------------------------------------------------------
+   --  Pk_Encode (Algorithm 22)
    ----------------------------------------------------------------------------
    function Pk_Encode (Rho : Rho_Array; T1 : T1_Vec) return Public_Key is
       PK : Public_Key := (others => 0);
@@ -129,8 +151,7 @@ package body LTHING_MLDSA87_Codec is
    end Pk_Encode;
 
    ----------------------------------------------------------------------------
-   --  Sig_Encode (Algorithm 26) — c_tilde || BitPack(z) || HintBitPack(h).
-   --  Omega = 75, K_Dim = 8. Hint_Off = 4544.
+   --  Sig_Encode (Algorithm 26)
    ----------------------------------------------------------------------------
    function Sig_Encode
      (C_Tilde : C_Tilde_Array; Z : Z_Vec; H : H_Vec) return Signature
@@ -155,7 +176,8 @@ package body LTHING_MLDSA87_Codec is
                   Raw (J) := (Gamma1 - Cen) mod 1_048_576;
                end;
             end loop;
-            pragma Assert (for all JJ in Poly'Range => Raw (JJ) in 0 .. 1_048_575);
+            pragma Assert
+              (for all JJ in Poly'Range => Raw (JJ) in 0 .. 1_048_575);
 
             declare
                Base   : constant Natural := C_Tilde_Bytes + Z_Bytes * I;
@@ -189,40 +211,7 @@ package body LTHING_MLDSA87_Codec is
    end Sig_Encode;
 
    ----------------------------------------------------------------------------
-   --  Pk_Decode (Algorithm 23)
-   --    rho = pk(0..31); t1(i) = SimpleBitUnpack(pk(32+320i .. +319), 10)
-   --  k = K_Dim = 8 for ML-DSA-87.
-   ----------------------------------------------------------------------------
-   procedure Pk_Decode
-     (PK  : Public_Key;
-      Rho : out Rho_Array;
-      T1  : out T1_Vec)
-   is
-   begin
-      for I in Rho_Array'Range loop
-         Rho (I) := PK (I);
-      end loop;
-
-      T1 := (others => (others => 0));
-
-      for I in T1_Vec'Range loop
-         pragma Loop_Invariant
-           (for all II in 0 .. I - 1 =>
-              (for all J in Poly'Range => T1 (II) (J) in 0 .. 1023));
-
-         declare
-            Base  : constant Natural := 32 + T1_Bytes * I;
-            Slice : constant Byte_Array := PK (Base .. Base + T1_Bytes - 1);
-         begin
-            T1 (I) := Simple_Bit_Unpack (Slice, 10, 1023);
-         end;
-      end loop;
-   end Pk_Decode;
-
-   ----------------------------------------------------------------------------
    --  Sig_Decode (Algorithm 27) + HintBitUnpack (Algorithm 21)
-   --  c_tilde = sig(0..63); z(i) = BitUnpack(sig(64+640i..+639), ...);
-   --  hint in last 83 bytes (Hint_Off = 4544).
    ----------------------------------------------------------------------------
    procedure Sig_Decode
      (Sig     : Signature;
@@ -232,12 +221,10 @@ package body LTHING_MLDSA87_Codec is
       Ok      : out Boolean)
    is
    begin
-      --  c_tilde = sig(0 .. 63)
       for I in C_Tilde_Array'Range loop
          C_Tilde (I) := Sig (I);
       end loop;
 
-      --  z(i) = BitUnpack(sig(64 + 640i .. +639), gamma1-1, gamma1), bitlen 20.
       Z := (others => (others => 0));
       for I in Z_Vec'Range loop
          pragma Loop_Invariant
@@ -247,7 +234,8 @@ package body LTHING_MLDSA87_Codec is
          declare
             Base  : constant Natural := C_Tilde_Bytes + Z_Bytes * I;
             Slice : constant Byte_Array := Sig (Base .. Base + Z_Bytes - 1);
-            Raw   : constant Poly := Simple_Bit_Unpack (Slice, Z_Bit_Len, 1_048_575);
+            Raw   : constant Poly :=
+              Simple_Bit_Unpack (Slice, Z_Bit_Len, 1_048_575);
          begin
             for J in Poly'Range loop
                pragma Loop_Invariant
@@ -269,7 +257,6 @@ package body LTHING_MLDSA87_Codec is
          end;
       end loop;
 
-      --  HintBitUnpack (Algorithm 21): last Omega + K_Dim = 83 bytes.
       H  := (others => (others => 0));
       Ok := True;
 
@@ -322,4 +309,4 @@ package body LTHING_MLDSA87_Codec is
       end;
    end Sig_Decode;
 
-end LTHING_MLDSA87_Codec;
+end LTHING_MLDSA_G_Codec;

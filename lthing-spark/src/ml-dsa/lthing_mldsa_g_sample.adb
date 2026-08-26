@@ -1,15 +1,14 @@
 ------------------------------------------------------------------------------
---  LTHING.MLDSA87.Sample (body) — ExpandA + SampleInBall (FIPS 204), L5
+--  LTHING_MLDSA_G_Sample body — generic FIPS 204 ExpandA + SampleInBall
 --
---  Mirror of LTHING_MLDSA_Sample for ML-DSA-87:
---    * Sample_In_Ball: tau = 60 (loop 196..255), sign bits H(I-196).
---    * Expand_A: matrix k x l = 8 x 7.
---    * Count_Nonzero: unchanged helper.
+--  Unifies ML-DSA-65 and ML-DSA-87 sampler bodies.  All parameter-set
+--  differences (k, l, tau) come from the Params formal package.
 --
---  The squeeze-on-demand / bounded escalation architecture is identical to
---  the Level-3 sibling.  SPARK_Mode (On); proof target AoRTE + flow.
+--  Squeeze-on-demand, provably terminating: a BOUNDED outer
+--  `for Round in 0 .. 2 loop` escalates the squeeze length.  See the
+--  concrete sampler bodies for the full rationale.
 --
---  GPL-3.0-or-later.
+--  SPARK_Mode (On).  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
 pragma SPARK_Mode (On);
@@ -17,11 +16,9 @@ pragma SPARK_Mode (On);
 with LTHING_Keccak;      use LTHING_Keccak;
 with LTHING_MLDSA_Field; use LTHING_MLDSA_Field;
 
-package body LTHING_MLDSA87_Sample is
+package body LTHING_MLDSA_G_Sample is
 
    Q_Const : constant := 8_380_417;
-
-   subtype Rate_Range is Positive range 1 .. 200;
 
    Max_Need  : constant := 1_048_576;
    subtype Need_Range is Positive range 1 .. Max_Need;
@@ -29,20 +26,21 @@ package body LTHING_MLDSA87_Sample is
    Base_Need : constant := 1088;
    Max_Round : constant := 2;
 
+   Start_I   : constant Natural := 256 - Tau;
+
    ---------------------------------------------------------------------------
    --  XOF helper
    ---------------------------------------------------------------------------
    function XOF
      (Seed : Byte_Array;
-      Rate : Rate_Range;
+      Mode : Sponge_Mode;
       Need : Need_Range) return Byte_Array
      with Post => XOF'Result'First = 0 and then XOF'Result'Last = Need - 1
    is
       Out_Buf : Byte_Array (0 .. Need - 1);
    begin
       Sponge (Input  => Seed,
-              Rate   => Rate,
-              Domain => Domain_SHAKE,
+              Mode   => Mode,
               Output => Out_Buf);
       return Out_Buf;
    end XOF;
@@ -50,7 +48,7 @@ package body LTHING_MLDSA87_Sample is
    ---------------------------------------------------------------------------
    --  Count_Nonzero
    ---------------------------------------------------------------------------
-   function Count_Nonzero (C : Poly) return Natural is
+   function Count_Nonzero (C : LTHING_MLDSA_NTT.Poly) return Natural is
       N : Natural := 0;
    begin
       for I in C'Range loop
@@ -66,13 +64,13 @@ package body LTHING_MLDSA87_Sample is
    Minus_One : constant Fq := Q_Const - 1;
 
    ---------------------------------------------------------------------------
-   --  Sample_In_Ball  (FIPS 204 Algorithm 29)  — tau = 60
-   --  Loop range: for I in 256-60 .. 255 = 196 .. 255
-   --  Sign bit index: H (I - 196), drawn from the first 64 bits of the stream.
+   --  Sample_In_Ball  (FIPS 204 Algorithm 29)
+   --  Loop range: for I in 256-Tau .. 255
+   --  Sign bit index: H (I - Start_I)
    ---------------------------------------------------------------------------
    procedure Sample_In_Ball
      (C_Tilde : Byte_Array;
-      C       : out Poly)
+      C       : out LTHING_MLDSA_NTT.Poly)
    is
       H : array (0 .. 63) of Integer;
 
@@ -88,7 +86,7 @@ package body LTHING_MLDSA87_Sample is
          declare
             Need   : constant Need_Range := Base_Need * (2 ** Round);
             Stream : constant Byte_Array :=
-              XOF (C_Tilde, Rate_SHAKE256, Need);
+              XOF (C_Tilde, Mode_SHAKE256, Need);
          begin
             C := (others => 0);
 
@@ -99,8 +97,7 @@ package body LTHING_MLDSA87_Sample is
             Pos  := 8;
             Done := True;
 
-            --  tau = 60: for i in 256-60 .. 255 = 196 .. 255
-            for I in 196 .. 255 loop
+            for I in Start_I .. 255 loop
                J     := 0;
                Found := False;
                while Pos <= Stream'Last loop
@@ -120,7 +117,7 @@ package body LTHING_MLDSA87_Sample is
 
                C (I)           := C (Integer (J));
                C (Integer (J)) :=
-                 (if H (I - 196) = 0 then Plus_One else Minus_One);
+                 (if H (I - Start_I) = 0 then Plus_One else Minus_One);
             end loop;
          end;
 
@@ -129,11 +126,11 @@ package body LTHING_MLDSA87_Sample is
    end Sample_In_Ball;
 
    ---------------------------------------------------------------------------
-   --  RejNTTPoly  (FIPS 204 Algorithm 30) — unchanged from Level 3
+   --  RejNTTPoly  (FIPS 204 Algorithm 30)
    ---------------------------------------------------------------------------
    procedure Rej_NTT_Poly
      (Seed : Byte_Array;
-      P    : out Poly)
+      P    : out LTHING_MLDSA_NTT.Poly)
    is
       Pos        : Natural;
       Filled     : Natural;
@@ -146,7 +143,7 @@ package body LTHING_MLDSA87_Sample is
 
          declare
             Need   : constant Need_Range := Base_Need * (2 ** Round);
-            Stream : constant Byte_Array := XOF (Seed, Rate_SHAKE128, Need);
+            Stream : constant Byte_Array := XOF (Seed, Mode_SHAKE128, Need);
          begin
             Filled := 0;
             Pos    := 0;
@@ -176,8 +173,7 @@ package body LTHING_MLDSA87_Sample is
    end Rej_NTT_Poly;
 
    ---------------------------------------------------------------------------
-   --  Expand_A  (FIPS 204 Algorithm 32) — k=8, l=7
-   --  seed := rho(0..31) & byte(s) & byte(r);  A(r,s) := RejNTTPoly(...)
+   --  Expand_A  (FIPS 204 Algorithm 32)
    ---------------------------------------------------------------------------
    procedure Expand_A
      (Rho : Byte_Array;
@@ -185,8 +181,8 @@ package body LTHING_MLDSA87_Sample is
    is
       Seed : Byte_Array (0 .. 33) := (others => 0);
    begin
-      for R in 0 .. 7 loop
-         for S in 0 .. 6 loop
+      for R in 0 .. K_Dim - 1 loop
+         for S in 0 .. L_Dim - 1 loop
             for I in 0 .. 31 loop
                Seed (I) := Rho (Rho'First + I);
             end loop;
@@ -197,4 +193,4 @@ package body LTHING_MLDSA87_Sample is
       end loop;
    end Expand_A;
 
-end LTHING_MLDSA87_Sample;
+end LTHING_MLDSA_G_Sample;

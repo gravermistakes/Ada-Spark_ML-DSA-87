@@ -13,16 +13,16 @@ pragma SPARK_Mode (Off);
 with LTHING_Types;      use LTHING_Types;
 with LTHING_Judicial;   use LTHING_Judicial;
 with LTHING_Keccak;
-with LTHING_MLDSA87;    use LTHING_MLDSA87;
-with LTHING_MLDSA87_Sign; use LTHING_MLDSA87_Sign;
+with LTHING_MLDSA_Params_87; use LTHING_MLDSA_Params_87;
+with LTHING_MLDSA_Sign_G87; use LTHING_MLDSA_Sign_G87;
 with Interfaces;        use Interfaces;
 with Ada.Text_IO;       use Ada.Text_IO;
 with Ada.Command_Line;  use Ada.Command_Line;
 
 procedure Test_Judicial87_Sign is
 
-   Sig_Bytes_87 : constant := LTHING_MLDSA87.Sig_Bytes;   --  4627
-   PK_Bytes_87  : constant := LTHING_MLDSA87.PK_Bytes;    --  2592
+   Sig_Bytes_87 : constant := LTHING_MLDSA_Params_87.Sig_Bytes;   --  4627
+   PK_Bytes_87  : constant := LTHING_MLDSA_Params_87.PK_Bytes;    --  2592
 
    Fails : Natural := 0;
 

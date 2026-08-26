@@ -21,6 +21,31 @@ package body LTHING_Keccak is
    subtype Coord      is Natural range 0 .. 4;
    subtype Rot_Amount is Natural range 0 .. 63;
 
+   ---------------------------------------------------------------------------
+   --  Sponge_Mode accessors
+   ---------------------------------------------------------------------------
+   function Mode_Rate (M : Sponge_Mode) return Positive is
+   begin
+      case M is
+         when Mode_SHAKE128  => return Rate_SHAKE128;
+         when Mode_SHAKE256  => return Rate_SHAKE256;
+         when Mode_SHA3_256  => return Rate_SHAKE256;
+         when Mode_SHA3_512  => return Rate_SHA3_512;
+         when Mode_LTHING_512 => return Rate_SHA3_512;
+      end case;
+   end Mode_Rate;
+
+   function Mode_Domain (M : Sponge_Mode) return Byte is
+   begin
+      case M is
+         when Mode_SHAKE128  => return Domain_SHAKE;
+         when Mode_SHAKE256  => return Domain_SHAKE;
+         when Mode_SHA3_256  => return Domain_SHA3;
+         when Mode_SHA3_512  => return Domain_SHA3;
+         when Mode_LTHING_512 => return Domain_SHAKE;
+      end case;
+   end Mode_Domain;
+
    --  Round constants RC[0..23] (FIPS 202).
    RC : constant array (0 .. 23) of Unsigned_64 :=
      (16#0000000000000001#, 16#0000000000008082#, 16#800000000000808A#,
@@ -163,6 +188,21 @@ package body LTHING_Keccak is
             end if;
          end loop;
       end;
+   end Sponge;
+
+   ---------------------------------------------------------------------------
+   --  Sponge (Mode) — type-safe overload
+   ---------------------------------------------------------------------------
+   procedure Sponge
+     (Input  : Byte_Array;
+      Mode   : Sponge_Mode;
+      Output : out Byte_Array)
+   is
+   begin
+      Sponge (Input  => Input,
+              Rate   => Mode_Rate (Mode),
+              Domain => Mode_Domain (Mode),
+              Output => Output);
    end Sponge;
 
 end LTHING_Keccak;

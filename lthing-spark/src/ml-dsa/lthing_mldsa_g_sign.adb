@@ -1,33 +1,21 @@
 ------------------------------------------------------------------------------
---  LTHING.MLDSA87.Sign (body) — FIPS 204 KeyGen_internal (Alg.6) +
---  Sign_internal (Alg.7) for ML-DSA-87 (k=8, l=7, eta=2). SPARK_Mode (On).
---
---  Differences from LTHING_MLDSA_Sign (ML-DSA-65):
---    * Cod -> LTHING_MLDSA87_Codec; Smp -> LTHING_MLDSA87_Sample
---    * Rej_Bounded_Poly: eta=2, accept nibble b<5, coeff = Canon(2-b)
---    * W1B buffer: K_Dim*128 = 8*128 = 1024 bytes
---    * C_Tilde: 64 bytes (vs 48)
---    * L_Vec/K_Vec: 7/8 polynomials (vs 5/6)
---
+--  LTHING_MLDSA_G_Sign (body) — FIPS 204 KeyGen_internal (Alg.6) +
+--  Sign_internal (Alg.7).  SPARK_Mode (On); AoRTE + flow.
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
 pragma SPARK_Mode (On);
 
-with LTHING_Keccak;        use LTHING_Keccak;
+with LTHING_Keccak;       use LTHING_Keccak;
 with LTHING_MLDSA_Field;
 with LTHING_MLDSA_NTT;
-with LTHING_MLDSA87_Codec;
 with LTHING_MLDSA_Round;
-with LTHING_MLDSA87_Sample;
 
-package body LTHING_MLDSA87_Sign is
+package body LTHING_MLDSA_G_Sign is
 
    package Fld renames LTHING_MLDSA_Field;
    package Ntt renames LTHING_MLDSA_NTT;
-   package Cod renames LTHING_MLDSA87_Codec;
    package Rnd renames LTHING_MLDSA_Round;
-   package Smp renames LTHING_MLDSA87_Sample;
 
    use type Fld.Fq;
 
@@ -36,7 +24,7 @@ package body LTHING_MLDSA87_Sign is
    Max_Attempts : constant := 1000;
 
    ---------------------------------------------------------------------------
-   --  helpers
+   --  small helpers
    ---------------------------------------------------------------------------
 
    procedure Shake256 (Input : Byte_Array; Output : out Byte_Array)
@@ -44,8 +32,7 @@ package body LTHING_MLDSA87_Sign is
    is
    begin
       Sponge (Input  => Input,
-              Rate   => Rate_SHAKE256,
-              Domain => Domain_SHAKE,
+              Mode   => Mode_SHAKE256,
               Output => Output);
    end Shake256;
 
@@ -105,7 +92,7 @@ package body LTHING_MLDSA87_Sign is
    end Sub_Poly;
 
    function Mat_Vec_Row
-     (A_Hat : Smp.Matrix; Row : Natural; V_Hat : L_Vec) return SPoly
+     (A_Hat : Sample.Matrix; Row : Natural; V_Hat : L_Vec) return SPoly
      with Global => null, Pre => Row <= K_Dim - 1
    is
       Acc : SPoly := (others => 0);
@@ -118,12 +105,14 @@ package body LTHING_MLDSA87_Sign is
    end Mat_Vec_Row;
 
    ---------------------------------------------------------------------------
-   --  RejBoundedPoly (Alg.31, eta=2): accept nibble b<5, coeff = 2-b.
+   --  RejBoundedPoly (Alg.31 / CoeffFromHalfByte Alg.15):
+   --  accept nibble b < 2*Eta+1, coeff = Eta - b.
    ---------------------------------------------------------------------------
    function Rej_Bounded_Poly (Seed : Byte_Array; Nonce : Natural) return SPoly
      with Global => null,
           Pre => Seed'Length = 64 and then Nonce <= 65535
    is
+      Threshold : constant Natural := 2 * Eta + 1;
       In_Buf : Byte_Array (0 .. 65) := (others => 0);
       Buf    : Byte_Array (0 .. 1023);
       R      : SPoly := (others => 0);
@@ -144,12 +133,12 @@ package body LTHING_MLDSA87_Sign is
             Z0 : constant Natural := B mod 16;
             Z1 : constant Natural := B / 16;
          begin
-            if Z0 < 5 and then Count < 256 then
-               R (Count) := Canon (2 - Integer_32 (Z0));
+            if Z0 < Threshold and then Count < 256 then
+               R (Count) := Canon (Integer_32 (Eta) - Integer_32 (Z0));
                Count := Count + 1;
             end if;
-            if Z1 < 5 and then Count < 256 then
-               R (Count) := Canon (2 - Integer_32 (Z1));
+            if Z1 < Threshold and then Count < 256 then
+               R (Count) := Canon (Integer_32 (Eta) - Integer_32 (Z1));
                Count := Count + 1;
             end if;
          end;
@@ -158,7 +147,7 @@ package body LTHING_MLDSA87_Sign is
    end Rej_Bounded_Poly;
 
    ---------------------------------------------------------------------------
-   --  ExpandMask (Alg.34): same gamma1=2^19 -> 20-bit fields as ML-DSA-65.
+   --  ExpandMask (Alg.34): gamma1=2^19 -> 20-bit unpack, then centered.
    ---------------------------------------------------------------------------
    function Expand_Mask_Poly (Seed : Byte_Array; Nonce : Natural) return SPoly
      with Global => null,
@@ -176,7 +165,7 @@ package body LTHING_MLDSA87_Sign is
       Shake256 (In_Buf, Buf);
 
       declare
-         Raw : constant Poly := Cod.Simple_Bit_Unpack (Buf, 20, 1_048_575);
+         Raw : constant Poly := Codec.Simple_Bit_Unpack (Buf, 20, 1_048_575);
       begin
          for I in R'Range loop
             R (I) := Canon (Gamma1 - Raw (I));
@@ -185,7 +174,7 @@ package body LTHING_MLDSA87_Sign is
       return R;
    end Expand_Mask_Poly;
 
-   function Make_Hint_Bit (A_Coeff, B_Coeff : Fq) return Cod.Hint_Bit
+   function Make_Hint_Bit (A_Coeff, B_Coeff : Fq) return Hint_Bit
      with Global => null
    is
    begin
@@ -201,18 +190,17 @@ package body LTHING_MLDSA87_Sign is
       PK   : out Public_Key;
       SK   : out Secret_Key)
    is
-      A_Hat   : Smp.Matrix;
+      A_Hat   : Sample.Matrix;
       S1_Hat  : L_Vec := (others => (others => 0));
       Rho     : Byte_Array (0 .. 31) := (others => 0);
       Rho_P   : Byte_Array (0 .. 63) := (others => 0);
       KK      : Byte_Array (0 .. 31) := (others => 0);
-      T1_All  : Cod.T1_Vec := (others => (others => 0));
+      T1_All  : T1_Vec := (others => (others => 0));
    begin
       SK := (Rho => (others => 0), KK => (others => 0), Tr => (others => 0),
              S1 => (others => (others => 0)), S2 => (others => (others => 0)),
              T0 => (others => (others => 0)));
 
-      --  (rho, rho', K) = H(seed || k || l, 128)
       declare
          In_Buf : Byte_Array (0 .. 33) := (others => 0);
          Out128 : Byte_Array (0 .. 127);
@@ -228,7 +216,7 @@ package body LTHING_MLDSA87_Sign is
          for I in 0 .. 31 loop KK (I)    := Out128 (96 + I);   end loop;
       end;
 
-      Smp.Expand_A (Rho, A_Hat);
+      Sample.Expand_A (Rho, A_Hat);
 
       for S in 0 .. L_Dim - 1 loop
          SK.S1 (S) := Rej_Bounded_Poly (Rho_P, S);
@@ -271,7 +259,7 @@ package body LTHING_MLDSA87_Sign is
          end;
       end loop;
 
-      PK     := Cod.Pk_Encode (Rho, T1_All);
+      PK     := Codec.Pk_Encode (Rho, T1_All);
       SK.Rho := Rho;
       SK.KK  := KK;
       Shake256 (Byte_Array (PK), SK.Tr);
@@ -287,7 +275,7 @@ package body LTHING_MLDSA87_Sign is
       Sig     : out Signature;
       Ok      : out Boolean)
    is
-      A_Hat  : Smp.Matrix;
+      A_Hat  : Sample.Matrix;
       S1_Hat : L_Vec := (others => (others => 0));
       S2_Hat : K_Vec := (others => (others => 0));
       T0_Hat : K_Vec := (others => (others => 0));
@@ -298,7 +286,7 @@ package body LTHING_MLDSA87_Sign is
       Sig := (others => 0);
       Ok  := False;
 
-      Smp.Expand_A (SK.Rho, A_Hat);
+      Sample.Expand_A (SK.Rho, A_Hat);
 
       for S in 0 .. L_Dim - 1 loop
          declare P : SPoly := SK.S1 (S); begin Ntt.NTT (P); S1_Hat (S) := P; end;
@@ -310,7 +298,6 @@ package body LTHING_MLDSA87_Sign is
          declare P : SPoly := SK.T0 (R); begin Ntt.NTT (P); T0_Hat (R) := P; end;
       end loop;
 
-      --  M' = 0x00 || len(ctx) || ctx || msg ; mu = H(tr || M', 64)
       declare
          M_Prime : Byte_Array (0 .. Message'Length + Context'Length + 1) :=
            (others => 0);
@@ -331,7 +318,6 @@ package body LTHING_MLDSA87_Sign is
          Shake256 (Tr_Mp, Mu);
       end;
 
-      --  rho'' = H(K || rnd(32 zeros) || mu, 64)
       declare
          Buf : Byte_Array (0 .. 127) := (others => 0);
       begin
@@ -387,7 +373,6 @@ package body LTHING_MLDSA87_Sign is
                end;
             end loop;
 
-            --  c_tilde = H(mu || w1bytes, 64)  [64 bytes for ML-DSA-87]
             declare
                Mu_W1 : Byte_Array (0 .. 64 + W1B'Length - 1) := (others => 0);
             begin
@@ -396,7 +381,7 @@ package body LTHING_MLDSA87_Sign is
                Shake256 (Mu_W1, C_Tld);
             end;
 
-            Smp.Sample_In_Ball (C_Tld, C_Poly);
+            Sample.Sample_In_Ball (C_Tld, C_Poly);
             C_Hat := C_Poly;
             Ntt.NTT (C_Hat);
 
@@ -422,12 +407,16 @@ package body LTHING_MLDSA87_Sign is
             end loop;
 
             for S in 0 .. L_Dim - 1 loop
-               if not Rnd.Inf_Norm_OK (To_R (Z (S)), Gamma1 - Beta) then
+               if not Rnd.Inf_Norm_OK
+                 (To_R (Z (S)), Integer_32 (Gamma1 - Beta))
+               then
                   Reject := True;
                end if;
             end loop;
             for R in 0 .. K_Dim - 1 loop
-               if not Rnd.Inf_Norm_OK (To_R (R0_Vec (R)), Gamma2 - Beta) then
+               if not Rnd.Inf_Norm_OK
+                 (To_R (R0_Vec (R)), Integer_32 (Gamma2 - Beta))
+               then
                   Reject := True;
                end if;
             end loop;
@@ -443,14 +432,15 @@ package body LTHING_MLDSA87_Sign is
                end loop;
 
                for R in 0 .. K_Dim - 1 loop
-                  if not Rnd.Inf_Norm_OK (To_R (Ct0 (R)), Gamma2) then
+                  if not Rnd.Inf_Norm_OK (To_R (Ct0 (R)), Integer_32 (Gamma2))
+                  then
                      Reject := True;
                   end if;
                end loop;
 
                if not Reject then
                   declare
-                     H_Bits : Cod.H_Vec := (others => (others => 0));
+                     H_Bits : H_Vec := (others => (others => 0));
                      Weight : Natural := 0;
                   begin
                      for R in 0 .. K_Dim - 1 loop
@@ -460,7 +450,7 @@ package body LTHING_MLDSA87_Sign is
                            declare
                               B_Co : constant Fq :=
                                 Fld.Add (A_Vec (R) (I), Ct0 (R) (I));
-                              Hb : constant Cod.Hint_Bit :=
+                              Hb : constant Hint_Bit :=
                                 Make_Hint_Bit (A_Vec (R) (I), B_Co);
                            begin
                               H_Bits (R) (I) := Hb;
@@ -471,14 +461,14 @@ package body LTHING_MLDSA87_Sign is
 
                      if Weight <= Omega then
                         declare
-                           Zc : Cod.Z_Vec := (others => (others => 0));
-                           Ct : Cod.C_Tilde_Array;
+                           Zc : Z_Vec := (others => (others => 0));
+                           Ct : C_Tilde_Array;
                         begin
                            for S in 0 .. L_Dim - 1 loop
                               Zc (S) := To_M (Z (S));
                            end loop;
                            for I in Ct'Range loop Ct (I) := C_Tld (I); end loop;
-                           Sig := Cod.Sig_Encode (Ct, Zc, H_Bits);
+                           Sig := Codec.Sig_Encode (Ct, Zc, H_Bits);
                            Ok  := True;
                            return;
                         end;
@@ -492,4 +482,4 @@ package body LTHING_MLDSA87_Sign is
       Ok  := False;
    end Sign;
 
-end LTHING_MLDSA87_Sign;
+end LTHING_MLDSA_G_Sign;

@@ -6,7 +6,7 @@
 --    §3  40-byte fixed header (crypto suite, timestamp, section lengths)
 --    §5  provenance seal (ancestor, artifact hash, chain hash, relation,
 --        signer id, seal id)
---    §6  ML-DSA-65 signature over header ‖ body ‖ seal
+--    §6  ML-DSA-65 / ML-DSA-87 signature over header ‖ body ‖ seal
 --    §9  the MUST-gate parser requirements (fail-closed at the first failure)
 --
 --  Result starts (Not_Verified, False); Trusted becomes True in exactly ONE
@@ -25,8 +25,10 @@ pragma SPARK_Mode (On);
 
 with Interfaces;    use Interfaces;   --  bitwise or/xor on Byte; Unsigned_*
 with LTHING_Keccak;
-with LTHING_MLDSA65;
-with LTHING_MLDSA87;
+with LTHING_MLDSA_Params_65;
+with LTHING_MLDSA_Params_87;
+with LTHING_MLDSA_Verify_G65;
+with LTHING_MLDSA_Verify_G87;
 
 package body LTHING_Judicial is
 
@@ -124,8 +126,7 @@ package body LTHING_Judicial is
    begin
       LTHING_Keccak.Sponge
         (Input  => Input,
-         Rate   => LTHING_Keccak.Rate_SHA3_512,
-         Domain => LTHING_Keccak.Domain_SHAKE,
+         Mode   => LTHING_Keccak.Mode_LTHING_512,
          Output => Buf);
       for I in Digest_Index loop
          R (I) := Buf (I);
@@ -196,11 +197,11 @@ package body LTHING_Judicial is
          Suite    : constant Unsigned_16 := Read_U16 (Document, F + Suite_Off);
          Is_87    : constant Boolean := Suite = Suite_MLDSA87;
          Exp_SigB : constant Natural :=
-           (if Is_87 then LTHING_MLDSA87.Sig_Bytes
-                     else LTHING_MLDSA65.Sig_Bytes);
+           (if Is_87 then LTHING_MLDSA_Params_87.Sig_Bytes
+                     else LTHING_MLDSA_Params_65.Sig_Bytes);
          Exp_PKB  : constant Natural :=
-           (if Is_87 then LTHING_MLDSA87.PK_Bytes
-                     else LTHING_MLDSA65.PK_Bytes);
+           (if Is_87 then LTHING_MLDSA_Params_87.PK_Bytes
+                     else LTHING_MLDSA_Params_65.PK_Bytes);
          BL    : constant Unsigned_64 := Read_U32 (Document, F + Body_Len_Off);
          SL    : constant Unsigned_64 := Read_U32 (Document, F + Seal_Len_Off);
          SigL  : constant Unsigned_64 := Read_U32 (Document, F + Sig_Len_Off);
@@ -264,7 +265,7 @@ package body LTHING_Judicial is
             --  §6/§9.10: the ML-DSA Verify precondition caps the message
             --  length; an envelope whose signed prefix exceeds it is rejected
             --  rather than truncated.
-            if Signed_Len > LTHING_MLDSA65.Max_Message_Bytes then
+            if Signed_Len > LTHING_MLDSA_Params_65.Max_Message_Bytes then
                Result := (Status => Bad_Length, Trusted => False);
                return;
             end if;
@@ -382,16 +383,18 @@ package body LTHING_Judicial is
                   begin
                      if Is_87 then
                         declare
-                           PKc : LTHING_MLDSA87.Public_Key := (others => 0);
-                           Sgc : LTHING_MLDSA87.Signature  := (others => 0);
+                           PKc : LTHING_MLDSA_Params_87.Public_Key :=
+                             (others => 0);
+                           Sgc : LTHING_MLDSA_Params_87.Signature  :=
+                             (others => 0);
                         begin
-                           for I in 0 .. LTHING_MLDSA87.PK_Bytes - 1 loop
+                           for I in 0 .. LTHING_MLDSA_Params_87.PK_Bytes - 1 loop
                               PKc (I) := Public_Key (PKf + I);
                            end loop;
-                           for I in 0 .. LTHING_MLDSA87.Sig_Bytes - 1 loop
+                           for I in 0 .. LTHING_MLDSA_Params_87.Sig_Bytes - 1 loop
                               Sgc (I) := Document (Sig_Off + I);
                            end loop;
-                           if not LTHING_MLDSA87.Verify
+                           if not LTHING_MLDSA_Verify_G87.Verify
                                     (PK      => PKc,
                                      Message => Document (F .. F + Signed_Len - 1),
                                      Context => Empty,
@@ -404,16 +407,18 @@ package body LTHING_Judicial is
                         end;
                      else
                         declare
-                           PKc : LTHING_MLDSA65.Public_Key := (others => 0);
-                           Sgc : LTHING_MLDSA65.Signature  := (others => 0);
+                           PKc : LTHING_MLDSA_Params_65.Public_Key :=
+                             (others => 0);
+                           Sgc : LTHING_MLDSA_Params_65.Signature  :=
+                             (others => 0);
                         begin
-                           for I in 0 .. LTHING_MLDSA65.PK_Bytes - 1 loop
+                           for I in 0 .. LTHING_MLDSA_Params_65.PK_Bytes - 1 loop
                               PKc (I) := Public_Key (PKf + I);
                            end loop;
-                           for I in 0 .. LTHING_MLDSA65.Sig_Bytes - 1 loop
+                           for I in 0 .. LTHING_MLDSA_Params_65.Sig_Bytes - 1 loop
                               Sgc (I) := Document (Sig_Off + I);
                            end loop;
-                           if not LTHING_MLDSA65.Verify
+                           if not LTHING_MLDSA_Verify_G65.Verify
                                     (PK      => PKc,
                                      Message => Document (F .. F + Signed_Len - 1),
                                      Context => Empty,

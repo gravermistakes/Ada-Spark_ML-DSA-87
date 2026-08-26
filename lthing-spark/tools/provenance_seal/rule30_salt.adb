@@ -145,8 +145,7 @@ begin
       Evolve (Seed, Raw_CA);
 
       Sponge (Input  => Raw_CA,
-              Rate   => Rate_SHAKE256,
-              Domain => Domain_SHAKE,
+              Mode   => Mode_SHAKE256,
               Output => Salt);
 
       for I in 0 .. 7 loop

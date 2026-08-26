@@ -5,6 +5,11 @@
 --  well under 2^46 so AoRTE holds. Each routine reduces back into Fq / the
 --  declared subtype ranges proven in the spec.
 --
+--  Timing posture:
+--    * Mod_Pm: branchless conditional subtract (no branch on centered value).
+--    * Decompose: branchless corner-case correction for Rp - Lo = Q - 1.
+--    * Inf_Norm_OK: full scan of all 256 coefficients, no early return.
+--
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
@@ -13,30 +18,25 @@ pragma SPARK_Mode (On);
 package body LTHING_MLDSA_Round is
 
    ---------------------------------------------------------------------------
-   --  Mod_Pm
+   --  Mod_Pm — branchless centered remainder
    ---------------------------------------------------------------------------
    function Mod_Pm (R : Integer_64; A : Integer_64) return Integer_64 is
-      M : constant Integer_64 := R mod A;   --  0 .. A-1 (A > 0)
+      M    : constant Integer_64 := R mod A;
+      Half : constant Integer_64 := A / 2;
+      Gt   : constant Integer_64 := Boolean'Pos (M > Half);
+      Corr : constant Integer_64 := Gt * A;
    begin
-      if M > A / 2 then
-         --  M - A in (-A/2, 0); and (M - A) mod A = M mod A = R mod A.
-         return M - A;
-      else
-         --  M in [0, A/2]; M mod A = M = R mod A.
-         return M;
-      end if;
+      return M - Corr;
    end Mod_Pm;
 
    ---------------------------------------------------------------------------
    --  Power2Round (Alg. 35)
    ---------------------------------------------------------------------------
    procedure Power2Round (R : Fq; R1 : out P2R_High; R0 : out P2R_Low) is
-      Rr  : constant Integer_64 := Integer_64 (R);          --  already 0..q-1
-      Low : constant Integer_64 := Mod_Pm (Rr, Two_Pow_D);  --  (-4096, 4096]
+      Rr  : constant Integer_64 := Integer_64 (R);
+      Low : constant Integer_64 := Mod_Pm (Rr, Two_Pow_D);
       Hi  : constant Integer_64 := (Rr - Low) / Two_Pow_D;
    begin
-      --  Rr - Low is an exact multiple of 2^d (since Low = Rr mod+- 2^d),
-      --  in 0 .. q-1+4096, so Hi in 0 .. 1023.
       pragma Assert (Rr - Low >= 0);
       pragma Assert ((Rr - Low) mod Two_Pow_D = 0);
       pragma Assert (Hi * Two_Pow_D = Rr - Low);
@@ -45,28 +45,21 @@ package body LTHING_MLDSA_Round is
    end Power2Round;
 
    ---------------------------------------------------------------------------
-   --  Decompose (Alg. 36)
+   --  Decompose (Alg. 36) — branchless corner-case correction
    ---------------------------------------------------------------------------
    procedure Decompose (R : Fq; R1 : out Bins; R0 : out Low_Range) is
-      Rp  : constant Integer_64 := Integer_64 (R) mod Q;    --  0 .. q-1
-      Lo  : Integer_64 := Mod_Pm (Rp, Two_Gamma2);          --  (-gamma2, gamma2]
+      Rp  : constant Integer_64 := Integer_64 (R) mod Q;
+      Lo  : Integer_64 := Mod_Pm (Rp, Two_Gamma2);
       Hi  : Integer_64;
+      Is_Top : constant Integer_64 :=
+        Integer_64 (Boolean'Pos (Rp - Lo = Q - 1));
    begin
-      if Rp - Lo = Q - 1 then
-         --  Top special case: fold to r1 = 0, r0 reduced by one.
-         Hi := 0;
-         Lo := Lo - 1;
-         --  (0*2g2 + (Lo-1)) mod q = (Rp - (q-1) - 1) mod q = Rp mod q.
-         pragma Assert (Lo = Mod_Pm (Rp, Two_Gamma2) - 1);
-         pragma Assert ((Hi * Two_Gamma2 + Lo) mod Q = Rp mod Q);
-      else
-         --  Rp - Lo is an exact multiple of 2*gamma2 in 0 .. q-1, so the
-         --  quotient lands in 0 .. m-1 = 0 .. 15.
-         pragma Assert ((Rp - Lo) mod Two_Gamma2 = 0);
-         Hi := (Rp - Lo) / Two_Gamma2;
-         pragma Assert (Hi * Two_Gamma2 + Lo = Rp);
-         pragma Assert ((Hi * Two_Gamma2 + Lo) mod Q = Rp mod Q);
-      end if;
+      Hi := (Rp - Lo) / Two_Gamma2;
+      pragma Assert ((Rp - Lo) mod Two_Gamma2 = 0);
+      pragma Assert (Hi * Two_Gamma2 + Lo = Rp);
+      Hi := Hi * (1 - Is_Top);
+      Lo := Lo - Is_Top;
+      pragma Assert ((Hi * Two_Gamma2 + Lo) mod Q = Rp mod Q);
       R1 := Integer_32 (Hi);
       R0 := Integer_32 (Lo);
    end Decompose;
@@ -117,7 +110,6 @@ package body LTHING_MLDSA_Round is
       Out_B : W1_Bytes := (others => 0);
    begin
       for T in 0 .. 127 loop
-         --  W1 (2T), W1 (2T+1) each in 0..15, so the byte is in 0..255.
          Out_B (T) :=
            Byte (Integer_32 (W1 (2 * T)) + 16 * Integer_32 (W1 (2 * T + 1)));
          pragma Loop_Invariant
@@ -127,19 +119,20 @@ package body LTHING_MLDSA_Round is
    end W1_Encode;
 
    ---------------------------------------------------------------------------
-   --  Inf_Norm_OK
+   --  Inf_Norm_OK — full scan, no early return
    ---------------------------------------------------------------------------
    function Inf_Norm_OK (P : Poly; Bound : Integer_32) return Boolean is
+      All_Ok : Boolean := True;
    begin
       for I in P'Range loop
          if abs (To_Centered (P (I))) >= Bound then
-            return False;
+            All_Ok := False;
          end if;
          pragma Loop_Invariant
-           (for all K in P'First .. I =>
-              abs (To_Centered (P (K))) < Bound);
+           (All_Ok = (for all K in P'First .. I =>
+                        abs (To_Centered (P (K))) < Bound));
       end loop;
-      return True;
+      return All_Ok;
    end Inf_Norm_OK;
 
 end LTHING_MLDSA_Round;

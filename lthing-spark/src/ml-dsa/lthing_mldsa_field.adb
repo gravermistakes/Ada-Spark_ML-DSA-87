@@ -1,5 +1,11 @@
 ------------------------------------------------------------------------------
 --  LTHING.MLDSA.Field (body) — provable Z_q arithmetic
+--
+--  Timing posture: To_Centered is branchless (no conditional jump on
+--  secret-dependent data). Add/Sub/Mul/Reduce still use mod Q which GNAT
+--  compiles to a multiply-shift sequence for the constant Q at -O2; verify
+--  the generated assembly after any toolchain change (see patch §4).
+--
 --  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
@@ -10,22 +16,18 @@ package body LTHING_MLDSA_Field is
    function Add (A, B : Fq) return Fq is
       S : constant Integer_64 := Integer_64 (A) + Integer_64 (B);
    begin
-      --  A,B in [0,q-1] so S in [0, 2q-2]; one conditional subtract suffices,
-      --  but mod keeps the proof direct and is constant-work for fixed q.
       return Fq (S mod Q);
    end Add;
 
    function Sub (A, B : Fq) return Fq is
       S : constant Integer_64 := Integer_64 (A) - Integer_64 (B) + Integer_64 (Q);
    begin
-      --  Add q before mod so the intermediate is nonneg in [1, 2q-1].
       return Fq (S mod Q);
    end Sub;
 
    function Mul (A, B : Fq) return Fq is
       P : constant Integer_64 := Integer_64 (A) * Integer_64 (B);
    begin
-      --  P in [0, (q-1)^2] < 2**46, fits Integer_64.
       return Fq (P mod Q);
    end Mul;
 
@@ -35,12 +37,12 @@ package body LTHING_MLDSA_Field is
    end Reduce;
 
    function To_Centered (A : Fq) return Integer_32 is
+      Val  : constant Unsigned_32 := Unsigned_32 (A);
+      Half : constant Unsigned_32 := Unsigned_32 (Q / 2);
+      Gt   : constant Unsigned_32 := Shift_Right (Half - Val, 31);
+      Corr : constant Unsigned_32 := Gt * Unsigned_32 (Q);
    begin
-      if A > Q / 2 then
-         return A - Q;          --  maps (q/2, q-1] to (-q/2, -1]
-      else
-         return A;              --  [0, q/2] stays
-      end if;
+      return Integer_32 (Val) - Integer_32 (Corr);
    end To_Centered;
 
 end LTHING_MLDSA_Field;

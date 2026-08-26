@@ -46,13 +46,33 @@ package LTHING_Keccak is
    Domain_SHAKE : constant Byte := 16#1F#;   --  SHAKE128/256, "SHAKE512"
    Domain_SHA3  : constant Byte := 16#06#;   --  SHA3-224/256/384/512
 
+   --  Type-safe sponge mode: bundles (rate, domain) so callers cannot
+   --  accidentally mismatch them.  LTHING_512 is the project-specific
+   --  "SHAKE512" config (rate 72, SHAKE domain).
+   type Sponge_Mode is
+     (Mode_SHAKE128, Mode_SHAKE256, Mode_SHA3_256, Mode_SHA3_512,
+      Mode_LTHING_512);
+
+   function Mode_Rate   (M : Sponge_Mode) return Positive
+     with Global => null, Post => Mode_Rate'Result <= 200;
+   function Mode_Domain (M : Sponge_Mode) return Byte
+     with Global => null;
+
    --  Keccak-f[1600] permutation (24 rounds), in place.
    procedure Keccak_F1600 (A : in out State)
      with Global => null;
 
-   --  Generic sponge: absorb Input (rate-blocked, pad10*1 + Domain), then
-   --  squeeze Output'Length bytes. Deterministic for a given (Input, Rate,
-   --  Domain) — the property LTHING's seal/chain comparisons depend on.
+   --  Type-safe sponge: absorb Input, squeeze Output'Length bytes.
+   --  Deterministic for a given (Input, Mode).
+   procedure Sponge
+     (Input  : Byte_Array;
+      Mode   : Sponge_Mode;
+      Output : out Byte_Array)
+     with Global => null,
+          Pre    => Output'Length > 0;
+
+   --  Raw sponge with explicit (Rate, Domain) — needed for KAT tests that
+   --  exercise non-standard combinations.
    procedure Sponge
      (Input  : Byte_Array;
       Rate   : Positive;

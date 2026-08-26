@@ -1,44 +1,32 @@
 ------------------------------------------------------------------------------
---  LTHING.MLDSA87 body — FIPS 204 ML-DSA-87 verifier (Alg. 3 + Alg. 8).
+--  LTHING_MLDSA_G_Verify body — generic FIPS 204 ML-DSA verifier
 --
---  Mirror of LTHING_MLDSA65 sized to ML-DSA-87: k=8, l=7, tau=60, beta=120,
---  omega=75, c_tilde=64B.
+--  Unifies ML-DSA-65 and ML-DSA-87 verifier bodies (Alg. 3 + Alg. 8).
+--  All parameter-set differences come from the Params/Codec/Sample formals.
 --
---  Alg. 3 (ML-DSA.Verify, external/pure):
---    build M' = 0x00 || len(ctx) || ctx || msg, then call Verify_internal.
---  Alg. 8 (ML-DSA.Verify_internal):
---    decode pk/sig, expand A, recompute
---      w1 = UseHint(h, A z - c t1 2^d)
---    accept iff  ||z||_inf < gamma1 - beta
---            AND c_tilde2 = c_tilde
---            AND popcount(h) <= omega.
+--  Fail-closed: any decode failure, malformed hint, norm overflow, challenge
+--  mismatch, or excess hint weight returns False.  Verify only returns True
+--  on a genuine FIPS 204 acceptance.
 --
---  Fail-closed: any decode failure, hint overflow, norm overflow, challenge
---  mismatch, or excess hint weight returns False.
---
---  GPL-3.0-or-later.
+--  SPARK_Mode (On).  GPL-3.0-or-later.
 ------------------------------------------------------------------------------
 
 pragma SPARK_Mode (On);
 
-with LTHING_Keccak;         use LTHING_Keccak;
+with LTHING_Keccak;       use LTHING_Keccak;
 with LTHING_MLDSA_Field;
 with LTHING_MLDSA_NTT;
-with LTHING_MLDSA87_Codec;
 with LTHING_MLDSA_Round;
-with LTHING_MLDSA87_Sample;
 
-package body LTHING_MLDSA87 is
+package body LTHING_MLDSA_G_Verify is
 
    package Fld renames LTHING_MLDSA_Field;
    package Ntt renames LTHING_MLDSA_NTT;
-   package Cod renames LTHING_MLDSA87_Codec;
    package Rnd renames LTHING_MLDSA_Round;
-   package Smp renames LTHING_MLDSA87_Sample;
 
-   subtype FPoly is Ntt.Poly;            --  array (0..255) of Fq
+   subtype FPoly is Ntt.Poly;
 
-   Two_Pow_D : constant := 8_192;        --  2^d, d = 13
+   Two_Pow_D : constant := 8_192;
 
    function Add_Poly (A, B : FPoly) return FPoly is
       R : FPoly;
@@ -67,19 +55,17 @@ package body LTHING_MLDSA87 is
       Context : Byte_Array;
       Sig     : Signature) return Boolean
    is
-      --  --- Alg. 3: build M' = 0x00 || len(ctx) || ctx || msg ---
       M_Prime : Byte_Array (0 .. Message'Length + Context'Length + 1) :=
         (others => 0);
 
-      --  --- decode outputs ---
-      Rho     : Cod.Rho_Array;
-      T1      : Cod.T1_Vec;
-      C_Tilde : Cod.C_Tilde_Array;
-      Z       : Cod.Z_Vec;
-      H       : Cod.H_Vec;
+      Rho     : Rho_Array;
+      T1      : T1_Vec;
+      C_Tilde : C_Tilde_Array;
+      Z       : Z_Vec;
+      H       : H_Vec;
       Ok      : Boolean;
 
-      A_Hat   : Smp.Matrix;
+      A_Hat   : Sample.Matrix;
 
       C_Poly  : Ntt.Poly;
       C_Hat   : FPoly;
@@ -103,10 +89,10 @@ package body LTHING_MLDSA87 is
       end loop;
 
       --  ---- Alg. 8 step 1: pkDecode ----
-      Cod.Pk_Decode (PK, Rho, T1);
+      Codec.Pk_Decode (PK, Rho, T1);
 
       --  ---- step 2: sigDecode (fail-closed) ----
-      Cod.Sig_Decode (Sig, C_Tilde, Z, H, Ok);
+      Codec.Sig_Decode (Sig, C_Tilde, Z, H, Ok);
       if not Ok then
          return False;
       end if;
@@ -118,13 +104,12 @@ package body LTHING_MLDSA87 is
          for I in Rho'Range loop
             Rho_BA (I) := Rho (I);
          end loop;
-         Smp.Expand_A (Rho_BA, A_Hat);
+         Sample.Expand_A (Rho_BA, A_Hat);
       end;
 
       --  ---- step 4: tr := H(pk, 64); mu := H(tr || M', 64) ----
       Sponge (Input  => Byte_Array (PK),
-              Rate   => Rate_SHAKE256,
-              Domain => Domain_SHAKE,
+              Mode   => Mode_SHAKE256,
               Output => Tr);
 
       declare
@@ -137,8 +122,7 @@ package body LTHING_MLDSA87 is
             Tr_Mp (64 + I) := M_Prime (I);
          end loop;
          Sponge (Input  => Tr_Mp,
-                 Rate   => Rate_SHAKE256,
-                 Domain => Domain_SHAKE,
+                 Mode   => Mode_SHAKE256,
                  Output => Mu);
       end;
 
@@ -149,7 +133,7 @@ package body LTHING_MLDSA87 is
          for I in C_Tilde'Range loop
             Ct_BA (I) := C_Tilde (I);
          end loop;
-         Smp.Sample_In_Ball (Ct_BA, C_Poly);
+         Sample.Sample_In_Ball (Ct_BA, C_Poly);
       end;
       C_Hat := C_Poly;
       Ntt.NTT (C_Hat);
@@ -217,7 +201,7 @@ package body LTHING_MLDSA87 is
          end loop;
       end;
 
-      --  c_tilde2 := H(mu || w1bytes, 64)   [64 bytes for ML-DSA-87]
+      --  c_tilde2 := H(mu || w1bytes, C_Tilde_Bytes)
       declare
          Mu_W1 : Byte_Array (0 .. 64 + W1_Bytes'Length - 1) := (others => 0);
       begin
@@ -228,14 +212,13 @@ package body LTHING_MLDSA87 is
             Mu_W1 (64 + I) := W1_Bytes (I);
          end loop;
          Sponge (Input  => Mu_W1,
-                 Rate   => Rate_SHAKE256,
-                 Domain => Domain_SHAKE,
+                 Mode   => Mode_SHAKE256,
                  Output => C_Tilde2);
       end;
 
       --  ---- step 9: three acceptance conditions ----
 
-      --  (a) ||z||_inf < gamma1 - beta = 524288 - 120 = 524168
+      --  (a) ||z||_inf < gamma1 - beta
       for S in 0 .. L_Dim - 1 loop
          declare
             Zp : Rnd.Poly;
@@ -243,18 +226,18 @@ package body LTHING_MLDSA87 is
             for I in FPoly'Range loop
                Zp (I) := Z (S) (I);
             end loop;
-            if not Rnd.Inf_Norm_OK (Zp, Gamma1 - Beta) then
+            if not Rnd.Inf_Norm_OK (Zp, Integer_32 (Gamma1 - Beta)) then
                return False;
             end if;
          end;
       end loop;
 
-      --  (b) hint weight <= omega = 75
+      --  (b) hint weight <= omega
       for R in 0 .. K_Dim - 1 loop
          pragma Loop_Invariant (Hint_Weight <= R * N);
-         for I in Cod.Hint_Poly'Range loop
+         for I in Hint_Poly'Range loop
             pragma Loop_Invariant (Hint_Weight <= R * N + I);
-            Hint_Weight := Hint_Weight + Natural (H (R) (I));
+            Hint_Weight := Hint_Weight + Integer (H (R) (I));
          end loop;
       end loop;
       if Hint_Weight > Omega then
@@ -271,4 +254,4 @@ package body LTHING_MLDSA87 is
       return True;
    end Verify;
 
-end LTHING_MLDSA87;
+end LTHING_MLDSA_G_Verify;

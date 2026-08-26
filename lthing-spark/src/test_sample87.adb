@@ -1,7 +1,7 @@
 --  test_sample87 — SampleInBall (tau=60, coeffs +-1) + ExpandA (8x7) determinism
 --  + input-sensitivity (adversarial). c_tilde / rho sourced from KAT vector V63
 --  (ML-DSA-87 ACCEPT, tcId=63).
-with LTHING_MLDSA87_Sample; use LTHING_MLDSA87_Sample;
+with LTHING_MLDSA_Sample_G87; use LTHING_MLDSA_Sample_G87;
 with LTHING_MLDSA_NTT;      use LTHING_MLDSA_NTT;     --  Poly
 with LTHING_MLDSA_Field;    use LTHING_MLDSA_Field;   --  Fq, To_Centered
 with MLDSA87_KAT_Vectors;
