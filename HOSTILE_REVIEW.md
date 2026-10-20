@@ -1,3 +1,5 @@
+> **Current-status note (2026-10-19):** this is a historical adversarial review and remediation record. Package names, proof counts, and open-item snapshots below describe earlier revisions. Current architecture and acceptance gates are documented in `README.md`, `TEST_COVERAGE_ANALYSIS.md`, and `lthing-spark/CLAUDE.md`. Do not use old concrete `lthing_mldsa65` / `lthing_mldsa87` names as implementation guidance.
+
 # Hostile Review + Remediation Guide — `lthing-spark`
 
 > Adversarial audit (2026-06-16), **refreshed 2026-06-20** to reflect the code

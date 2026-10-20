@@ -1,37 +1,50 @@
-# CLAUDE.md — lthing-spark (Ada/SPARK layer)
+# lthing-spark operating map
 
-SPARK control layer + ML-DSA-65 parts + pure-Ada Keccak. Read the **root
-`CLAUDE.md`** first for toolchain + the non-negotiable conventions (fail-closed,
-no frozen vectors, "done = builds + tests pass + 0 unproved").
+Read the root `CLAUDE.md` first.
 
-## Units
-| Unit | SPARK | Role |
-|------|-------|------|
-| `lthing_types` | On | `Byte`, bounded `Byte_Array` (0..1 MiB), `Digest` (64B), `Verified_Record` + predicate |
-| `lthing_keccak` | On | Keccak-f[1600] + `Sponge(Input, Rate, Domain, Output)`. **Proved (51 checks, 0 unproved).** KAT in `test_keccak`. |
-| `lthing_hash` | On | `SHAKE512` (rate 72, domain `0x1F`) + `Chain_Hash`. |
-| `lthing_judicial` | On | `Parse_And_Verify` — full LTHING envelope verify (§2/§3/§5/§6/§9 of `LTHING_HEADER_SPEC.md`): header geometry, seal-hash recompute, ML-DSA-65 signature over `header‖body‖seal`; fail-closed, postconditions + AoRTE proved. `Digest_Equal` is pure-Ada XOR (asm FFI retired). |
-| `lthing_mldsa_field` | On | Z_q arithmetic (proved). |
-| `lthing_mldsa_ntt` | On | NTT/INTT (proved AoRTE; correctness via negacyclic-convolution gate). |
-| `lthing_mldsa65`, `lthing_mldsa_sample` | On | Full ML-DSA-65 Verify (Alg 3/8) + samplers; body present, KAT-validated (15/15), gnatprove-clean. |
+## Canonical production units
 
-## Keccak/SHAKE API (use this, not the FFI)
-```ada
-with LTHING_Keccak; use LTHING_Keccak;   --  Byte/Byte_Array come from LTHING_Types
---  rates: Rate_SHAKE128=168, Rate_SHAKE256=136, Rate_SHA3_512=72
---  domains: Domain_SHAKE=16#1F# (SHAKE/"SHAKE512"), Domain_SHA3=16#06#
-Sponge (Input => M, Rate => Rate_SHA3_512, Domain => Domain_SHAKE, Output => Buf);
-```
-LTHING "SHAKE512" = `Sponge(_, Rate_SHA3_512, Domain_SHAKE, <64-byte Buf>)`.
+| Area | Units |
+|---|---|
+| Types | `lthing_types` |
+| Keccak/hash | `lthing_keccak`, `lthing_hash` |
+| Judicial | `lthing_judicial` |
+| ML-DSA params | `ml-dsa/lthing_mldsa_g_params`, `params_65`, `params_87` |
+| ML-DSA codec | `ml-dsa/lthing_mldsa_g_codec`, `codec_g65`, `codec_g87` |
+| ML-DSA sampling | `ml-dsa/lthing_mldsa_g_sample`, `sample_g65`, `sample_g87` |
+| ML-DSA signing | `ml-dsa/lthing_mldsa_g_sign`, `sign_g65`, `sign_g87` |
+| ML-DSA verify | `ml-dsa/lthing_mldsa_g_verify`, `verify_g65`, `verify_g87` |
+| Shared arithmetic | `ml-dsa/lthing_mldsa_field`, `_ntt`, `_round`, `_timing` |
+
+The former concrete ML-DSA packages are deleted. Do not reintroduce or target
+them in new work.
 
 ## Commands
+
 ```sh
-export PATH=/root/.alire/bin:$PATH
-gnatmake -q -D /tmp/b -aIsrc -o /tmp/b/<main> src/<main>.adb && /tmp/b/<main>
-gnatprove -P lthing.gpr --level=2 --report=all -j0            # whole project
-gnatprove -P lthing.gpr -u <unit>.adb --level=2 --report=all  # one unit
+make clean
+make build
+make tools
+make test
+make prove
 ```
-Authoritative KAT values come from published standards and pinned reference
-vector files (FIPS 202/204, the Keccak reference vectors) — never hand-write
-a digest, and never generate one with a non-Ada/Bash tool. **Language policy
-(root `CLAUDE.md`): Ada and Bash only — no Python, Go, Rust, or anything else.**
+
+Single test example:
+
+```sh
+gnatmake -q -D /tmp/b -aIsrc -aIsrc/ml-dsa   -o /tmp/b/test_name src/test_name.adb
+/tmp/b/test_name
+```
+
+## Verification posture
+
+- ML-DSA-65 sigVer: ACVP tcId 31..45, full gate.
+- ML-DSA-87 sigVer: ACVP tcId 61..75, full gate.
+- Judicial suite `0x0001` uses ML-DSA-65.
+- Judicial suite `0x0002` uses ML-DSA-87.
+- Whole-project acceptance requires GNATprove 0 unproved.
+
+## Deoxys-II
+
+Next target: `src/deoxys/deoxysii256-spark/`. Keep its proof/test claims
+separate until it is explicitly integrated into the top-level project.

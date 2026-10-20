@@ -1,78 +1,76 @@
-# ML-DSA-87 Signer (SPARK/Ada) — Standalone Package
+# Ada/SPARK ML-DSA + LTHING cryptographic core
 
-The ML-DSA-87 (FIPS 204, NIST security category 5) signing implementation
-from `lthing-spark/`, distributed here as a self-contained package — no
-dependency on the rest of this repository. The packaged, built, and signed
-distribution artifact lives at
-[`lthing-spark/dist/mldsa87_signer_package.tar.gz`](lthing-spark/dist/mldsa87_signer_package.tar.gz);
-this README documents that package's contents.
+This repository contains the Ada/SPARK cryptographic core used by LTHING. The
+current tree implements shared FIPS 204 machinery instantiated for
+**ML-DSA-65** and **ML-DSA-87**, pure-Ada Keccak/SHAKE, fail-closed judicial
+envelope verification, provenance-seal tooling, and a Deoxys-II subtree.
 
-## Contents (inside the packaged tarball)
+## Current ML-DSA architecture
 
-- `src/` — the complete with-closure of the signer, 15 units / 2,678 lines:
-  - `sign_doc87.adb` — CLI entry point (`sign_doc87 <file> <passphrase>`)
-  - `lthing_mldsa87_sign.ads/.adb` — Key_Gen + Sign (FIPS 204 Alg. 6/7)
-  - `lthing_mldsa87.ads/.adb` — Verify (FIPS 204 Alg. 3/8) + public types
-  - `lthing_mldsa87_codec.ads/.adb` — pkEncode/pkDecode, sigEncode/sigDecode
-  - `lthing_mldsa87_sample.ads/.adb` — SampleInBall, ExpandA, RejNTTPoly
-  - `lthing_mldsa_field.ads/.adb`, `lthing_mldsa_ntt.ads/.adb`,
-    `lthing_mldsa_round.ads/.adb` — shared field arithmetic, NTT, rounding
-    core (shared with the ML-DSA-65 implementation in the parent repo)
-  - `lthing_keccak.ads/.adb` — pure-Ada Keccak-f[1600] / SHAKE256 / SHAKE512
-  - `lthing_types.ads` — `Byte_Array` and shared subtypes
-- `bin/sign_doc87` — built x86_64 Linux binary (GNAT 13.3.0, `-g -O0 -gnata`),
-  present once you build (see below) — not shipped in the tarball itself
-- `LICENSE.txt` (packaged copy; see [`LICENSE`](LICENSE) at this repo's root
-  for the same text) — The Evermoor Sanctuary License
-  (ESL-ANCSA-MRA-IndiModSHA) v1.3, the canonical license version for this
-  package (see note below)
+Canonical code lives under `lthing-spark/src/ml-dsa/`:
 
-## Build
+- `LTHING_MLDSA_G_Params` — shared parameter/type substrate.
+- `LTHING_MLDSA_G_Codec` — generic pk/signature encoding and decoding.
+- `LTHING_MLDSA_G_Sample` — generic sampling and matrix expansion.
+- `LTHING_MLDSA_G_Sign` — FIPS 204 KeyGen + Sign.
+- `LTHING_MLDSA_G_Verify` — FIPS 204 Verify.
+- `LTHING_MLDSA_Params_65` / `_87` and the `*_G65` / `*_G87`
+  instantiations — the concrete parameter sets.
+- `LTHING_MLDSA_Field`, `_NTT`, `_Round`, `_Timing` — shared arithmetic
+  and timing-hardening support.
 
-```sh
-gnatmake -q -D obj -aIsrc -o bin/sign_doc87 src/sign_doc87.adb
-```
+The pre-generic concrete `lthing_mldsa65` / `lthing_mldsa87` families were
+deleted and are historical.
 
-No external libraries required — only the Ada/GNAT standard library
-(`Ada.Text_IO`, `Ada.Command_Line`, `Ada.Streams.Stream_IO`, `Interfaces`).
+The current parameter generic is intentionally a **65/87 shared profile**:
+`Gamma1 = 2^19` and `Gamma2 = (q-1)/32` are fixed because both current
+instantiations share them. ML-DSA-44 would require extending those parameters.
 
-## Usage
+## Build / test / proof
+
+From `lthing-spark/`:
 
 ```sh
-./bin/sign_doc87 <file> <passphrase>
+make clean
+make build
+make tools
+make test
+make prove
 ```
 
-Derives a 32-byte seed from the passphrase via SHAKE256, generates an
-ML-DSA-87 keypair from that seed (`Key_Gen`), signs the file's contents
-under an empty context string, and prints the hex-encoded public key
-(2592 bytes / 5184 hex chars) followed by the hex-encoded signature
-(4627 bytes / 9254 hex chars).
+Acceptance requires:
 
-This CLI signs only — it does not verify. Signing is deterministic in the
-passphrase: the same file + passphrase always reproduces the same keypair
-and signature.
+1. the core project builds;
+2. shipped provenance tools compile against the current packages;
+3. every `src/test_*.adb` main exits 0 with no `[FAIL]`;
+4. whole-project GNATprove reports **0 unproved**.
 
-## Provenance
+## Authoritative FIPS 204 gates
 
-Extracted from `lthing-spark/src/` at commit `57fcb0b`
-(branch `claude/check-function-hrzp7u`), 2026-07-03. The test suite this
-code was verified against (`test_sign87.adb`, `test_verify_adv87.adb`,
-`test_judicial87_sign.adb`, `test_kat87.adb` against NIST ACVP tcId 61–75)
-and the standing SPARK proof status (`SPARK_PROOF_GAPS.md` / CI `gnatprove`
-run) are not included in the packaged tarball — see `lthing-spark/` in this
-repository for both.
+- ML-DSA-65 sigVer: NIST ACVP tcId 31..45.
+- ML-DSA-87 sigVer: NIST ACVP tcId 61..75.
 
-## Licensing note
+Both are full expected-result gates containing accept and reject vectors.
 
-The Evermoor Sanctuary License's own provenance-sealing machinery
-(Section 5A) is pinned to **ML-DSA-65** for signing Provenance Seals —
-that governs how *seals under this license* are signed, not what
-algorithm a *Work* licensed under it may implement. There is no conflict
-in licensing an ML-DSA-87 signer under a license whose own seals use
-ML-DSA-65.
+## Judicial verification
 
-v1.3 is used here (over v1.0) because it explicitly defines the LTHING
-attribution/provenance format and its cryptographic stack (SHAKE512,
-ML-DSA-65, Deoxys-II-256-128) — the same primitives implemented in the
-parent `lthing-spark` project. v1.0 (JSON-based, `ed25519`-recommended)
-is not included in this package but is available on request.
+`LTHING_Judicial.Parse_Unverified` cannot return trusted data.
+`Parse_And_Verify` performs structural, seal/chain, and signature checks before
+returning trusted data.
+
+- suite `0x0001`: ML-DSA-65
+- suite `0x0002`: ML-DSA-87
+
+## ML-DSA-87 signer CLI
+
+`lthing-spark/src/sign_doc87.adb` derives a deterministic KeyGen seed from a
+passphrase, signs a file with ML-DSA-87 under an empty context, and prints the
+public key and signature as hex.
+
+## Next workstream: Deoxys-II
+
+The next active implementation/audit target is:
+
+`lthing-spark/src/deoxys/deoxysii256-spark/`
+
+See `LICENSE` and `ATTRIBUTION.lthing` for licensing/provenance.

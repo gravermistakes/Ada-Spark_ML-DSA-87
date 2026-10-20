@@ -1,12 +1,15 @@
 name: CI
 on: [push, pull_request]
+
 jobs:
   test-and-prove:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install GNAT + gprbuild
         run: sudo apt-get update && sudo apt-get install -y gnat gprbuild
+
       - name: Install gnatprove (Alire)
         run: |
           curl -sSL -o alr.zip https://github.com/alire-project/alire/releases/download/v2.0.2/alr-2.0.2-bin-x86_64-linux.zip
@@ -14,7 +17,15 @@ jobs:
           ./alr_install/bin/alr -n settings --global --set toolchain.assistant false || true
           ./alr_install/bin/alr -n install gnatprove
           echo "$HOME/.alire/bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        run: make -C lthing-spark build
+
+      - name: Shipped tools
+        run: make -C lthing-spark tools
+
       - name: Tests
         run: make -C lthing-spark test
+
       - name: Prove
         run: make -C lthing-spark prove

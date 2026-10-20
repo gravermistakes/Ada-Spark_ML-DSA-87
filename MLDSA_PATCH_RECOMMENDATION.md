@@ -1,3 +1,5 @@
+> **Historical patch record:** this recommendation drove work that has since been substantially applied, including genericization and timing hardening. It is not the current implementation specification. See `README.md`, `TEST_COVERAGE_ANALYSIS.md`, and `lthing-spark/CLAUDE.md` for current state.
+
 # Patch Recommendation: Ada-Spark\_ML-DSA-87
 
 **Target**: `gravermistakes/Ada-Spark_ML-DSA-87` (`lthing-spark/`)

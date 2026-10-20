@@ -7,7 +7,8 @@ with Ada.Command_Line;   use Ada.Command_Line;
 with Ada.Streams.Stream_IO;
 with Interfaces;         use Interfaces;
 with LTHING_Types;       use LTHING_Types;
-with LTHING_MLDSA65;
+with LTHING_MLDSA_Params_65;
+with LTHING_MLDSA_Verify_G65;
 
 procedure Verify_Seal65 is
 
@@ -64,15 +65,15 @@ begin
 
    declare
       Doc : constant Byte_Array := Read_File (Argument (1));
-      PK  : constant LTHING_MLDSA65.Public_Key :=
-              LTHING_MLDSA65.Public_Key
-                (From_Hex (Argument (2), LTHING_MLDSA65.PK_Bytes));
-      Sig : constant LTHING_MLDSA65.Signature :=
-              LTHING_MLDSA65.Signature
-                (From_Hex (Argument (3), LTHING_MLDSA65.Sig_Bytes));
+      PK  : constant LTHING_MLDSA_Params_65.Public_Key :=
+              LTHING_MLDSA_Params_65.Public_Key
+                (From_Hex (Argument (2), LTHING_MLDSA_Params_65.PK_Bytes));
+      Sig : constant LTHING_MLDSA_Params_65.Signature :=
+              LTHING_MLDSA_Params_65.Signature
+                (From_Hex (Argument (3), LTHING_MLDSA_Params_65.Sig_Bytes));
       Ok  : Boolean;
    begin
-      Ok := LTHING_MLDSA65.Verify (PK, Doc, Ctx, Sig);
+      Ok := LTHING_MLDSA_Verify_G65.Verify (PK, Doc, Ctx, Sig);
       if Ok then
          Put_Line ("ACCEPT");
          Set_Exit_Status (Success);
