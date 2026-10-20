@@ -1,3 +1,5 @@
+> **Current-status note (2026-10-19):** the algorithm discussion below predates the generic-package migration. The FIPS mapping remains historical evidence, but concrete package/file names and line references may be stale. Current code is in `src/ml-dsa/lthing_mldsa_g_*` with G65/G87 instantiations; see `CONFORMANCE.md` for the current package map.
+
 # FIPS 204 (ML-DSA) — Verification Protocols (authoritative reference)
 
 > Source: FIPS 204 final (2024-08-13), extracted verbatim from the NIST PDF

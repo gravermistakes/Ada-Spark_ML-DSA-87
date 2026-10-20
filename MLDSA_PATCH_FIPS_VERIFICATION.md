@@ -1,3 +1,5 @@
+> **Historical review record:** this document verifies the patch recommendation, not the present tree. The recommendation was subsequently corrected/applied. Use the current generic ML-DSA sources and fresh CI evidence for present-tense claims.
+
 # FIPS Verification: MLDSA_PATCH_RECOMMENDATION.md
 
 Cross-referenced against **FIPS 204** (ML-DSA, August 2024) and **FIPS 202** (SHA-3).

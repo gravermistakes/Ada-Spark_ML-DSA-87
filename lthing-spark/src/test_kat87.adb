@@ -1,28 +1,14 @@
 ------------------------------------------------------------------------------
 --  test_kat87 -- authoritative ML-DSA-87 sigVer KAT gate (FIPS 204).
 --
---  Drives LTHING_MLDSA87.Verify against the 15 external/pure sigVer vectors
---  (tcId 61..75) sourced from kat/mldsa87_sigver.json and committed verbatim
---  into the MLDSA87_KAT_Vectors package (src/mldsa87_kat_vectors.ads). No
---  vector is hand-invented here; every byte comes from that package.
+--  Drives the current generic ML-DSA-87 verifier instance against the 15
+--  external/pure NIST ACVP vectors tcId 61..75 committed in
+--  MLDSA87_KAT_Vectors. This is a FULL expected-result gate: accepting vectors
+--  must accept and rejecting vectors must reject. The old reject-only/stub
+--  description is obsolete.
 --
---  Gate logic:
---    if LTHING_MLDSA87.Arithmetic_Core_Complete then
---       result must equal the vector's Expected (3 accept / 12 reject);
---    else  -- arithmetic core stubbed: fail-closed, Verify rejects everything
---       result must be False for every vector.
---  Arithmetic_Core_Complete is currently False (Level-5 body not yet
---  implemented), so this is the NEGATIVE gate: every call must return False.
---  Once the body is implemented and passes all 15 vectors, flip the flag.
---
---  CONTEXT / M' NOTE: Verify takes a dedicated Context parameter --
---  Verify (PK, Message, Context, Sig) -- and forms the FIPS 204 prefix
---  M' = 0x00 || len(ctx) || ctx || msg internally (single-byte context
---  length, 0..255). This runner passes V.Msg and V.Ctx straight through;
---  it does NOT pre-construct M'.
---
---  Exits non-zero on any failure so a CI/test target fails the build.
---  GPL-3.0-or-later.
+--  Context is passed separately and Verify constructs FIPS 204 M' internally.
+--  Exits non-zero on any failure.
 ------------------------------------------------------------------------------
 
 with LTHING_MLDSA_Verify_G87;
